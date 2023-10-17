@@ -1,1 +1,1 @@
-deploy AI
+develop AI

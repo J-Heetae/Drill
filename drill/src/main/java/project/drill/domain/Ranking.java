@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Rank {
+public enum Ranking {
 }

@@ -24,12 +24,14 @@ public class Course {
     @Column(name="course_difficulty", nullable = false)
     private String courseDifficulty;
 
-    @ManyToOne
-    @JoinColumn(name="center_id")
+    @Enumerated(value=EnumType.STRING)
+    @ColumnDefault("'center'")
     private Center center;
 
     @ColumnDefault("true")
     @Column(name="is_new",nullable = false)
     private boolean isNew;
+
+
 
 }

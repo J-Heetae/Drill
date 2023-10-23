@@ -31,12 +31,12 @@ public class Post {
     @Column(name="post_video",nullable = false)
     private String postVideo;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
 
-    @Column(name="post_preview")
-    private String postPreview;
+    @Column(name="post_thumbnail")
+    private String postThumbnail;
 
 
 }

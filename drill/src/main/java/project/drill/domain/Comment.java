@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @DynamicInsert
 @Builder
-
 public class Comment {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,7 +23,7 @@ public class Comment {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name="member_nickname")
+    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname")
     private Member member;
 
     @Column(name="comment_content",nullable = false)

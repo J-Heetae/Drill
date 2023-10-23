@@ -20,10 +20,10 @@ public class Member {
     @Column(name="member_id")
     private Long memberId;
 
-    @Column(name="member_email",nullable = false)
+    @Column(name="member_email",nullable = false,unique = true)
     private String memberEmail;
 
-    @Column(name="member_nickname")
+    @Column(name="member_nickname",unique = true)
     private String memberNickname;
 
     @Column(name="member_profile")
@@ -42,7 +42,7 @@ public class Member {
 
     @Enumerated(value=EnumType.STRING)
     @ColumnDefault("'test'")
-    private Rank rank;
+    private Ranking ranking;
 
 
 

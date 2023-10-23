@@ -11,6 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @DynamicInsert
 @Builder
+@Table(name = "center")
 public class Center {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

@@ -11,11 +11,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @DynamicInsert
 @Builder
-public class Like {
+public class Liked {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="like_id")
-    private Long likeId;
+    @Column(name="liked_id")
+    private Long likedId;
 
     @ManyToOne
     @JoinColumn(name="member_id")

@@ -30,33 +30,33 @@ spring:
             matching-strategy: ant_path_matcher
     jpa:
         hibernate:
-            ddl-auto: update
+            #ddl-auto: create
         show_sql: true
         properties:
             hibernate:
                 format_sql: true #?? ??? ???
 
-    security:
-        oauth2:
-            client:
-                registration:
-
-                    kakao:
-                        client-id: f8ae067dc6798972969cd650aca79d01
-                        client-secret: u8FZ07hOCRzzLlr2QbVgHVnp5MeCSSuo
-                        redirect-uri: ${varialbles.beUri}/login/oauth2/code/kakao
-                        authorization-grant-type: authorization_code
-                        client-authentication-method: POST
-                        client-name: Kakao
-                        scope:
-                            - profile_nickname
-                            - account_email
-                provider:
-                    kakao:
-                        authorization-uri: https://kauth.kakao.com/oauth/authorize
-                        token-uri: https://kauth.kakao.com/oauth/token
-                        user-info-uri: https://kapi.kakao.com/v2/user/me
-                        user-name-attribute: id
+#    security:
+#        oauth2:
+#            client:
+#                registration:
+#
+#                    kakao:
+#                        client-id: f8ae067dc6798972969cd650aca79d01
+#                        client-secret: u8FZ07hOCRzzLlr2QbVgHVnp5MeCSSuo
+#                        redirect-uri: ${varialbles.beUri}/login/oauth2/code/kakao
+#                        authorization-grant-type: authorization_code
+#                        client-authentication-method: POST
+#                        client-name: Kakao
+#                        scope:
+#                            - profile_nickname
+#                            - account_email
+#                provider:
+#                    kakao:
+#                        authorization-uri: https://kauth.kakao.com/oauth/authorize
+#                        token-uri: https://kauth.kakao.com/oauth/token
+#                        user-info-uri: https://kapi.kakao.com/v2/user/me
+#                        user-name-attribute: id
 
 
 logging.level:

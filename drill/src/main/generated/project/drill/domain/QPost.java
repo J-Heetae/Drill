@@ -30,7 +30,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Long> postId = createNumber("postId", Long.class);
 
-    public final StringPath postPreview = createString("postPreview");
+    public final StringPath postThumbnail = createString("postThumbnail");
 
     public final StringPath postVideo = createString("postVideo");
 
@@ -54,8 +54,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.course = inits.isInitialized("course") ? new QCourse(forProperty("course"), inits.get("course")) : null;
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
+        this.course = inits.isInitialized("course") ? new QCourse(forProperty("course")) : null;
+        this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
     }
 
 }

@@ -29,8 +29,8 @@ public class Member {
     @Column(name="member_profile")
     private String memberProfile;
 
-    @OneToOne
-    @JoinColumn(name="center_id")
+    @Enumerated(value = EnumType.STRING)
+    @ColumnDefault("'Center'")
     private Center center;
 
     @Enumerated(value = EnumType.STRING)

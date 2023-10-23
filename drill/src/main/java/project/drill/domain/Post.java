@@ -19,7 +19,7 @@ public class Post {
     private Long postId;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="member_nickname")
+    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname")
     private Member member;
 
     @Column(name="post_content",nullable = false)

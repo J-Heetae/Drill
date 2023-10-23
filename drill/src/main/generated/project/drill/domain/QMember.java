@@ -34,7 +34,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath memberProfile = createString("memberProfile");
 
-    public final EnumPath<Rank> rank = createEnum("rank", Rank.class);
+    public final EnumPath<Ranking> ranking = createEnum("ranking", Ranking.class);
 
     public final EnumPath<Role> role = createEnum("role", Role.class);
 

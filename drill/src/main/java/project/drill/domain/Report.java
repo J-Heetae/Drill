@@ -11,7 +11,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
-@Builder
 public class Report {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,7 +22,7 @@ public class Report {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="member_id",referencedColumnName = "member_id")
     private Member member;
 
     @Column(name="is_check")

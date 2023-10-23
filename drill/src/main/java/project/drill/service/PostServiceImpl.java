@@ -1,6 +1,8 @@
 package project.drill.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.drill.domain.Course;
 import project.drill.domain.Member;
@@ -34,6 +36,25 @@ public class PostServiceImpl implements PostService {
                 .postThumbnail(postDto.getPostThumbnail())
                 .build();
         return postRepository.save(post);
+    }
+
+    @Override
+    public Post read(Long postId){
+        Optional<Post> post = postRepository.findById(postId);
+        return post.get();
+    }
+
+    @Override
+    public void delete(Long postId){
+        postRepository.deleteById(postId);
+    }
+
+    @Override
+    public Page<Post> findAllByMemberEmail(Pageable pageable, String memberEmail){
+        Optional<Member> member = memberRepository.findById(memberEmail);
+        String nickname= member.get().getMemberNickname();
+        Page <Post> myPostPage = postRepository.findAllByMemberNickname(pageable, nickname);
+        return myPostPage;
     }
 
 }

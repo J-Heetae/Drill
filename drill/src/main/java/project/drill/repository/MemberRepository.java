@@ -5,6 +5,6 @@ import project.drill.domain.Member;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findByMemberNickname(String memberNickname);
 }

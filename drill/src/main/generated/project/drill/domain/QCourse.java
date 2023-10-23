@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -18,11 +17,9 @@ public class QCourse extends EntityPathBase<Course> {
 
     private static final long serialVersionUID = -1343661571L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QCourse course = new QCourse("course");
 
-    public final QCenter center;
+    public final EnumPath<Center> center = createEnum("center", Center.class);
 
     public final StringPath courseDifficulty = createString("courseDifficulty");
 
@@ -33,24 +30,15 @@ public class QCourse extends EntityPathBase<Course> {
     public final BooleanPath isNew = createBoolean("isNew");
 
     public QCourse(String variable) {
-        this(Course.class, forVariable(variable), INITS);
+        super(Course.class, forVariable(variable));
     }
 
     public QCourse(Path<? extends Course> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QCourse(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QCourse(PathMetadata metadata, PathInits inits) {
-        this(Course.class, metadata, inits);
-    }
-
-    public QCourse(Class<? extends Course> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.center = inits.isInitialized("center") ? new QCenter(forProperty("center")) : null;
+        super(Course.class, metadata);
     }
 
 }

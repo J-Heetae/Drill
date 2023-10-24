@@ -22,6 +22,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
+    public final EnumPath<Center> center = createEnum("center", Center.class);
+
     public final QCourse course;
 
     public final QMember member;

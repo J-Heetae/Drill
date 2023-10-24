@@ -25,8 +25,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'com.querydsl:querydsl-jpa'
@@ -44,7 +42,6 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
 
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -57,3 +54,26 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거
+clean {
+	delete file('src/main/generated')
+}
+
+bootJar {
+	dependsOn tasks.withType(JavaCompile)
+	doLast {
+		def profile = project.findProperty('profile') ?: 'dev'
+		copy {
+			from("${projectDir}/src/main/resources") {
+				if (profile == 'dev') {
+					include 'application.yaml'
+				} else {
+					include "application-${profile}.yaml"
+				}
+			}
+			into("${buildDir}/resources/main")
+		}
+	}
+}
+

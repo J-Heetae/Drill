@@ -18,7 +18,7 @@ public class Liked {
     private Long likedId;
 
     @ManyToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="member_email")
     private Member member;
 
     @ManyToOne

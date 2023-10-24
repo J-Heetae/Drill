@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.drill.domain.Center;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostDto {
     private String memberNickname;
+    private Center center;
     private String postContent;
     private String postVideo;
     private Long courseId;

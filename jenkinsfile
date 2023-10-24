@@ -19,11 +19,6 @@ pipeline {
                 dockerImage = docker.build("${imagename}:${version}", "--no-cache .")
             }
           }
-          post {
-            failure {
-              error 'This pipeline stops here...'
-            }
-          }
         }
 
         // docker Deploy

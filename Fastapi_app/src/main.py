@@ -16,4 +16,4 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/test")
 def test_jenkins():
-    return {"test": "jenkins success 200"}
+    return {"test": "great"}

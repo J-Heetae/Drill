@@ -1,54 +1,58 @@
-environment {
-    imagename = "fast_api_test"
-    registryCredential = 'wlsdnrzlzl'
-    version = 'latest'
-    dockerImage = ''
-}
+pipeline {
+    agent any
 
-stages {
-
-    // docker build
-    stage('Bulid Docker') {
-      agent any
-      steps {
-        echo 'Bulid Docker'
-        script {
-            dockerImage = sh 'docker build -t test:latest ./src'
-        }
-      }
+    environment {
+        imagename = "fast_api_test"
+        registryCredential = 'yujinuk'
+        version = 'latest'
+        dockerImage = ''
     }
 
-    // docker Deploy
-    stage('Deploy Docker') {
-      agent any
-      steps {
-        echo 'Deploy Docker '
-        sh 'tag=${version} docker-compose -f ./docker/docker-compose.yml up -d'
-      }
-      post {
-        failure {
-          error 'This pipeline stops here...'
-        }
-      }
-    }
+    stages {
 
-    // docker push
-    stage('Push Docker') {
-      agent any
-      steps {
-        echo 'Push Docker'
-        script {
-            docker.withRegistry( '', registryCredential) {
-                dockerImage.push(version)  // ex) "1.0"
+        // docker build
+        stage('Bulid Docker') {
+          agent any
+          steps {
+            echo 'Bulid Docker'
+            script {
+                dockerImage = sh 'docker build -t test:latest .'
             }
+          }
         }
-      }
-      post {
-        failure {
-          error 'This pipeline stops here...'
+
+        // docker Deploy
+        stage('Deploy Docker') {
+          agent any
+          steps {
+            echo 'Deploy Docker '
+            sh 'tag=${version} docker-compose -f ./docker/docker-compose.yml up -d'
+          }
+          post {
+            failure {
+              error 'This pipeline stops here...'
+            }
+          }
         }
-      }
+
+        // docker push
+        stage('Push Docker') {
+          agent any
+          steps {
+            echo 'Push Docker'
+            script {
+                docker.withRegistry( '', registryCredential) {
+                    dockerImage.push(version)  // ex) "1.0"
+                }
+            }
+          }
+          post {
+            failure {
+              error 'This pipeline stops here...'
+            }
+          }
+        }
+
+
     }
-
-
 }

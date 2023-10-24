@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         imagename = "fast_api_test"
-        registryCredential = 'wlsdnrzlzl'
+        registryCredential = 'yujinuk'
         version = 'latest'
         dockerImage = ''
     }
@@ -20,6 +20,39 @@ pipeline {
             }
           }
         }
+
+        // docker Deploy
+        stage('Deploy Docker') {
+          agent any
+          steps {
+            echo 'Deploy Docker '
+            sh 'tag=${version} docker-compose -f docker-compose.yml up -d'
+          }
+          post {
+            failure {
+              error 'This pipeline stops here...'
+            }
+          }
+        }
+
+        // docker push
+        stage('Push Docker') {
+          agent any
+          steps {
+            echo 'Push Docker'
+            script {
+                docker.withRegistry( '', registryCredential) {
+                    dockerImage.push(version)  // ex) "1.0"
+                }
+            }
+          }
+          post {
+            failure {
+              error 'This pipeline stops here...'
+            }
+          }
+        }
+
 
     }
 }

@@ -4,7 +4,7 @@ pipeline {
     environment {
         imagename = "fast_api_test"
         registryCredential = 'wlsdnrzlzl'
-        version = '3.8'
+        version = 'latest'
         dockerImage = ''
     }
 

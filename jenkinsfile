@@ -21,24 +21,5 @@ pipeline {
           }
         }
 
-        // docker push
-        stage('Push Docker') {
-          agent any
-          steps {
-            echo 'Push Docker'
-            script {
-                docker.withRegistry( '', registryCredential) {
-                    dockerImage.push(version)  // ex) "1.0"
-                }
-            }
-          }
-          post {
-            failure {
-              error 'This pipeline stops here...'
-            }
-          }
-        }
-
-
     }
 }

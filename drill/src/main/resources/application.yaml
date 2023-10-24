@@ -2,7 +2,7 @@
 #??? ??
 varialbles:
     # ???? ??? ??
-    port: 8060
+    port: 8080
 
     #feurl
     feUri: http://localhost:3060
@@ -30,7 +30,7 @@ spring:
             matching-strategy: ant_path_matcher
     jpa:
         hibernate:
-            ddl-auto: create
+            #ddl-auto: create
         show_sql: true
         properties:
             hibernate:

@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         imagename = "fast_api_test"
-        registryCredential = 'yujinuk'
+        registryCredential = 'wlsdnrzlzl'
         version = 'latest'
         dockerImage = ''
     }
@@ -17,20 +17,6 @@ pipeline {
             echo 'Bulid Docker'
             script {
                 dockerImage = sh 'docker build -t test:latest ./Fastapi_app'
-            }
-          }
-        }
-
-        // docker Deploy
-        stage('Deploy Docker') {
-          agent any
-          steps {
-            echo 'Deploy Docker '
-            sh 'docker build -f ./docker-compose.yml up -d'
-          }
-          post {
-            failure {
-              error 'This pipeline stops here...'
             }
           }
         }

@@ -3,14 +3,15 @@ package project.drill.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import project.drill.repository.PostCustomRepository;
+
+import project.drill.repository.PostRepository;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RankingServiceImpl implements RankingService {
-	private final PostCustomRepository rankingRepository;
+	private final PostRepository rankingRepository;
 	@Override
 	public List<String> findAllRanking(String centerName, String courseName) {
 		return rankingRepository.findByCenterNameAndCourseName(centerName,courseName);

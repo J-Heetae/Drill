@@ -2,7 +2,7 @@
 #??? ??
 varialbles:
     # ???? ??? ??
-    port: 8080
+    port: 8060
 
     #feurl
     feUri: http://localhost:3060
@@ -12,8 +12,8 @@ varialbles:
     value: local
 
     #????? ????
-    server:
-        port: ${varialbles.port}
+server:
+  port: ${varialbles.port}
 
 
 spring:
@@ -61,8 +61,6 @@ spring:
 
 logging.level:
     org.hibernate.SQL : info
-
-
 
 
 

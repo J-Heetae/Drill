@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "jenkinsWorld"}
 
 
 @app.get("/items/{item_id}")
@@ -16,4 +16,4 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/test")
 def test_jenkins():
-    return {"test": "jenkins success 200"}
+    return {"test": "jenkins"}

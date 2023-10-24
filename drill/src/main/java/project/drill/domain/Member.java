@@ -22,9 +22,6 @@ public class Member {
     @Column(name="member_nickname",unique = true)
     private String memberNickname;
 
-    @Column(name="member_profile")
-    private String memberProfile;
-
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'Center'")
     private Center center;

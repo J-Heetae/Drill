@@ -14,8 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     Page<Post> findAllByMemberMemberNickname(Pageable pageable,String memberNickname);
     // 최신순 조회
     Page<Post> findAllByOrderByPostWriteTimeDesc(Pageable pageable);
-    // 과거순 조회
-    Page<Post> findAllByOrderByPostWriteTimeAsc(Pageable pageable);
 
 
 }

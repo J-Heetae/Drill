@@ -16,6 +16,7 @@ server:
     port: ${variables.port}
 
 
+
 spring:
     profiles:
         active:
@@ -39,8 +40,6 @@ spring:
 
 logging.level:
     org.hibernate.SQL : info
-
-
 
 
 

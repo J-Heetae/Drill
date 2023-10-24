@@ -73,9 +73,6 @@ public class PostServiceImpl implements PostService {
             case "new" :
                 postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);
                 break;
-            case "old" :
-                postPage = postRepository.findAllByOrderByPostWriteTimeAsc(pageable);
-                break;
         }
     return postPage;}
 }

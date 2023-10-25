@@ -19,11 +19,10 @@ public class Member {
     @Column(name="member_email")
     private String memberEmail;
 
-    @Column(name="member_nickname",unique = true)
+    @Column(name="member_nickname",unique = true, nullable = true)
     private String memberNickname;
 
     @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Center'")
     private Center center;
 
     @Enumerated(value = EnumType.STRING)
@@ -34,8 +33,7 @@ public class Member {
     private Long member_score;
 
     @Enumerated(value=EnumType.STRING)
-    @ColumnDefault("'test'")
-    private Ranking ranking;
+    private Difficulty difficulty;
 
 
 

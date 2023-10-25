@@ -26,6 +26,8 @@ public class PostController {
     // 게시글 등록
     @PostMapping
     public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
+        //코스 아이디 가져 오기
+        //맴버 가져오기
         postService.save(postDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

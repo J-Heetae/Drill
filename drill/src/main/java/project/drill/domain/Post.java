@@ -19,7 +19,7 @@ public class Post {
     @Column(name="post_id")
     private Long postId;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname")
     private Member member;
 
@@ -33,7 +33,6 @@ public class Post {
     private String postVideo;
 
     @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Center'")
     private Center center;
 
     @ManyToOne

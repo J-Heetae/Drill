@@ -34,6 +34,8 @@ pipeline {
         // docker push
         stage('Finish') {
             steps {
+                sh 'docker stop $(docker ps -a -q)'
+                sh 'docker rm $(docker ps -a -q)'
                 // 사용되지 않는 (dangling) 이미지를 찾아 제거합니다.
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }

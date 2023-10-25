@@ -79,3 +79,4 @@ bootJar {
 	}
 }
 
+jar.enabled = false

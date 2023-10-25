@@ -19,7 +19,7 @@ services:
     ports:
       - 3308:3306 # HOST:CONTAINER
     environment:
-      MYSQL_ROOT_PASSWORD: 비밀번호
+      MYSQL_ROOT_PASSWORD: ssafy
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

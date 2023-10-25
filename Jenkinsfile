@@ -6,7 +6,7 @@ pipeline {
         stage('Gradle Build') {
             steps {
                 // 'drill' 디렉터리 내에서 작업을 실행합니다.
-                dir('drill') {
+                dir('demo') {
                     // gradlew 실행 권한 부여
                     sh 'chmod +x gradlew'
                     // gradlew를 사용해 프로젝트를 빌드하며 테스트는 제외합니다.
@@ -18,7 +18,7 @@ pipeline {
         // Docker 이미지 빌드 스테이지: Dockerfile을 기반으로 이미지를 빌드합니다.
         stage('Docker Build') {
             steps {
-                dir('drill') {
+                dir('demo') {
                     // 이미지를 빌드합니다.
                     sh 'docker build -t drill:latest .'
                 }

@@ -22,25 +22,22 @@ pipeline {
         }
 
         // docker Deploy
-        stage('Deploy Docker') {
-          agent any
-          steps {
-            echo 'Deploy Docker '
-            sh 'tag=${version} docker-compose -f docker-compose.yml up -d'
-          }
+        stage('Deploy') {
+            steps {
+                // 실행 중인 'back' 컨테이너 제거
+                sh 'docker rm -f back'
+                // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
+                sh 'docker run -d --name back -p 8200:8200 -u root fast_api_test:latest'
+            }
         }
 
         // docker push
-        stage('Push Docker') {
-          agent any
-          steps {
-            echo 'Push Docker'
-            script {
-                docker.withRegistry( '', registryCredential) {
-                    dockerImage.push(version)  // ex) "1.0"
-                }
+        stage('Finish') {
+            steps {
+                // 사용되지 않는 (dangling) 이미지를 찾아 제거합니다.
+                sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
-          }
+        }
         }
     }
 }

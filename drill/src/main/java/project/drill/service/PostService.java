@@ -4,12 +4,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import project.drill.domain.Post;
 import project.drill.dto.PostDto;
+import project.drill.dto.ReadPostDto;
 
 import java.util.List;
 
 public interface PostService {
     Post save(PostDto postDto);
-    Post read(Long postId);
+    ReadPostDto read(Long postId);
 
     void delete(Long postId);
 

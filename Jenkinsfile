@@ -5,8 +5,8 @@ pipeline {
         // Gradle 빌드 스테이지: Spring Boot 프로젝트를 빌드합니다.
         stage('Gradle Build') {
             steps {
-                // 'Backend' 디렉터리 내에서 작업을 실행합니다.
-                dir('Backend') {
+                // 'drill' 디렉터리 내에서 작업을 실행합니다.
+                dir('drill') {
                     // gradlew 실행 권한 부여
                     sh 'chmod +x gradlew'
                     // gradlew를 사용해 프로젝트를 빌드하며 테스트는 제외합니다.
@@ -18,12 +18,9 @@ pipeline {
         // Docker 이미지 빌드 스테이지: Dockerfile을 기반으로 이미지를 빌드합니다.
         stage('Docker Build') {
             steps {
-                dir('Backend') {
+                dir('drill') {
                     // 이미지를 빌드합니다.
-                    sh 'docker build -t [여러분의 서비스 이름]:latest .'
-// 일반 빌드가 deprecated 되어서, BuildKit을 사용하는 코드. 여기서는 안되서 이전 버젼으로 진행
-//                     sh 'DOCKER_BUILDKIT=1 docker build -t herosof-trashbin:latest .'
-
+                    sh 'docker build -t drill:latest .'
                 }
             }
         }
@@ -34,7 +31,7 @@ pipeline {
                 // 실행 중인 'back' 컨테이너 제거
                 sh 'docker rm -f back'
                 // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name back -p 8200:8200 -u root [여러분의 서비스 이름]:latest'
+                sh 'docker run -d --name back -p 8200:8200 -u root drill:latest'
             }
         }
 

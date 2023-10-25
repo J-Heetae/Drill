@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostDto {
     private String memberNickname;
-    private Center center;
+    private String centerName;
     private String postContent;
     private String postVideo;
     private Long courseId;

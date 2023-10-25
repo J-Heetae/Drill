@@ -21,11 +21,11 @@ public class QCourse extends EntityPathBase<Course> {
 
     public final EnumPath<Center> center = createEnum("center", Center.class);
 
-    public final StringPath courseDifficulty = createString("courseDifficulty");
-
     public final NumberPath<Long> courseId = createNumber("courseId", Long.class);
 
     public final StringPath courseName = createString("courseName");
+
+    public final EnumPath<Difficulty> difficulty = createEnum("difficulty", Difficulty.class);
 
     public final BooleanPath isNew = createBoolean("isNew");
 

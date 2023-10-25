@@ -21,13 +21,13 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<Center> center = createEnum("center", Center.class);
 
+    public final EnumPath<Difficulty> difficulty = createEnum("difficulty", Difficulty.class);
+
     public final NumberPath<Long> member_score = createNumber("member_score", Long.class);
 
     public final StringPath memberEmail = createString("memberEmail");
 
     public final StringPath memberNickname = createString("memberNickname");
-
-    public final EnumPath<Ranking> ranking = createEnum("ranking", Ranking.class);
 
     public final EnumPath<Role> role = createEnum("role", Role.class);
 

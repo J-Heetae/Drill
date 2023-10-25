@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         imagename = "fast_api_test"
-        registryCredential = 'yujinuk'
+        registryCredential = 'admin'
         version = 'latest'
         dockerImage = ''
     }
@@ -26,12 +26,7 @@ pipeline {
           agent any
           steps {
             echo 'Deploy Docker '
-            sh 'docker compose up -d'
-          }
-          post {
-            failure {
-              error 'This pipeline stops here...'
-            }
+            sh 'tag=${version} docker-compose -f docker-compose.yml up -d'
           }
         }
 
@@ -46,13 +41,6 @@ pipeline {
                 }
             }
           }
-          post {
-            failure {
-              error 'This pipeline stops here...'
-            }
-          }
         }
-
-
     }
 }

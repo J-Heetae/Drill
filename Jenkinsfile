@@ -5,7 +5,7 @@ pipeline {
         // Docker 이미지 빌드 스테이지: Dockerfile을 기반으로 이미지를 빌드합니다.
         stage('Docker Build') {
             steps {
-                dir('Backend') {
+                dir('drill') {
                     sh 'docker build -t backendtest:latest .'
                 }
             }

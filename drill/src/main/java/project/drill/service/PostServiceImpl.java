@@ -10,9 +10,8 @@ import project.drill.domain.Course;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
 import project.drill.dto.PostDto;
-import project.drill.repository.CourseRepository;
-import project.drill.repository.MemberRepository;
-import project.drill.repository.PostRepository;
+import project.drill.dto.ReadPostDto;
+import project.drill.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +24,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
+    private final LikedRepository likedRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public Post save(PostDto postDto) {
@@ -44,9 +45,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post read(Long postId) {
+    public ReadPostDto read(Long postId) {
         Optional<Post> post = postRepository.findById(postId);
-        return post.get();
+        Long likedCount = likedRepository.countByPostPostId(postId);
+        Long commentCount = commentRepository.countByPostPostId(postId);
+        ReadPostDto readPostDto = ReadPostDto.builder()
+                .memberNickname(post.get().getMember().getMemberNickname())
+                .centerName(post.get().getCenter().toString())
+                .postContent(post.get().getPostContent())
+                .postVideo(post.get().getPostContent())
+                .postWriteTime(post.get().getPostWriteTime())
+                .courseName(post.get().getCourse().getCourseName())
+                .likedCount(likedCount)
+                .commentCount(commentCount)
+                .build();
+        return readPostDto;
     }
 
     @Override

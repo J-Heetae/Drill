@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @DynamicInsert
 @Builder
-public class Member {
+public class Member implements Serializable {
     @Id
     @Column(name="member_email")
     private String memberEmail;

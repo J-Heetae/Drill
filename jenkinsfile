@@ -38,6 +38,5 @@ pipeline {
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
         }
-        }
     }
 }

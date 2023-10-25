@@ -27,7 +27,7 @@ pipeline {
                 // 실행 중인 'back' 컨테이너 제거
                 sh 'docker rm -f back'
                 // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name back -p 8080:8093 -u root ${imagename}:${version}'
+                sh 'docker run -d --name back -p 8093:8080 -u root ${imagename}:${version}'
             }
         }
 

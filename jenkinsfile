@@ -16,7 +16,7 @@ pipeline {
           steps {
             echo 'Bulid Docker'
             script {
-                dockerImage = sh 'docker build -t fast_api_test:latest ./Fastapi_app'
+                dockerImage = sh 'docker build -t test:latest ./Fastapi_app'
             }
           }
         }
@@ -27,7 +27,7 @@ pipeline {
                 // 실행 중인 'back' 컨테이너 제거
                 sh 'docker rm -f back'
                 // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name back -p 8200:8200 -u root fast_api_test:latest'
+                sh 'docker run -d --name back -p 8200:8200 -u root test:latest'
             }
         }
 

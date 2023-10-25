@@ -20,7 +20,7 @@ pipeline {
             steps {
                 dir('demo') {
                     // 이미지를 빌드합니다.
-                    sh 'docker build -t drill:latest .'
+                    sh 'docker build -t demo:latest .'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
                 // 실행 중인 'back' 컨테이너 제거
                 sh 'docker rm -f back'
                 // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name back -p 8200:8200 -u root drill:latest'
+                sh 'docker run -d --name back -p 8200:8200 -u root demo:latest'
             }
         }
 

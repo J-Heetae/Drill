@@ -25,7 +25,7 @@ public class PostController {
     private final PostService postService;
     // 게시글 등록
     @PostMapping
-    public ResponseEntity<?> writePost(PostDto postDto){
+    public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
         postService.save(postDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

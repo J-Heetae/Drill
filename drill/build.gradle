@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
 
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation group: 'com.querydsl', name: 'querydsl-core', version: '5.0.0'

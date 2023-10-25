@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import project.drill.domain.Center;
 import project.drill.domain.Course;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
@@ -32,7 +33,7 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .postId(0L)
                 .member(member.get())
-                .center(postDto.getCenter())
+                .center(Center.valueOf(postDto.getCenterName()))
                 .postContent(postDto.getPostContent())
                 .postVideo(postDto.getPostVideo())
                 .postWriteTime(LocalDateTime.now())

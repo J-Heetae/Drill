@@ -21,11 +21,10 @@ public class Course {
     @Column(name="course_name",nullable = false)
     private String courseName;
 
-    @Column(name="course_difficulty", nullable = false)
-    private String courseDifficulty;
+    @Enumerated(value=EnumType.STRING)
+    private Difficulty difficulty;
 
     @Enumerated(value=EnumType.STRING)
-    @ColumnDefault("'center'")
     private Center center;
 
     @ColumnDefault("true")

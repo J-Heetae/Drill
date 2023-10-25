@@ -15,6 +15,7 @@ import project.drill.dto.EntirePostPageDto;
 import project.drill.dto.PostDto;
 
 import project.drill.dto.PostPageDto;
+import project.drill.dto.ReadPostDto;
 import project.drill.service.PostService;
 
 
@@ -35,8 +36,8 @@ public class PostController {
     // 게시글 상세 보기
     @GetMapping("/{postId}")
     public ResponseEntity<?> readPost(@PathVariable Long postId){
-        Post post = postService.read(postId);
-        return new ResponseEntity<Post>(post,HttpStatus.OK);
+        ReadPostDto readPost = postService.read(postId);
+        return new ResponseEntity<ReadPostDto>(readPost,HttpStatus.OK);
     }
     // 게시글 삭제
     @DeleteMapping("/{postId}")

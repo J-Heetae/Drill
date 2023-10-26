@@ -1,13 +1,8 @@
 package project.drill.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.drill.dto.LikedDto;
 import project.drill.service.LikedService;
 
 @RestController
@@ -15,9 +10,4 @@ import project.drill.service.LikedService;
 @RequestMapping("/api/liked")
 public class LikedController {
     private final LikedService likedService;
-    @PostMapping
-    public ResponseEntity<?> liked (LikedDto likedDto){
-        likedService.save(likedDto);
-        return new ResponseEntity<>("성공", HttpStatus.OK);
-    }
 }

@@ -14,7 +14,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // 실행 중인 'backendtest' 컨테이너 제거
-                sh 'docker rm -f backendtest'
+                sh 'docker rm -f springtest'
                 // 새로운 이미지로 'backendtest' 컨테이너를 백그라운드에서 실행
                 sh 'docker run -d --name springtest -p 8060:8060 -u root backendtest:latest'
             }

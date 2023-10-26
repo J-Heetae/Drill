@@ -1,14 +1,12 @@
 package project.drill.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import project.drill.domain.Center;
-import project.drill.domain.Course;
-import project.drill.domain.Member;
-import project.drill.domain.Post;
+import project.drill.domain.*;
 import project.drill.dto.EntirePostPageDto;
 import project.drill.dto.PostDto;
 import project.drill.dto.ReadPostDto;
@@ -17,7 +15,7 @@ import project.drill.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 
@@ -88,12 +86,12 @@ public class PostServiceImpl implements PostService {
                 postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);
             } else {
                 if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
-                    postPage = postRepository.findAllByCenterNameOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName());
+                    postPage = postRepository.findAllByCenterOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()));
                 } else {
                     if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("all")) {
-                        postPage = postRepository.findAllByCenterNameAndCourseDifficultyOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getDifficulty());
-                    } else if (!entirePostPageDto.getDifficulty().equals("difficulty0") && !entirePostPageDto.getCourseName().equals("all")) {
-                        postPage = postRepository.findAllByCenterNameAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName());
+                        postPage = postRepository.findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                    } else if (!entirePostPageDto.getCourseName().equals("all")) {
+                        postPage = postRepository.findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName());
                     }
 
                 }
@@ -107,7 +105,7 @@ public class PostServiceImpl implements PostService {
                 } else {
                     if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("all")) {
                         postPage = postRepository.findAllByCenterCenterNameDifficultyOrdeyByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getDifficulty());
-                    } else if (!entirePostPageDto.getDifficulty().equals("difficulty0") && !entirePostPageDto.getCourseName().equals("all")) {
+                    } else if (!entirePostPageDto.getCourseName().equals("all")) {
                         postPage = postRepository.findAllByCenterCenterNameAndCourseCourseNameOrderByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName());
                     }
 

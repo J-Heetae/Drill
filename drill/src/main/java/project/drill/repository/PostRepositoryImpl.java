@@ -14,7 +14,6 @@ import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
 import static project.drill.domain.QLiked.liked;
 import static project.drill.domain.QPost.post;
 
-
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostCustomRepository {
 

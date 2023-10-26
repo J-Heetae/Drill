@@ -3,7 +3,9 @@ package project.drill.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import project.drill.domain.Center;
 import project.drill.domain.Course;
+import project.drill.domain.Difficulty;
 import project.drill.domain.Post;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +18,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     Page<Post> findAllByOrderByPostWriteTimeDesc(Pageable pageable);
 
 
-   Page<Post> findAllByCenterNameOrderByPostWriteTimeDesc(Pageable pageable, String centerName);
+   Page<Post> findAllByCenterOrderByPostWriteTimeDesc(Pageable pageable, Center center);
 
-    Page<Post> findAllByCenterNameAndCourseDifficultyOrderByPostWriteTimeDesc(Pageable pageable, String centerName, String difficulty);
+    Page<Post> findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty);
 
-    Page<Post> findAllByCenterNameAndCourseCourseNameOrderByPostWriteTimeDesc(Pageable pageable, String centerName, String courseName);
+    Page<Post> findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName);
 }

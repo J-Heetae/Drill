@@ -33,9 +33,15 @@ public class Member implements Serializable {
     private Role role;
 
     @Column(name="member_score",nullable = false)
+    @ColumnDefault("0")
     private Long member_score;
 
+    @Column(name="max_score",nullable = false)
+    @ColumnDefault("100")
+    private Long max_score;
+
     @Enumerated(value=EnumType.STRING)
+    @ColumnDefault("'difficulty1'")
     private Difficulty difficulty;
 
 

@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.drill.domain.Post;
 import project.drill.dto.EntirePostPageDto;
-import project.drill.dto.PostDto;
-
+import project.drill.dto.PostDto2;
 import project.drill.dto.PostPageDto;
+import project.drill.service.MemberService;
 import project.drill.dto.ReadPostDto;
 import project.drill.service.PostService;
 
@@ -24,12 +24,15 @@ import project.drill.service.PostService;
 @RequestMapping("/api/post")
 public class PostController {
     private final PostService postService;
+    private final MemberService memberService;
     // 게시글 등록
     @PostMapping
-    public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
-        //코스 아이디 가져 오기
-        //맴버 가져오기
-        postService.save(postDto);
+    public ResponseEntity<?> writePost(@RequestBody PostDto2 postDto2){
+
+        postService.save(postDto2);//영상 등록
+        memberService.save(postDto2); // 유저 레벨 업
+
+        //맴버와 lv보내서 새로운 사람으로 등록
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

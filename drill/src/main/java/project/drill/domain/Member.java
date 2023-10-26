@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicInsert;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 
 @Entity
@@ -25,6 +24,7 @@ public class Member implements Serializable {
     @Column(name="member_nickname",unique = true, nullable = true)
     private String memberNickname;
 
+    @Column(nullable = true)
     @Enumerated(value = EnumType.STRING)
     private Center center;
 

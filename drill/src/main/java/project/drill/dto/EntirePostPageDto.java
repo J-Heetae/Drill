@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EntirePostPageDto {
-    private String centerName;
-    private String difficulty;
     private String order;
     private int page;
     private int size;

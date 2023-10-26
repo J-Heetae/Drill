@@ -5,20 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReadPostDto {
+public class PostDto2 {
     private String memberNickname;
-    private String centerName;
+    private String center;
     private String postContent;
     private String postVideo;
-    private LocalDateTime postWriteTime;
     private String courseName;
-    private Long likedCount;
-    private Long commentCount;
+    private String postThumbnail;
 }

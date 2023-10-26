@@ -16,7 +16,7 @@ pipeline {
                 // 실행 중인 'backendtest' 컨테이너 제거
                 sh 'docker rm -f backendtest'
                 // 새로운 이미지로 'backendtest' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name springtest -p 8080:8060 -u root backendtest:latest'
+                sh 'docker run -d --name springtest -p 8060:8060 -u root backendtest:latest'
             }
         }
 

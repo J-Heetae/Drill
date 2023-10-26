@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostService {
 
     Post save(PostDto2 postDto2);
-    Post read(Long postId);
+    ReadPostDto  read(Long postId);
 
 
     void delete(Long postId);

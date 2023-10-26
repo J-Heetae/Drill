@@ -10,7 +10,6 @@ import project.drill.repository.CommentRepository;
 import project.drill.repository.MemberRepository;
 import project.drill.repository.PostRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,12 +45,5 @@ public class CommentServiceImpl implements CommentService{
             throw new NullPointerException("글이 존재하지 않습니다.");
         commentRepository.deleteById(commentId);
     }
-
-    @Override
-    public List<Comment> getCommentList(Long postId) {
-        List<Comment> commentList = commentRepository.findAllByPostPostIdOrderByCommentWriteTimeDesc(postId);
-        return commentList;
-    }
-
 
 }

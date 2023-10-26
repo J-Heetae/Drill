@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ranking")
+@RequestMapping("api/ranking")
 public class RankingController {
 
 	private final RankingService rankingService;

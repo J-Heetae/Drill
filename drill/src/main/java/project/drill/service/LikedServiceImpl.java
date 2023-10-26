@@ -1,8 +1,6 @@
 package project.drill.service;
 
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.drill.domain.Liked;
 import project.drill.domain.Member;
@@ -30,9 +28,7 @@ public class LikedServiceImpl implements LikedService {
                 .likedId(0L)
                 .post(post.get())
                 .member(member.get())
-                .build();
-        likedRepository.save(liked);
-        }
+                .build();}
         else{
             likedRepository.deleteById(findLiked.get().getLikedId());
         }

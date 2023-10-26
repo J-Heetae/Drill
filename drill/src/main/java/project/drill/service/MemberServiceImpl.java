@@ -9,6 +9,8 @@ import project.drill.domain.Center;
 import project.drill.domain.Course;
 import project.drill.domain.Difficulty;
 import project.drill.domain.Member;
+import project.drill.domain.Role;
+import project.drill.dto.MemberDto;
 import project.drill.dto.PostDto2;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.MemberRepository;
@@ -75,5 +77,37 @@ public class MemberServiceImpl implements MemberService {
 			.difficulty(ndifficulty)
 			.build();
 		return memberRepository.save(member2);
+	}
+
+	@Override
+	public MemberDto findMyPage(String memberNickname) {
+		Optional<Member> memberOptional = memberRepository.findByMemberNickname(memberNickname);
+
+		MemberDto member = MemberDto.builder()
+			.memberNickname(memberOptional.get().getMemberNickname())
+			.member_score(memberOptional.get().getMember_score())
+			.max_score(memberOptional.get().getMax_score())
+			.difficulty(memberOptional.get().getDifficulty().toString())
+			.center(memberOptional.get().getCenter().toString())
+			.build();
+		return member;
+	}
+
+	@Override
+	public void updateUser(String memberNickname,String center,String memberEmail) {
+		Optional<Member> member = memberRepository.findByMemberEmail(memberEmail);
+
+		Member member2 = Member.builder()
+			.memberEmail(member.get().getMemberEmail())
+			.center(Center.valueOf(center))
+			.memberNickname(memberNickname)
+			.role(Role.ROLE_DONE)
+			.member_score(member.get().getMember_score())
+			.max_score(member.get().getMax_score())
+			.difficulty(member.get().getDifficulty())
+			.build();
+
+
+		memberRepository.save(member2);
 	}
 }

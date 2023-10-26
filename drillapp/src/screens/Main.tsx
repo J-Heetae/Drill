@@ -1,7 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Dimensions, Image } from 'react-native';
-import { SelectList } from 'react-native-dropdown-select-list'
+import { Image, StyleSheet } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { RootState } from "../modules/redux/RootReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 type DataItem = {
   key: string;
@@ -11,8 +13,11 @@ type DataItem = {
 
 
 const Main = () => {
+  const dispatch = useDispatch()
+  // Redux 저장소에서 데이터를 조회
+  const userInfo = useSelector((state: RootState) => state.templateUser);
+
   const [selected, setSelected] = useState<string>("");
-  const windowHeight = Dimensions.get('window').height;
   const data: DataItem[] = [
     {key:'1',value:'더클라임 홍대'},
     {key:'2',value:'더클라임 일산'},
@@ -49,36 +54,38 @@ const Main = () => {
                 height: 40,
               }}
             />
-            클라이밍재밌다
+            {userInfo.nickName}
           </UserNameText>
         </UserNameView>
         <DateView>
           <DateText>Thu, 27 May 2021</DateText>
         </DateView>
         <SelectView>
-          <SelectList 
-            onSelect={() => (selected)}
-            setSelected={setSelected} 
-            data={data}  
-            save="value"
-            search={false} 
-            placeholder="지점명"
-            inputStyles={{ color: 'white', fontSize: 15}}
-            dropdownTextStyles={{color: 'white', fontSize: 15}}
-            boxStyles={{ width: 200, height: 50, backgroundColor: '#5AC77C', borderColor: '#5AC77C', borderRadius: 50 }}
-            dropdownStyles={{ width: 200, height: Math.min(windowHeight - 100, 200), backgroundColor: '#5AC77C' }}    
+          <Dropdown 
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            mode='default'
+            data={data}
+            maxHeight={200}
+            placeholder='지점 선택'
+            labelField="value"
+            valueField="key"
+            onChange={() => (selected)}
           />
-          <SelectList 
-            onSelect={() => (selected)} 
-            setSelected={setSelected} 
-            data={holderColor}  
-            save="value"
-            search={false} 
-            placeholder="홀드 색"
-            inputStyles={{ color: 'white', fontSize: 15}}
-            dropdownTextStyles={{color: 'white', fontSize: 15}}
-            boxStyles={{ width: 100, height: 50, backgroundColor: '#5AC77C', borderColor: '#5AC77C', borderRadius: 50 }}
-            dropdownStyles={{ width: 100, height: Math.min(windowHeight - 100, 200), backgroundColor: '#5AC77C' }}
+          <Dropdown 
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            mode='default'
+            data={holderColor}
+            maxHeight={200}
+            placeholder='홀드 색'
+            labelField="value"
+            valueField="key"
+            onChange={() => (selected)}
           />
         </SelectView> 
       </TopView>
@@ -96,6 +103,25 @@ const Main = () => {
   )
 };
 
+const styles = StyleSheet.create({
+  dropdown: {
+    width: 150,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
+
 const ContainerView = styled.View`
   flex: 1;
   background-color: white;
@@ -104,13 +130,12 @@ const ContainerView = styled.View`
 
 const TopView = styled.View`
   flex: 1;
-  zIndex: 2;
+  z-index: 1;
 `;
 const BottomView = styled.View`
   flex: 2.5;
   justify-content: center;
   align-items: center;
-  zIndex: 1;
 `;
 // -------------------------------
 
@@ -130,7 +155,6 @@ const SelectView = styled.View`
   flex-direction: row;
   justify-content: center;
   gap: 10px;
-  zIndex: 999;
 `
 const DateView = styled.View`
   flex: 1;

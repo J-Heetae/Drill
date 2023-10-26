@@ -17,7 +17,7 @@ services:
     image: mysql:8.0
     container_name: mysql
     ports:
-      - 3308:3306 # HOST:CONTAINER
+      - 3306:3306 # HOST:CONTAINER
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
     command:

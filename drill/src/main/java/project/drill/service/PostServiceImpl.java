@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import project.drill.domain.Center;
 import project.drill.domain.Course;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
+import project.drill.dto.EntirePostPageDto;
 import project.drill.dto.PostDto;
 import project.drill.dto.ReadPostDto;
 import project.drill.repository.*;
@@ -77,18 +79,42 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> findAllByOrder(String order, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Post> findAllByOrder(EntirePostPageDto entirePostPageDto) {
         Page<Post> postPage = null;
-        switch (order) {
-            case "liked":
-                postPage = postRepository.findByLiked(pageable);
-            break;
-            case "new" :
+        Pageable pageable = PageRequest.of(entirePostPageDto.getPage(), entirePostPageDto.getSize());
+        if (entirePostPageDto.getOrder().equals("new")) {
+            if (entirePostPageDto.getCenterName().equals("center0")) {
                 postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);
-                break;
-        }
-    return postPage;}
+            } else {
+                if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
+                    postPage = postRepository.findAllByCenterNameOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName());
+                } else {
+                    if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("all")) {
+                        postPage = postRepository.findAllByCenterNameAndCourseDifficultyOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getDifficulty());
+                    } else if (!entirePostPageDto.getDifficulty().equals("difficulty0") && !entirePostPageDto.getCourseName().equals("all")) {
+                        postPage = postRepository.findAllByCenterNameAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName());
+                    }
+
+                }
+            }
+        } else {
+            if (entirePostPageDto.getCenterName().equals("center0")) {
+                postPage = postRepository.findByLiked(pageable);
+            } else {
+                if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
+                    postPage = postRepository.findByCenterNameOrderByLiked(pageable, entirePostPageDto.getCenterName());
+                } else {
+                    if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("all")) {
+                        postPage = postRepository.findAllByCenterCenterNameDifficultyOrdeyByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getDifficulty());
+                    } else if (!entirePostPageDto.getDifficulty().equals("difficulty0") && !entirePostPageDto.getCourseName().equals("all")) {
+                        postPage = postRepository.findAllByCenterCenterNameAndCourseCourseNameOrderByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName());
+                    }
+
+                }
+            } }
+            return postPage;
+
+    }
 }
 
 

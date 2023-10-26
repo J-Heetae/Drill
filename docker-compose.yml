@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  jenkins:  # Jenkins Container
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    volumes:
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock 
+      - /var/jenkins_home:/var/jenkins_home
+    ports:
+      - 8093:8080
+    privileged: true
+    user: root 
+    restart: unless-stopped
+
+  mysql:   # MySql Container
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - 3306:3306 # HOST:CONTAINER
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql

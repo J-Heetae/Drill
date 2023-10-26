@@ -1,21 +1,13 @@
 package project.drill.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.drill.domain.Post;
-import project.drill.dto.EntirePostPageDto;
-import project.drill.dto.PostDto;
-import project.drill.dto.PostDto2;
+import project.drill.dto.*;
 
-import project.drill.dto.PostPageDto;
 import project.drill.service.MemberService;
 import project.drill.service.PostService;
 
@@ -28,10 +20,10 @@ public class PostController {
     private final MemberService memberService;
     // 게시글 등록
     @PostMapping
-    public ResponseEntity<?> writePost(@RequestBody PostDto2 postDto2){
+    public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
 
-        postService.save(postDto2);//영상 등록
-        memberService.save(postDto2); // 유저 레벨 업
+        postService.save(postDto);//영상 등록
+        memberService.save(postDto); // 유저 레벨 업
 
         //맴버와 lv보내서 새로운 사람으로 등록
         return new ResponseEntity<>(HttpStatus.OK);
@@ -40,8 +32,8 @@ public class PostController {
     // 게시글 상세 보기
     @GetMapping("/{postId}")
     public ResponseEntity<?> readPost(@PathVariable Long postId){
-        Post post = postService.read(postId);
-        return new ResponseEntity<Post>(post,HttpStatus.OK);
+        ReadPostDto post = postService.read(postId);
+        return new ResponseEntity<>(post,HttpStatus.OK);
     }
     // 게시글 삭제
     @DeleteMapping("/{postId}")

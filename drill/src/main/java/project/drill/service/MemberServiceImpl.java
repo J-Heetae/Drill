@@ -11,10 +11,9 @@ import project.drill.domain.Difficulty;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
 import project.drill.dto.MemberDto;
-import project.drill.dto.PostDto2;
+import project.drill.dto.PostDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.MemberRepository;
-import project.drill.repository.PostRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,10 @@ public class MemberServiceImpl implements MemberService {
 	private final CourseRepository courseRepository;
 
 	@Override
-	public Member save(PostDto2 postDto2) {
-		Optional<Member> member = memberRepository.findByMemberNickname(postDto2.getMemberNickname());
-		Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto2.getCourseName(),
-			Center.valueOf(postDto2.getCenter()));
+	public Member save(PostDto postDto) {
+		Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());
+		Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto.getCourseName(),
+			Center.valueOf(postDto.getCenter()));
 		String courseD = course.get().getDifficulty().toString();
 		int courseR = courseD.charAt(courseD.length() - 1)-'0';
 
@@ -69,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
 		Member member2 = Member.builder()
 			.memberEmail(member.get().getMemberEmail())
-			.center(Center.valueOf(postDto2.getCenter()))
+			.center(Center.valueOf(postDto.getCenter()))
 			.memberNickname(member.get().getMemberNickname())
 			.role(member.get().getRole())
 			.member_score(score)

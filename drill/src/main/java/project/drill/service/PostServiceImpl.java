@@ -4,20 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import project.drill.domain.Center;
 import project.drill.domain.Course;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
 import project.drill.dto.EntirePostPageDto;
-import project.drill.dto.PostDto2;
+import project.drill.dto.PostDto;
 import project.drill.dto.ReadPostDto;
 import project.drill.repository.*;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,30 +25,45 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
+    private final LikedRepository likedRepository;
+    private final CommentRepository commentRepository;
 
     @Override
-    public Post save(PostDto2 postDto2) {
-        Optional<Member> member = memberRepository.findByMemberNickname(postDto2.getMemberNickname());
-        Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto2.getCourseName(),
-            Center.valueOf(postDto2.getCenter()));
+    public Post save(PostDto postDto) {
+        Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());
+        Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto.getCourseName(),
+            Center.valueOf(postDto.getCenter()));
         Post post = Post.builder()
                 .postId(0L)
                 .member(member.get())
-                .center(Center.valueOf(postDto2.getCenter()))
-                .postContent(postDto2.getPostContent())
-                .postVideo(postDto2.getPostVideo())
+                .center(Center.valueOf(postDto.getCenter()))
+                .postContent(postDto.getPostContent())
+                .postVideo(postDto.getPostVideo())
                 .postWriteTime(LocalDateTime.now())
                 .course(course.get())
-                .postThumbnail(postDto2.getPostThumbnail())
+                .postThumbnail(postDto.getPostThumbnail())
                 .build();
         return postRepository.save(post);
     }
 
     @Override
-    public Post read(Long postId) {
+    public ReadPostDto read(Long postId) {
         Optional<Post> post = postRepository.findById(postId);
-        return post.get();
+        Long likedCount = likedRepository.countByPostPostId(postId);
+        Long commentCount = commentRepository.countByPostPostId(postId);
+        ReadPostDto readPostDto = ReadPostDto.builder()
+                .memberNickname(post.get().getMember().getMemberNickname())
+                .centerName(post.get().getCenter().toString())
+                .postContent(post.get().getPostContent())
+                .postVideo(post.get().getPostContent())
+                .postWriteTime(post.get().getPostWriteTime())
+                .courseName(post.get().getCourse().getCourseName())
+                .likedCount(likedCount)
+                .commentCount(commentCount)
+                .build();
+        return readPostDto;
     }
+
 
     @Override
     public void delete(Long postId) {

@@ -2,10 +2,10 @@ package project.drill.service;
 
 import project.drill.domain.Member;
 import project.drill.dto.MemberDto;
-import project.drill.dto.PostDto2;
+import project.drill.dto.PostDto;
 
 public interface MemberService {
-	Member save(PostDto2 postDto2);
+	Member save(PostDto postDto);
 
 	MemberDto findMyPage(String memberNickname);
 

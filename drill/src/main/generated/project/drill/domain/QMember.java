@@ -23,6 +23,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<Difficulty> difficulty = createEnum("difficulty", Difficulty.class);
 
+    public final NumberPath<Long> max_score = createNumber("max_score", Long.class);
+
     public final NumberPath<Long> member_score = createNumber("member_score", Long.class);
 
     public final StringPath memberEmail = createString("memberEmail");

@@ -1,0 +1,51 @@
+
+#??? ??
+variables:
+    # ???? ??? ??
+    port: 8060
+
+    #feurl
+    feUri: http://localhost:3060
+
+    #??????? ? url
+    beUri: http://localhost:${variables.port}
+    value: local
+
+    #????? ????
+server:
+    port: ${variables.port}
+
+
+
+spring:
+    profiles:
+        active:
+            - local
+    datasource:
+        url: jdbc:mysql://localhost:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+        username: root
+        password: ssafy
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+        view:
+            prefix: /WEB-INF/view/
+            suffix: .jsp
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show_sql: true
+        properties:
+            hibernate:
+                format_sql: true #?? ??? ???
+
+
+logging.level:
+    org.hibernate.SQL : info
+
+
+
+servlet:
+    session:
+        timeout: 300m

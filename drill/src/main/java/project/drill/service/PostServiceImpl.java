@@ -9,9 +9,11 @@ import project.drill.domain.Center;
 import project.drill.domain.Course;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
-import project.drill.dto.PostDto;
+
+import project.drill.dto.PostDto2;
 import project.drill.dto.ReadPostDto;
 import project.drill.repository.*;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,18 +30,19 @@ public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
 
     @Override
-    public Post save(PostDto postDto) {
-        Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());
-        Optional<Course> course = courseRepository.findById(postDto.getCourseId());
+    public Post save(PostDto2 postDto2) {
+        Optional<Member> member = memberRepository.findByMemberNickname(postDto2.getMemberNickname());
+        Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto2.getCourseName(),
+            Center.valueOf(postDto2.getCenter()));
         Post post = Post.builder()
                 .postId(0L)
                 .member(member.get())
-                .center(Center.valueOf(postDto.getCenterName()))
-                .postContent(postDto.getPostContent())
-                .postVideo(postDto.getPostVideo())
+                .center(Center.valueOf(postDto2.getCenter()))
+                .postContent(postDto2.getPostContent())
+                .postVideo(postDto2.getPostVideo())
                 .postWriteTime(LocalDateTime.now())
                 .course(course.get())
-                .postThumbnail(postDto.getPostThumbnail())
+                .postThumbnail(postDto2.getPostThumbnail())
                 .build();
         return postRepository.save(post);
     }

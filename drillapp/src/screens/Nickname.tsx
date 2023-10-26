@@ -3,18 +3,26 @@ import styled from 'styled-components/native';
 import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { setNickName } from "../modules/redux/slice/TemplateUserSlice";
 
 type RootStackParamList = {
   Freplace: undefined;
 };
 
 const Nickname = () => {
+  const dispatch = useDispatch()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Freplace'>>()
   const [text, setText] = useState('');
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
   };
+
+  const setUserInfo = () => {
+    const result = dispatch(setNickName("hohoho"))
+    console.log("result :: ", result)
+}
 
   return (
     <ContainerView>
@@ -36,7 +44,7 @@ const Nickname = () => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Freplace')}>
-          <Text style={styles.buttonText}>다음</Text>
+          <Text style={styles.buttonText} onPress={setUserInfo}>다음</Text>
         </TouchableOpacity>
       </ButtonView>
     </ContainerView>

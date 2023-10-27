@@ -40,12 +40,26 @@ spring:
         properties:
             hibernate:
                 format_sql: true #?? ??? ???
+    servlet:
+        multipart:
+            max-file-size: 200MB
+            max-request-size: 200MB
 
+cloud:
+    aws:
+        s3:
+            bucket: drill-video-bucket.bucket
+        region:
+            static: ap-northeast-2
+            auto: false
+        stack:
+            auto: false
+        credentials:
+            access-key: AKIA32XVP6DSV5IHAI3U
+            secret-key: 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
 
 logging.level:
     org.hibernate.SQL : info
-
-
 
 servlet:
     session:

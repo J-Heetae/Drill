@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class DrillApplication {
-
+	static {
+		System.setProperty("com.amazonaws.skd.disableEc2Metadata", "true");
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(DrillApplication.class, args);
 	}

@@ -19,17 +19,9 @@ pipeline {
             steps {
                 script {  // Groovy 스크립트 블록 시작
                     // // 실행 중인 'back' 컨테이너 제거
-                    // sh 'docker rm -f drill_back'
+                    sh 'docker rm -f drill_back'
                     // // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
-                    // sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_back:latest'
-                    
-                    def existingContainer = sh(script: 'docker ps -aqf "name=drill_back"', returnStatus: true)  // 이전 컨테이너 존재 여부 확인
-                    if (existingContainer == 0) {  // 이전 컨테이너가 없으면
-                        sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_back:latest'  // 컨테이너 실행
-                    } else {  // 이전 컨테이너가 있으면
-                        sh 'docker rm -f drill_back'  // 이전 컨테이너 제거
-                        sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_back:latest'  // 새 컨테이너 실행
-                    }
+                    sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_back:latest'
                 }
             }
         }

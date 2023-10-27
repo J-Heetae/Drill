@@ -1,5 +1,6 @@
 package project.drill.kakao;
 
+import org.springframework.context.annotation.ComponentScan;
 import project.drill.config.FeignConfiguration;
 import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;

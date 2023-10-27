@@ -54,7 +54,7 @@ public class MemberController {
 	public ResponseEntity<String> doSocialLogin(
 			@RequestBody @Valid SocialLoginDto request, HttpServletResponse response)
 			throws Exception {
-
+		System.out.println(request.getCode());
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request)).orElseThrow();
 
 		Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId",

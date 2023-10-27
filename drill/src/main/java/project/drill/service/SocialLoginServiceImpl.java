@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +61,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   public SocialAuthResponse getAccessToken(String authorizationCode) {
     ResponseEntity<?> response = kakaoAuthApi.getAccessToken(
         kakaoAppKey,
+        "f0ifHhoCMvifvGlExw6WDpvqZOtvf8CB",
         kakaoGrantType,
         kakaoRedirectUri,
         authorizationCode

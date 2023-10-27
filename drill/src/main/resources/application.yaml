@@ -78,8 +78,9 @@ servlet:
 social:
     client:
         kakao:
-            rest-api-key: a21cb4cfd9c1a81b77614f1af356f2d1
-            secret-key:
+            rest-api-key: e055ec3f8a5c059c7530d94ddda9a6bd
+            secret-key: f0ifHhoCMvifvGlExw6WDpvqZOtvf8CB
             #      redirect-uri: http://localhost:8082/api/user
-            redirect-uri: http://localhost:8081/auth
+            redirect-uri: http://localhost:3000/user
             grant_type: authorization_code
+

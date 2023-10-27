@@ -48,7 +48,7 @@ spring:
 cloud:
     aws:
         s3:
-            bucket: drill-video-bucket
+            bucket: drill-video-bucket.bucket
         region:
             static: ap-northeast-2
             auto: false

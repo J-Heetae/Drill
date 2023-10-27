@@ -17,7 +17,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/api/upload")
 @RequiredArgsConstructor
 public class FileUploadController {
 
@@ -28,6 +28,7 @@ public class FileUploadController {
 
 	@PostMapping
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+		System.out.println("업로드 한다잉?");
 		try {
 			String fileName = file.getOriginalFilename();
 			String fileUrl = "https://" + bucket + "/test" + fileName;

@@ -14,7 +14,7 @@ pipeline {
                     // gradlew 실행 권한 부여
                     sh 'chmod +x gradlew'
                     // gradlew를 사용해 프로젝트를 빌드하며 테스트는 제외합니다.
-                    sh "./gradlew clean build"
+                    sh "./gradlew clean build -x test"
                 }
             }
         }

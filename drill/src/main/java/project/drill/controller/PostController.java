@@ -65,7 +65,7 @@ public class PostController {
         String order= entirePostPageDto.getOrder();
         int page = entirePostPageDto.getPage();
         int size = entirePostPageDto.getSize();
-        PostPageAndCourseListDto myPostPage = postService.findAllByOrder(entirePostPageDto);
+        Page<Post> myPostPage = postService.findAllByOrder(entirePostPageDto);
         return new ResponseEntity<>(myPostPage,HttpStatus.OK);
     }
 }

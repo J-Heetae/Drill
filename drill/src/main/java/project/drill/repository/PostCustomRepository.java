@@ -12,11 +12,6 @@ public interface PostCustomRepository {
 	List<String> findByCenterNameAndCourseName(String centerName, String courseName);
     Page<Post> findByLiked(Pageable pageable);
     Page<Post> findByCenterNameOrderByLiked(Pageable pageable,String centerName);
-    Page<Post> findAllByCenterCenterNameDifficultyOrderByLiked(Pageable pageable,String centerName,String difficulty);
+    Page<Post> findAllByCenterCenterNameDifficultyOrdeyByLiked(Pageable pageable,String centerName,String difficulty);
     Page<Post> findAllByCenterCenterNameAndCourseCourseNameOrderByLiked(Pageable pageable, String centerName, String courseName);
-
-    Page<Post> findByMemberNicknameAndLiked(Pageable pageable,String memberNickname);
-    Page<Post> findByCenterNameAndMemberNicknameOrderByLiked(Pageable pageable,String centerName ,String memberNickname);
-    Page<Post> findAllByCenterCenterNameDifficultyAndMemberNicknameOrderByLiked(Pageable pageable,String centerName,String difficulty ,String memberNickname);
-    Page<Post> findAllByCenterCenterNameAndCourseCourseNameAndMemberNicknameOrderByLiked(Pageable pageable, String centerName, String courseName ,String memberNickname);
 }

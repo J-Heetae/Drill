@@ -20,7 +20,20 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
 
 //   Page<Post> findAllByCourseCourseNameOrderBy(Pageable pageable, String courseName, Page);
 
+<<<<<<< Updated upstream
     Page<Post> findAllByCenterNameAndCourseDifficultyOrderByPostWriteTimeDesc(Pageable pageable, String centerName, String difficulty);
 
     Page<Post> findAllByCenterNameAndCourseCourseNameOrderByPostWriteTimeDesc(Pageable pageable, String centerName, String courseName);
+=======
+    Page<Post> findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName);
+
+    Page<Post> findAllByMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable,String memberNickname);
+
+
+    Page<Post> findAllByCenterAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center,String memberNickname);
+
+    Page<Post> findAllByCenterAndCourseDifficultyAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty,String memberNickname);
+
+    Page<Post> findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName, String memberNickname);
+>>>>>>> Stashed changes
 }

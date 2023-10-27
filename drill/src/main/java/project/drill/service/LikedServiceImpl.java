@@ -28,7 +28,8 @@ public class LikedServiceImpl implements LikedService {
                 .likedId(0L)
                 .post(post.get())
                 .member(member.get())
-                .build();}
+                .build();
+        likedRepository.save(liked);}
         else{
             likedRepository.deleteById(findLiked.get().getLikedId());
         }

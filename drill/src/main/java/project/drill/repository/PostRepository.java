@@ -23,4 +23,13 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     Page<Post> findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty);
 
     Page<Post> findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName);
+
+    Page<Post> findAllByMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable,String memberNickname);
+
+
+    Page<Post> findAllByCenterAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center,String memberNickname);
+
+    Page<Post> findAllByCenterAndCourseDifficultyAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty, String memberNickname);
+
+    Page<Post> findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName, String memberNickname);
 }

@@ -26,6 +26,7 @@ public class Member implements Serializable {
 
     @Column(nullable = true)
     @Enumerated(value = EnumType.STRING)
+    @ColumnDefault("'difficulty0'")
     private Center center;
 
     @Enumerated(value = EnumType.STRING)

@@ -12,4 +12,4 @@ COPY ${JAR_FILE} app.jar
 EXPOSE 8060
 
 # 컨테이너가 실행될 때 'java -jar app.jar' 명령을 실행하여 애플리케이션을 구동합니다.
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]

@@ -46,18 +46,13 @@ public class FileUploadController {
 			metadata.setContentType(file.getContentType());
 			metadata.setContentLength(file.getSize());
 
-			System.out.println(bucket);
-			System.out.println(fileName);
-			System.out.println(file.getInputStream());
-			System.out.println(metadata);
-			System.out.println("amazonS3Client" + amazonS3Client.toString());
-
 			amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
 			return ResponseEntity.ok(fileUrl);
 		} catch (AmazonS3Exception s3) {
 			log.error("AmazonS3Exception", s3);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -11,10 +11,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 @Configuration
 public class S3Config {
-	@Value("${cloud.aws.credentials.access-key}")
+	@Value("${cloud.aws.access-key}")
 	private String iamAccessKey;
 
-	@Value("${cloud.aws.credentials.secret-key}")
+	@Value("${cloud.aws.secret-key}")
 	private String iamSecretKey;
 
 	@Value("${cloud.aws.region.static}")
@@ -23,16 +23,9 @@ public class S3Config {
 	@Bean
 	public AmazonS3Client amazonS3Client(){
 		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(iamAccessKey, iamSecretKey);
-
-		System.out.println("awsCredentials" + awsCredentials.toString());
-
-		AmazonS3Client build = (AmazonS3Client)AmazonS3ClientBuilder.standard()
+		return (AmazonS3Client)AmazonS3ClientBuilder.standard()
 			.withRegion(region).enablePathStyleAccess()
 			.withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
 			.build();
-
-		System.out.println(build.toString());
-
-		return build;
 	}
 }

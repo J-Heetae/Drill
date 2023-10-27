@@ -41,6 +41,7 @@ public class FileUploadController {
 			System.out.println(fileName);
 			System.out.println(file.getInputStream());
 			System.out.println(metadata);
+			System.out.println("amazonS3Client" + amazonS3Client.toString());
 
 			amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 			return ResponseEntity.ok(fileUrl);

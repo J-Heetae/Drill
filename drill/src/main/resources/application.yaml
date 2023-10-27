@@ -4,6 +4,18 @@ server:
 spring:
     profiles:
         default: dev
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+        view:
+            prefix: /WEB-INF/view/
+            suffix: .jsp
+
 
 logging.level:
     org.hibernate.SQL : info
+
+
+servlet:
+    session:
+        timeout: 300m

@@ -8,11 +8,7 @@ pipeline {
                 dir('drill') {
                     script {
                         // // 이미지를 빌드합니다.
-                        // sh 'docker build -t drill_back:latest .'
-                        def dockerImage = docker.build('drill_back:latest', '.')  // Docker 이미지 빌드
-                        dockerImage.inside {  // Docker 이미지 내에서 실행 시작
-                            sh './gradlew build -x test'  // 테스트 제외하고 애플리케이션 빌드
-                        }  // Docker 이미지 내에서 실행 종료
+                        sh 'docker build -t drill_back:latest .'
                     }
                 }
             }

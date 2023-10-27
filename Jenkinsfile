@@ -1,6 +1,7 @@
 pipeline {
     agent any
-
+    
+    stages {
         // Docker 이미지 빌드 스테이지: Dockerfile을 기반으로 이미지를 빌드합니다.
         stage('Docker Build') {
             steps {
@@ -28,4 +29,5 @@ pipeline {
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
         }
+    }
 }

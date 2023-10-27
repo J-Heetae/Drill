@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/upload")
 @RequiredArgsConstructor
+@Slf4j
 public class FileUploadController {
 
 	private AmazonS3Client amazonS3Client;
@@ -52,6 +55,9 @@ public class FileUploadController {
 			amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
 			return ResponseEntity.ok(fileUrl);
+		} catch (AmazonS3Exception s3) {
+			log.error("AmazonS3Exception", s3);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

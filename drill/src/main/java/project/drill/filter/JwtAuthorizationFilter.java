@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.drill.config.auth.MemberDetail;
 import project.drill.domain.Member;
 import project.drill.repository.MemberRepository;
 
@@ -70,7 +71,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // token 값을 권한 처리를 위해 Authentication에 주입
     if(memberId!=null){
-      Member member=memberRepository.findById(Long.parseLong(memberId)).orElse(null);
+      Member member=memberRepository.findById(memberId).orElse(null);
+//      Member member=memberRepository.findById(Long.parseLong(memberId)).orElse(null);
       MemberDetail memberDetail = new MemberDetail(member);
 
       UsernamePasswordAuthenticationToken emailPasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(memberDetail,null, memberDetail.getAuthorities());

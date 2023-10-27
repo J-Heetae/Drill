@@ -15,8 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import project.drill.config.auth.MemberDetail;
+import project.drill.config.redis.RefreshTokenService;
+import project.drill.dto.MemberLoginRequestDto;
 
-public class JwtAuthenticationFilter {
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private final AuthenticationManager authenticationManager;
 
   private final RefreshTokenService refreshTokenService;
@@ -51,8 +55,9 @@ public class JwtAuthenticationFilter {
     System.out.println("JwtAuthenticationFilter : " + loginRequestDto);
 
     // 이메일패스워드 토큰 생성
+    // 패스워드는 안쓰므로 기본 1234로 박음
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(),
-        loginRequestDto.getPassword());
+        "1234");
     System.out.println("JwtAuthenticationFilter : 토큰생성완료");
 
     // authenticate() 함수가 호출 되면 인증 프로바이더가 유저 디테일 서비스의
@@ -68,7 +73,7 @@ public class JwtAuthenticationFilter {
         authenticationManager.authenticate(token);
     MemberDetail memberDetail = (MemberDetail) authentication.getPrincipal();
     if (memberDetail.getMember() != null)
-      System.out.println("Authentication : " + memberDetail.getMember().getEmail());
+      System.out.println("Authentication : " + memberDetail.getMember().getMemberEmail());
     return authentication;
   }
 
@@ -79,7 +84,7 @@ public class JwtAuthenticationFilter {
 
     MemberDetail memberDetail = (MemberDetail) authResult.getPrincipal();
 
-    Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId", String.valueOf(memberDetail.getMember().getId()));
+    Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId", String.valueOf(memberDetail.getMember().getMemberId()));
 
     String accessToken = jwtTokenProvider.generateToken(memberDetail.getUsername(), ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
     String refreshToken = jwtTokenProvider.generateToken(memberDetail.getUsername(), REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
@@ -90,7 +95,7 @@ public class JwtAuthenticationFilter {
     jwtTokenProvider.addHeaderRefreshToken(response, refreshToken);
 
 //        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
-    refreshTokenService.saveRefreshToken(String.valueOf(memberDetail.getMember().getId()), refreshToken, REFRESH_TOKEN_EXPIRATION_TIME);
+    refreshTokenService.saveRefreshToken(String.valueOf(memberDetail.getMember().getMemberId()), refreshToken, REFRESH_TOKEN_EXPIRATION_TIME);
 
     // RefreshToken을 쿠키에 담아 전송할 경우
 //        jwtTokenProvider.addRefreshTokenToCookie(response, refreshToken);

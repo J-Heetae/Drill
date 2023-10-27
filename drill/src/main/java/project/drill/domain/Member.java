@@ -18,7 +18,11 @@ import javax.persistence.*;
 @Builder
 public class Member implements Serializable {
     @Id
-    @Column(name="member_email")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="member_id")
+    private Long memberId;
+
+    @Column(name="member_email", unique = true, nullable = false)
     private String memberEmail;
 
     @Column(name="member_nickname",unique = true, nullable = true)

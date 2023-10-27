@@ -22,7 +22,7 @@ spring:
         active:
             - local
     datasource:
-        url: jdbc:mysql://k9a106a.p.ssafy.io:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+        url: jdbc:mysql://localhost:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
         username: root
         password: ssafy
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -44,7 +44,6 @@ spring:
         oauth2:
             client:
                 registration:
-
                     kakao:
                         client-id: f8ae067dc6798972969cd650aca79d01
                         client-secret: u8FZ07hOCRzzLlr2QbVgHVnp5MeCSSuo
@@ -75,3 +74,12 @@ logging.level:
 servlet:
     session:
         timeout: 300m
+
+social:
+    client:
+        kakao:
+            rest-api-key: a21cb4cfd9c1a81b77614f1af356f2d1
+            secret-key:
+            #      redirect-uri: http://localhost:8082/api/user
+            redirect-uri: http://localhost:8081/auth
+            grant_type: authorization_code

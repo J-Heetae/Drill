@@ -2,6 +2,7 @@ package project.drill.controller;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ import lombok.RequiredArgsConstructor;
 public class FileUploadController {
 
 	private AmazonS3Client amazonS3Client;
+
+	@Autowired
+	public FileUploadController(AmazonS3Client amazonS3Client) {
+		this.amazonS3Client = amazonS3Client;
+	}
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
@@ -44,6 +50,7 @@ public class FileUploadController {
 			System.out.println("amazonS3Client" + amazonS3Client.toString());
 
 			amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+
 			return ResponseEntity.ok(fileUrl);
 		} catch (IOException e) {
 			e.printStackTrace();

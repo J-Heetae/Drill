@@ -1,6 +1,6 @@
 
 #??? ??
-varialbles:
+variables:
     # ???? ??? ??
     port: 8060
 
@@ -8,12 +8,13 @@ varialbles:
     feUri: http://localhost:3060
 
     #??????? ? url
-    beUri: http://localhost:${varialbles.port}
+    beUri: http://localhost:${variables.port}
     value: local
 
     #????? ????
-    server:
-        port: ${varialbles.port}
+server:
+    port: ${variables.port}
+
 
 
 spring:
@@ -21,13 +22,16 @@ spring:
         active:
             - local
     datasource:
-        url: jdbc:mysql://localhost:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+        url: jdbc:mysql://k9a106a.p.ssafy.io:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
         username: root
         password: ssafy
         driver-class-name: com.mysql.cj.jdbc.Driver
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
+        view:
+            prefix: /WEB-INF/view/
+            suffix: .jsp
     jpa:
         hibernate:
             ddl-auto: update
@@ -65,8 +69,6 @@ spring:
 
 logging.level:
     org.hibernate.SQL : info
-
-
 
 
 

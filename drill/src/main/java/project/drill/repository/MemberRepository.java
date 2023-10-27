@@ -1,4 +1,11 @@
 package project.drill.repository;
 
-public class MemberRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import project.drill.domain.Member;
+
+import java.util.Optional;
+
+public interface MemberRepository extends JpaRepository<Member, String> {
+    Optional<Member> findByMemberNickname(String memberNickname);
+    Optional<Member> findByMemberEmail(String memberEmail);
 }

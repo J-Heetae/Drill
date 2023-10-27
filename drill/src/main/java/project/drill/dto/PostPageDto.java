@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberDto {
-	private String memberNickname;
-	private long member_score;
-	private long max_score;
-	private String center;
-	private  String difficulty;
+public class PostPageDto {
+    private String memberEmail;
+    private int page;
+    private int size;
+
 }

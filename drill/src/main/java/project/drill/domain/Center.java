@@ -1,26 +1,21 @@
 package project.drill.domain;
 
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import javax.persistence.*;
-
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicInsert
-@Builder
-@Table(name = "center")
-public class Center {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="center_id")
-    private Long centerId;
-
-    @Column(name="center_name",nullable = false)
-    private String centerName;
-
-    @Column(name="center_region",nullable = false)
-    private String centerRegion;
+public enum Center {
+	center0("전체"),
+	center1("1호점"),
+	center2("2호점"),
+	center3("3호점"),
+	center4("4호점"),
+	center5("5호점"),
+	center6("6호점"),
+	center7("7호점"),
+	center8("8호점"),
+	center9("9호점"),
+	center10("10호점");
+	private String description;
 }

@@ -22,7 +22,7 @@ public class Report {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name="member_id",referencedColumnName = "member_id")
+    @JoinColumn(name="member_email",referencedColumnName = "member_email")
     private Member member;
 
     @Column(name="is_check")

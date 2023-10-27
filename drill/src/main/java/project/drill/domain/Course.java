@@ -21,15 +21,16 @@ public class Course {
     @Column(name="course_name",nullable = false)
     private String courseName;
 
-    @Column(name="course_difficulty", nullable = false)
-    private String courseDifficulty;
+    @Enumerated(value=EnumType.STRING)
+    private Difficulty difficulty;
 
-    @ManyToOne
-    @JoinColumn(name="center_id")
+    @Enumerated(value=EnumType.STRING)
     private Center center;
 
     @ColumnDefault("true")
     @Column(name="is_new",nullable = false)
     private boolean isNew;
+
+
 
 }

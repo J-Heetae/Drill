@@ -1,6 +1,7 @@
 package project.drill.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -31,12 +32,16 @@ public class Post {
     @Column(name="post_video",nullable = false)
     private String postVideo;
 
-    @OneToOne
+    @Enumerated(value = EnumType.STRING)
+    @ColumnDefault("'Center'")
+    private Center center;
+
+    @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
 
-    @Column(name="post_preview")
-    private String postPreview;
+    @Column(name="post_thumbnail")
+    private String postThumbnail;
 
 
 }

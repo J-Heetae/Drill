@@ -1,5 +1,5 @@
 # Build
-FROM openjdk:11 AS builder
+FROM openjdk:11-jdk-slim AS builder
 
 COPY gradlew .
 COPY build.gradle .
@@ -11,7 +11,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # Production
-FROM openjdk:11
+FROM openjdk:11-jdk-slim
 COPY --from=builder build/libs/*.jar app.jar
 EXPOSE 8060
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prd", "-jar", "/app.jar"]

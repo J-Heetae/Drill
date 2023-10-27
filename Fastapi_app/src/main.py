@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 import boto3 # S3 연결
 
-# from addcomponents.addmodel import check_model
+from addcomponents.addmodel import check_model
 
 app = FastAPI()
 
@@ -72,7 +72,7 @@ async def videopath(video_ids : str):
 
 
 @app.get("api/img/upload")
-def imguploadtoaws(img_ids: str):
+async def imguploadtoaws(img_ids: str):
     pass
     '''
     imgpath(os)를 받으면 S3에 저장하는 코드

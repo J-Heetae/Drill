@@ -104,6 +104,6 @@ async def imguploadtoaws(img_ids: str):
         print(f"Another error => {e}")
     '''
 
-
+ 
 if __name__ == "__main__":
     uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8080, reload = True)

@@ -43,36 +43,21 @@ pipeline {
     agent any
 
     stages {
-        // Gradle 빌드 스테이지: Spring Boot 프로젝트를 빌드합니다.
-        stage('Gradle Build') {
-            steps {
-                // 'Backend' 디렉터리 내에서 작업을 실행합니다.
-                dir('drill') {
-                    // gradlew 실행 권한 부여
-                    sh 'chmod +x gradlew'
-                    // gradlew를 사용해 프로젝트를 빌드하며 테스트는 제외합니다.
-                    sh './gradlew clean build -x test'
-                }
-            }
-        }
-
         // Docker 이미지 빌드 스테이지: Dockerfile을 기반으로 이미지를 빌드합니다.
         stage('Docker Build') {
             steps {
                 dir('drill') {
-                    // 이미지를 빌드합니다.
-                    sh 'docker build -t drill_back:latest .'
+                    sh 'docker build -t drill_builder:latest .'
                 }
             }
         }
 
-        // 배포 스테이지: 이전에 실행 중인 'back' 컨테이너를 제거하고 새로운 이미지로 컨테이너를 실행합니다.
         stage('Deploy') {
             steps {
-                // 실행 중인 'back' 컨테이너 제거
-                sh 'docker rm -f drill_back'
-                // 새로운 이미지로 'back' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name drill_back -p 8200:8200 -u root drill_back:latest'
+                // 실행 중인 'backendtest' 컨테이너 제거
+                sh 'docker rm -f springtest'
+                // 새로운 이미지로 'backendtest' 컨테이너를 백그라운드에서 실행
+                sh 'docker run -d --name drill_builder -p 8060:8060 -u root drill_builder:latest'
             }
         }
 

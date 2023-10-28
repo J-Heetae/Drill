@@ -55,9 +55,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 // 실행 중인 'backendtest' 컨테이너 제거
-                sh 'docker rm -f springtest'
+                sh 'docker rm -f drill_back'
                 // 새로운 이미지로 'backendtest' 컨테이너를 백그라운드에서 실행
-                sh 'docker run -d --name drill_builder -p 8060:8060 -u root drill_builder:latest'
+                sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_builder:latest'
             }
         }
 

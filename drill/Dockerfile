@@ -2,7 +2,10 @@
 # FROM openjdk:11-jdk-slim AS builder
 
 # WORKDIR /app
-# COPY . .
+# COPY build.gradle .
+# COPY settings.gradle .
+# COPY gradle.properties .
+# COPY src/ src/
 
 # RUN chmod +x ./gradlew
 # RUN ./gradlew build -x test

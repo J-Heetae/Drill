@@ -1,35 +1,19 @@
-# # Build
-# FROM openjdk:11-jdk-slim AS builder
+# Build
+FROM openjdk:11-jdk-slim AS builder
 
-# WORKDIR /app
-# COPY build.gradle .
-# COPY settings.gradle .
-# COPY gradle.properties .
-# COPY src/ src/
-
-# RUN chmod +x ./gradlew
-# RUN ./gradlew build -x test
-
-# # Production
-# FROM openjdk:11-jdk-slim
-
-# COPY --from=builder /app/build/libs/*.jar app.jar
-# EXPOSE 8060
-
-# ENTRYPOINT ["java", "-Dspring.profiles.active=prd", "-jar", "/app.jar"]
-
-
-FROM openjdk:11 AS builder
-COPY gradlew .
-COPY gradle gradle
+WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
-COPY src src
+COPY gradle.properties .
+COPY src/ src/
+
 RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
+# Production
+FROM openjdk:11-jdk-slim
 
-FROM openjdk:11
-COPY --from=builder build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8060
-ENTRYPOINT ["java","-Dspring.profiles.active=prd", "-jar","/app.jar"]
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=prd", "-jar", "/app.jar"]

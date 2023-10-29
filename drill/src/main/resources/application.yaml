@@ -81,6 +81,9 @@ social:
             rest-api-key: e055ec3f8a5c059c7530d94ddda9a6bd
             secret-key: f0ifHhoCMvifvGlExw6WDpvqZOtvf8CB
             #      redirect-uri: http://localhost:8082/api/user
-            redirect-uri: http://localhost:3000/user
+            redirect-uri: http://localhost:3000
             grant_type: authorization_code
+jwt:
+    secret: secret12345secret12345secret12345secret12345secret12345secret12345secret12345secret12345secret12345secret12345secret12345
+
 

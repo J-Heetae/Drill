@@ -44,10 +44,14 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   public Long doSocialLogin(SocialLoginDto socialLoginDto) throws Exception {
 
     SocialAuthResponse socialAuthResponse = getAccessToken(socialLoginDto.getCode());
+    System.out.println("카카오 토큰 : " + socialAuthResponse.getAccess_token());
     SocialUserResponse socialUserResponse = getUserInfo(socialAuthResponse.getAccess_token());
-    if (memberRepository.findByMemberEmail(socialUserResponse.getEmail()) == null) {
+    System.out.println("이메일: " + socialUserResponse.getEmail());
+    System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getEmail()));
+    if (!memberRepository.findByMemberEmail(socialUserResponse.getEmail()).isPresent()) {
       Member member = new Member(null, socialUserResponse.getEmail(),
           null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null );
+      System.out.println("save member");
       memberRepository.save(member);
     }
 
@@ -61,7 +65,6 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   public SocialAuthResponse getAccessToken(String authorizationCode) {
     ResponseEntity<?> response = kakaoAuthApi.getAccessToken(
         kakaoAppKey,
-        "f0ifHhoCMvifvGlExw6WDpvqZOtvf8CB",
         kakaoGrantType,
         kakaoRedirectUri,
         authorizationCode

@@ -12,7 +12,7 @@ public interface KakaoAuthApi {
     @PostMapping("/oauth/token")
     ResponseEntity<String> getAccessToken(
             @RequestParam("client_id") String clientId,
-            @RequestParam(value = "client_secret", required = false, defaultValue = "secret") String clientSecret,
+            //@RequestParam(value = "client_secret", required = false, defaultValue = "secret") String clientSecret,
             @RequestParam("grant_type") String grantType,
             @RequestParam("redirect_uri") String redirectUri,
             @RequestParam("code") String authorizationCode

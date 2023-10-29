@@ -56,7 +56,7 @@ public class MemberController {
 			throws Exception {
 		System.out.println(request.getCode());
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request)).orElseThrow();
-
+		System.out.println("controller member : " + member.toString());
 		Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId",
 				String.valueOf(member.getMemberId()));
 

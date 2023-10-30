@@ -28,16 +28,19 @@ load_dotenv() # .env 파일에 있는 키와 값을 환경변수로 등록해주
 
 '''
 S3 연결
+'''
 client_s3 = boto3.client(
     's3',
-    aws_access_key_id = os.getenv("CREDENTIALS_ACCESS_KEY")
-    aws_secret_access_key = os.getenv("CREDENTIALS_SECRET_KEY")
+    aws_access_key_id = os.environ.get("CREDENTIALS_ACCESS_KEY"),
+    aws_secret_access_key = os.environ.get("CREDENTIALS_SECRET_KEY")
 )
-'''
 
 
 @app.get("/")
 def read_root():
+    res = client_s3.list_buckets()
+    print(res['Buckets'])
+    # print(os.environ.get("CREDENTIALS_ACCESS_KEY"))
     return {"Hello": "jenkinsWorld"}
 
 @app.get("/items/{item_id}")
@@ -53,6 +56,13 @@ def test_jenkins():
 def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
+@app.get("/test/amazon")
+def amazon_s3():
+    # client_s3.download_file(os.environ.get("S3_BUCKET"), "Video/20231017_191311.mp4", "Video/testvideo.mp4")
+    with open('video/testvideo.mp4', 'wb') as f:
+        client_s3.download_fileobj(os.environ.get("S3_BUCKET"), "Video/20231017_191311.mp4", f)
+    return {"status" : "success 200"}
+
 @app.get("api/videopath/download")
 async def videopath(video_ids : str):
     '''
@@ -65,6 +75,11 @@ async def videopath(video_ids : str):
     # 파일 객체에 Write하여 다운로드
     with open('FILE_NAME', 'wb') as f:
         client_s3.download_fileobj('BUCKET_NAME', 'OBJECT_NAME', f)
+    '''
+    
+    '''
+    # 불러온 video file을 model에 넣어서 결과값 가져오는 함수
+    
     '''
     pass
 

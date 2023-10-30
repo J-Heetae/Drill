@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { FlatList, TextInput, StyleSheet, Image, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
 
 const BASE_URI = 'https://source.unsplash.com/random?sig=';
+const imageUrl = 'https://source.unsplash.com/random?sig=1';
 
 const Video = () => {
   const [text, setText] = useState('');
@@ -22,6 +24,35 @@ const Video = () => {
   const onChangeText = (inputText: string) => {
     setText(inputText);
   };
+
+  const API_URL = 'http://10.0.2.2:8060/api/post/list';
+
+  // EntirePostPageDto 객체 생성
+  const entirePostPageDto = {
+    centerName: 'center0',
+    courseName: 'course0',
+    difficulty: 'difficulty0',
+    memberNickname: '',
+    order: 'sss',
+    page: 0,
+    size: 10,
+  };
+
+  // POST 요청 보내기
+  const fetchPostList = async () => {
+    try {
+      const response = await axios.post(API_URL, entirePostPageDto);
+      // 성공
+      console.log('코스 목록:', response.data)
+      console.log('게시글 목록:', response.data.postPage);
+    } catch (error) { 
+      // 요청
+      console.error('게시글 목록을 불러오는 데 실패:', error);
+    }
+  };
+
+  // fetchPostList 함수 호출
+  fetchPostList();
 
   return(
     <ContainerView>

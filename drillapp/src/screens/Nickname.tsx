@@ -88,7 +88,7 @@ const ContentView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 85%;
+  width: 350px;
   justify-content: center;
 `
 // -------------------------------

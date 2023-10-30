@@ -72,7 +72,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> findAllByMemberEmail(String memberEmail, int page, int size) {
-        Optional<Member> member = memberRepository.findById(memberEmail);
+        Optional<Member> member = memberRepository.findByMemberEmail(memberEmail);
         String nickname = member.get().getMemberNickname();
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> myPostPage = postRepository.findAllByMemberMemberNickname(pageable, nickname);

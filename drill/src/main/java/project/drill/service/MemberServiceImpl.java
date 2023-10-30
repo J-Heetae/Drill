@@ -15,6 +15,8 @@ import project.drill.dto.PostDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.MemberRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -22,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 	private final CourseRepository courseRepository;
 
+	@Transactional
 	@Override
 	public Member save(PostDto postDto) {
 		Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());

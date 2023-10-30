@@ -70,6 +70,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		Member member2 = Member.builder()
+				.memberId(member.get().getMemberId())
 			.memberEmail(member.get().getMemberEmail())
 			.center(Center.valueOf(postDto.getCenter()))
 			.memberNickname(member.get().getMemberNickname())

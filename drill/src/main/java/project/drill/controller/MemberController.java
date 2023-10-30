@@ -72,7 +72,13 @@ public class MemberController {
 
 		refreshTokenService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken,
 				REFRESH_TOKEN_EXPIRATION_TIME);
+		
+		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 응답 전송
+		if(member.getMemberNickname() == null) {
 
+		}
+
+		// 닉네임 설정 했으면 정상 로그인, body에 닉네임 넣어서 주기
 		return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
 	}
 

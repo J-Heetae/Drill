@@ -109,8 +109,8 @@ const UserNameText = styled.Text`
   color: black;
 `
 const UserExpView = styled.View`
-  width: 330px;
-  height: 40px;
+  width: 280px;
+  height: 30px;
   background-color: #DDDADA;
   border-radius: 30px;
 `
@@ -126,7 +126,7 @@ const MenuView = styled.View`
   gap: 10px;
 `
 const SortMenu = styled.View`
-  width: 104px;
+  width: 80px;
   height: 40px;
   background-color: #5AC77C;
   border-radius: 50px;

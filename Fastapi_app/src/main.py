@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import boto3 # S3 연결
 
 import sys
-from .addcomponents.addmodel import check_model
+# from .addcomponents.addmodel import check_model
 
 
 app = FastAPI()
@@ -40,9 +40,12 @@ client_s3 = boto3.client(
 
 @app.get("/")
 def read_root():
-    check = check_model()
-    return {"Hello": "jenkinsWorld",
-            "check": check}
+    # check = check_model()
+    # return {"Hello": "jenkinsWorld",
+    #         "check": check}
+    res = client_s3.list_buckets()
+    print(res['Buckets'])
+    return {0 : 0}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):

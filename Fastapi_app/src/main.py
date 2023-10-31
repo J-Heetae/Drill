@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import boto3 # S3 연결
 
 import sys
-from addcomponents.addmodel import check_model
+from .addcomponents.addmodel import check_model
 
 
 app = FastAPI()

@@ -47,9 +47,7 @@ async def read_root():
     # check = check_model()
     # return {"Hello": "jenkinsWorld",
     #         "check": check}
-    res = client_s3.list_buckets()
-    print(res['Buckets'])
-    return {"0" : res["Buckets"]}
+    return {"0" : client_s3}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():

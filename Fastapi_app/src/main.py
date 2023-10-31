@@ -51,7 +51,7 @@ async def read_root():
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
-    with open(".static/info.html", "r", encoding="utf-8") as file:
+    with open("./static/info.html", "r", encoding="utf-8") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content)
 

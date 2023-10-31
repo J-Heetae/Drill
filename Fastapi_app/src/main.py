@@ -66,15 +66,15 @@ def read_name(name: str, status: str):
 @app.get("/download/video/{objectname}/{filename}")
 def amazon_s3(objectname: str, filename: str):
     file_path = f"video/{filename}.mp4"
-    return {"bucket" : os.environ.get("S3_BUCKET"), 
-            "object" : f"Video/{objectname}.mp4",
-            "file" : file_path}
+    # return {"bucket" : os.environ.get("S3_BUCKET"), 
+    #         "object" : f"Video/{objectname}.mp4",
+    #         "file" : file_path}
     # client_s3.download_file(os.environ.get("S3_BUCKET"), f"Video/{objectname}.mp4", file_path)
     # current_directory = os.getcwd()  # 현재 작업 디렉토리 가져오기
     # file_path = os.path.join(current_directory, 'video', f'{filename}.mp4')
-    # with open(f'.video/{filename}.mp4', 'wb') as f:
-    #     client_s3.download_fileobj(str(os.environ.get("S3_BUCKET")), f"Video/{objectname}.mp4", f)
-    # return {"status" : "file_path"}
+    with open(file_path, 'wb') as f:
+        client_s3.download_fileobj(str(os.environ.get("S3_BUCKET")), f"Video/{objectname}.mp4", f)
+    return {"status" : "success 200"}
 
 @app.get("api/videopath/download")
 async def videopath(video_ids : str):

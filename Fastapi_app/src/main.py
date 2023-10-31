@@ -55,9 +55,9 @@ def read_name(name: str, status: str):
 @app.get("/download/video/{objectname}/{filename}")
 def amazon_s3(objectname: str, filename: str):
     # client_s3.download_file(os.environ.get("S3_BUCKET"), "Video/20231017_191311.mp4", "Video/testvideo.mp4")
-    current_directory = os.getcwd()  # 현재 작업 디렉토리 가져오기
-    file_path = os.path.join(current_directory, 'video', f'{filename}.mp4')
-    with open(file_path, 'wb') as f:
+    # current_directory = os.getcwd()  # 현재 작업 디렉토리 가져오기
+    # file_path = os.path.join(current_directory, 'video', f'{filename}.mp4')
+    with open(f'.video/{filename}.mp4', 'wb') as f:
         client_s3.download_fileobj(os.environ.get("S3_BUCKET"), f"Video/{objectname}.mp4", f)
     return {"status" : "success 200"}
 

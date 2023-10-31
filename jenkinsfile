@@ -24,17 +24,17 @@ pipeline {
         // docker Deploy
         stage('Deploy') {
             steps {
-                // ½ÇÇà ÁßÀÎ 'back' ÄÁÅ×ÀÌ³Ê Á¦°Å
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 'back' ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½
                 sh 'docker rm -f fast'
-                // »õ·Î¿î ÀÌ¹ÌÁö·Î 'fast' ÄÁÅ×ÀÌ³Ê¸¦ ¹é±×¶ó¿îµå¿¡¼­ ½ÇÇà
-                sh 'docker run -d --name fast -p 8080:8080 -u root ${imagename}:${version}'
+                // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ 'fast' ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Ê¸ï¿½ ï¿½ï¿½×¶ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                sh 'docker run -d --name fast -p 8000:8000 -u root ${imagename}:${version}'
             }
         }
 
         // docker push
         stage('Finish') {
             steps {
-                // »ç¿ëµÇÁö ¾Ê´Â (dangling) ÀÌ¹ÌÁö¸¦ Ã£¾Æ Á¦°ÅÇÕ´Ï´Ù.
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ (dangling) ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
         }

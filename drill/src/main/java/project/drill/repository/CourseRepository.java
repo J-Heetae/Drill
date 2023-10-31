@@ -14,5 +14,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findByCourseNameAndCenterAndIsNewIsTrue(String courseName, Center center);
     List<Course> findAllByIsNewIsTrue();
     List<Course> findAllByCenterAndIsNewIsTrue(Center center);
+    List<String> findDifficultyByCenterAndIsNewIsTrue(Center center);
+    List<String> findCourseNameByCenterAndIsNewIsTrue(Center center);
+
+    List<String> findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center center, Difficulty difficulty);
+
     List<Course> findAllByDifficultyAndCenterAndIsNewIsTrue(Difficulty difficulty, Center center);
 }

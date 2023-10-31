@@ -3,15 +3,11 @@ package project.drill.controller;
 import static project.drill.filter.JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME;
 import static project.drill.filter.JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME;
 
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import project.drill.domain.Member;
-import project.drill.dto.KakaoLoginDto;
+import project.drill.dto.LoginRequestDto;
 import project.drill.dto.MemberDto;
-import project.drill.dto.SocialLoginDto;
 import project.drill.filter.JwtUtil;
 import project.drill.service.MemberService;
 import project.drill.config.redis.RefreshTokenService;
@@ -53,7 +48,7 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> doSocialLogin(
-			@RequestBody @Valid KakaoLoginDto request, HttpServletResponse response)
+			@RequestBody @Valid LoginRequestDto request, HttpServletResponse response)
 			throws Exception {
 		System.out.println(request.getAccessToken());
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request)).orElseThrow();

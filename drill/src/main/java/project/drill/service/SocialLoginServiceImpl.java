@@ -1,14 +1,12 @@
 package project.drill.service;
 
 import com.google.gson.GsonBuilder;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +14,8 @@ import org.springframework.stereotype.Service;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
 import project.drill.dto.KaKaoLoginResponse;
-import project.drill.dto.KakaoLoginDto;
+import project.drill.dto.LoginRequestDto;
 import project.drill.dto.SocialAuthResponse;
-import project.drill.dto.SocialLoginDto;
 import project.drill.dto.SocialUserResponse;
 import project.drill.util.GsonLocalDateTimeAdapter;
 import project.drill.kakao.KakaoAuthApi;
@@ -42,18 +39,18 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
   private final MemberRepository memberRepository;
 
-  public Long doSocialLogin(KakaoLoginDto kakaoLoginDto) throws Exception {
-    SocialUserResponse socialUserResponse = getUserInfo(kakaoLoginDto.getAccessToken());
-    System.out.println("이메일: " + socialUserResponse.getEmail());
-    System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getEmail()));
+  public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
+    SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getAccessToken());
+    System.out.println("아이디: " + socialUserResponse.getId());
+    System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
     if (!memberRepository.findByMemberEmail(socialUserResponse.getEmail()).isPresent()) {
-      Member member = new Member(null, socialUserResponse.getEmail(),
+      Member member = new Member(null, socialUserResponse.getId(),
           null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null );
       System.out.println("save member");
       memberRepository.save(member);
     }
 
-    Member member = memberRepository.findByMemberEmail(socialUserResponse.getEmail())
+    Member member = memberRepository.findByMemberEmail(socialUserResponse.getId())
         .orElseThrow(() -> new NotFoundException());
 
     return member.getMemberId();

@@ -3,6 +3,6 @@ package project.drill.dto;
 import lombok.Getter;
 
 @Getter
-public class KakaoLoginDto {
+public class LoginRequestDto {
   private String accessToken;
 }

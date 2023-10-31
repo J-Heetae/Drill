@@ -38,29 +38,21 @@ client_s3 = boto3.client(
 
 @app.get("/")
 def read_root():
-    res = client_s3.list_buckets()
-    print(res['Buckets'])
-    # print(os.environ.get("CREDENTIALS_ACCESS_KEY"))
     return {"Hello": "jenkinsWorld"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.get("/test")
-def test_jenkins():
-    check = check_model()
-    return {"test": "great", "check": check}
-
 @app.get("/a106/{name}/{status}")
 def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
-@app.get("/test/amazon")
-def amazon_s3():
+@app.get("/download/video/{objectname}/{filename}")
+def amazon_s3(objectname: str, filename: str):
     # client_s3.download_file(os.environ.get("S3_BUCKET"), "Video/20231017_191311.mp4", "Video/testvideo.mp4")
-    with open('video/testvideo.mp4', 'wb') as f:
-        client_s3.download_fileobj(os.environ.get("S3_BUCKET"), "Video/20231017_191311.mp4", f)
+    with open(f'video/{filename}.mp4', 'wb') as f:
+        client_s3.download_fileobj(os.environ.get("S3_BUCKET"), f"Video/{objectname}.mp4", f)
     return {"status" : "success 200"}
 
 @app.get("api/videopath/download")

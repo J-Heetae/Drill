@@ -28,6 +28,8 @@ app.add_middleware(
     allow_headers = ["*"], # cross-origin request로 허용할 HTTP Header의 목록 / Accept, Accept-Language, Content-Language, Content-Type은 CORS에서 항상 허용되는 헤더, 추가적인 사항에 대하여 적으면 된다.
 )
 
+static_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "static")
+
 load_dotenv() # .env 파일에 있는 키와 값을 환경변수로 등록해주는 library
 
 '''
@@ -51,7 +53,7 @@ async def read_root():
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
-    with open("./static/info.html", "r", encoding="utf-8") as file:
+    with open(os.path.join(static_path, "info.html"), "r", encoding="utf-8") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content)
 

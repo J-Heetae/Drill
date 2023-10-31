@@ -40,7 +40,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   private final MemberRepository memberRepository;
 
   public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
-    SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getAccessToken());
+    SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getKakaoToken());
     System.out.println("아이디: " + socialUserResponse.getId());
     System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
     if (!memberRepository.findByMemberEmail(socialUserResponse.getEmail()).isPresent()) {

@@ -74,7 +74,8 @@ def amazon_s3(objectname: str, filename: str):
     # file_path = os.path.join(current_directory, 'video', f'{filename}.mp4')
     with open(file_path, 'wb') as f:
         client_s3.download_fileobj(str(os.environ.get("S3_BUCKET")), f"Video/{objectname}.mp4", f)
-    return {"status" : "success 200"}
+    return {"status" : "success 200",
+            "path" : file_path}
 
 @app.get("api/videopath/download")
 async def videopath(video_ids : str):

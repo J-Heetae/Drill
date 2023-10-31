@@ -6,7 +6,7 @@ pipeline {
         registryCredential = 'admin'
         version = 'latest'
         dockerImage = ''
-        envfilepath = env.ENV_FILE_PATH
+        envfilepath = '/home/ubuntu/.env'
     }
 
     stages {

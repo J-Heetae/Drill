@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import project.drill.domain.Member;
 import project.drill.dto.LoginRequestDto;
 import project.drill.dto.MemberDto;
+import project.drill.dto.SettingDto;
 import project.drill.filter.JwtUtil;
 import project.drill.service.MemberService;
 import project.drill.config.redis.RefreshTokenService;
@@ -31,6 +33,7 @@ import project.drill.repository.MemberRepository;
 import project.drill.filter.JwtTokenProvider;
 import project.drill.service.SocialLoginService;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/member")
@@ -88,12 +91,13 @@ public class MemberController {
 	@PutMapping("/settings")
 	@ApiOperation(value = "닉네임, 관심지점 세팅")
 	public ResponseEntity<String> findAllByMate(
-			@RequestParam String memberNickname,
-			@RequestParam String center,
+			@RequestBody SettingDto settingDto,
 			@RequestHeader HttpHeaders header){
 		String kakaoId = jwtTokenProvider.getIdFromToken(header.getFirst("Authorization"));
-		System.out.println("kakaoid : " + kakaoId);
-		memberService.updateUser(memberNickname,center,kakaoId);
+		log.info("kakao Id : " + kakaoId);
+		log.info("nickname : " + settingDto.getMemberNickname());
+		log.info("center : " + settingDto.getCenter());
+		memberService.updateUser(settingDto.getMemberNickname(), settingDto.getCenter(), kakaoId);
 		return new ResponseEntity<>( "Settings updated successfully",HttpStatus.OK);
 	}
 //	@PutMapping("/settings")

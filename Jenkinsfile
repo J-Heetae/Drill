@@ -27,7 +27,7 @@ pipeline {
                 // ���� ���� 'back' �����̳� ����
                 sh 'docker rm -f fast'
                 // ���ο� �̹����� 'fast' �����̳ʸ� ��׶��忡�� ����
-                sh 'docker run -d --name fast -p 8000:8000 -u root ${imagename}:${version}'
+                sh 'docker run -d --name fast -p 8000:8000 -u root ${imagename}:${version} -v .env:./Fastapi_app/src'
             }
         }
 

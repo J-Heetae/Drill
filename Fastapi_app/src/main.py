@@ -1,6 +1,8 @@
 from typing import Union
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 import os
@@ -26,6 +28,8 @@ app.add_middleware(
     allow_headers = ["*"], # cross-origin request로 허용할 HTTP Header의 목록 / Accept, Accept-Language, Content-Language, Content-Type은 CORS에서 항상 허용되는 헤더, 추가적인 사항에 대하여 적으면 된다.
 )
 
+# 정적 파일을 서빙할 디렉토리를 설정
+app.mount("/static", StaticFiles(directory="static"), name="static")
 load_dotenv() # .env 파일에 있는 키와 값을 환경변수로 등록해주는 library
 
 '''
@@ -39,13 +43,19 @@ client_s3 = boto3.client(
 
 
 @app.get("/")
-def read_root():
+async def read_root():
     # check = check_model()
     # return {"Hello": "jenkinsWorld",
     #         "check": check}
     res = client_s3.list_buckets()
     print(res['Buckets'])
-    return {0 : 0}
+    return {"0" : res["Buckets"]}
+
+@app.get("/information", response_class=HTMLResponse)
+async def read_root():
+    with open("static/info.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+    return HTMLResponse(content=html_content)
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):

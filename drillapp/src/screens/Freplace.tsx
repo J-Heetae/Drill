@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 300,
+    width: 280,
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 8,
@@ -77,13 +77,13 @@ const ContentView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 350px;
+  width: 280px;
   justify-content: center;
 `
 // -------------------------------
 
 const TitleText = styled.Text`
-  font-size: 25px;
+  font-size: 20px;
   font-family: 'SCDream4';
 `
 export default Freplace;

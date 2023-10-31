@@ -20,7 +20,7 @@ const Nickname = () => {
   };
 
   const setUserInfo = () => {
-    const result = dispatch(setNickName("hohoho"))
+    const result = dispatch(setNickName("클라이밍재밌다"))
     console.log("result :: ", result)
 }
 
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 300,
+    width: 280,
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 8,
@@ -88,7 +88,7 @@ const ContentView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 350px;
+  width: 280px;
   justify-content: center;
 `
 // -------------------------------

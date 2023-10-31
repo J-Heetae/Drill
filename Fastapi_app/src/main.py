@@ -65,7 +65,7 @@ def read_name(name: str, status: str):
 
 @app.get("/download/video/{objectname}/{filename}")
 def amazon_s3(objectname: str, filename: str):
-    file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"filename.mp4")
+    file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"{filename}.mp4")
     # return {"bucket" : os.environ.get("S3_BUCKET"), 
     #         "object" : f"Video/{objectname}.mp4",
     #         "file" : file_path}

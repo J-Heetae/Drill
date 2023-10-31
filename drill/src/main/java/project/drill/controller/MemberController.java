@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import project.drill.domain.Member;
+import project.drill.dto.KakaoLoginDto;
 import project.drill.dto.MemberDto;
 import project.drill.dto.SocialLoginDto;
 import project.drill.filter.JwtUtil;
@@ -52,9 +53,9 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> doSocialLogin(
-			@RequestBody @Valid SocialLoginDto request, HttpServletResponse response)
+			@RequestBody @Valid KakaoLoginDto request, HttpServletResponse response)
 			throws Exception {
-		System.out.println(request.getCode());
+		System.out.println(request.getAccessToken());
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request)).orElseThrow();
 		System.out.println("controller member : " + member.toString());
 		Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId",
@@ -72,8 +73,13 @@ public class MemberController {
 
 		refreshTokenService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken,
 				REFRESH_TOKEN_EXPIRATION_TIME);
-
-		return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
+		
+		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 201 응답 전송
+		if(member.getMemberNickname() == null) {
+			return new ResponseEntity<>("닉네임 설정 필요", HttpStatus.CREATED);
+		}
+		// 닉네임 설정 했으면 정상 로그인, body에 닉네임 넣어서 주기
+		return new ResponseEntity<>(member.getMemberNickname(), HttpStatus.OK);
 	}
 
 	@GetMapping("/mypage")

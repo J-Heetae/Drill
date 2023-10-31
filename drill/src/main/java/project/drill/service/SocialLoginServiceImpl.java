@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
 import project.drill.dto.KaKaoLoginResponse;
+import project.drill.dto.KakaoLoginDto;
 import project.drill.dto.SocialAuthResponse;
 import project.drill.dto.SocialLoginDto;
 import project.drill.dto.SocialUserResponse;
@@ -41,11 +42,8 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
   private final MemberRepository memberRepository;
 
-  public Long doSocialLogin(SocialLoginDto socialLoginDto) throws Exception {
-
-    SocialAuthResponse socialAuthResponse = getAccessToken(socialLoginDto.getCode());
-    System.out.println("카카오 토큰 : " + socialAuthResponse.getAccess_token());
-    SocialUserResponse socialUserResponse = getUserInfo(socialAuthResponse.getAccess_token());
+  public Long doSocialLogin(KakaoLoginDto kakaoLoginDto) throws Exception {
+    SocialUserResponse socialUserResponse = getUserInfo(kakaoLoginDto.getAccessToken());
     System.out.println("이메일: " + socialUserResponse.getEmail());
     System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getEmail()));
     if (!memberRepository.findByMemberEmail(socialUserResponse.getEmail()).isPresent()) {

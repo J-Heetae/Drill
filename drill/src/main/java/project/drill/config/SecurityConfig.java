@@ -110,7 +110,7 @@ public class SecurityConfig {
         .anyRequest().authenticated()
         .and()
         .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+        .logoutRequestMatcher(new AntPathRequestMatcher("/api/member/logout"))
         .invalidateHttpSession(true)
         .logoutSuccessHandler(new CustomLogoutSuccessHandler(refreshTokenService, jwtUtil, tokenRevocationService));
 

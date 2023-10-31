@@ -172,13 +172,13 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   dropdown1: {
-    width: 150,
+    width: 130,
     height: 40,
     backgroundColor: '#5AC77C',
     borderRadius: 50,
   },
   dropdown2: {
-    width: 75,
+    width: 65,
     height: 40,
     backgroundColor: '#5AC77C',
     borderRadius: 50,
@@ -236,7 +236,7 @@ const SelectView = styled.View`
   
 `
 const DateView = styled.View`
-  flex: 1;
+  flex: 1.3;
   justify-content: center;
   margin-bottom: 10px;
 `
@@ -262,7 +262,7 @@ const RankTitleText = styled.Text`
   margin-bottom: 10px;
 `
 const MyRankingText = styled.Text`
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   text-align: center;
   color: white;
@@ -286,7 +286,7 @@ const Top10RankNum = styled.Text`
 const Top10RankNickname = styled.Text`
   flex: 2;
   text-align: center;
-  font-size: 20px;
+  font-size: 15px;
   color: white;
 `
 export default Main;

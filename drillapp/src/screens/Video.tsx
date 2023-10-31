@@ -90,8 +90,8 @@ const Video = () => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 50,
-    width: 350,
+    height: 40,
+    width: 280,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
@@ -133,8 +133,8 @@ const SortMenuView = styled.View`
 `
 const SortMenu = styled.View`
   background-color: #5AC77C;
-  width: 110px;
-  height: 40px;
+  width: 85px;
+  height: 30px;
   borderRadius: 50px;
   justify-content: center;
   align-items: center;

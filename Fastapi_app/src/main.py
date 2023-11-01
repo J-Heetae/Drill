@@ -17,8 +17,8 @@ import sys
 app = FastAPI()
 
 origins = [
-    "http://localhost:8000/*",
-    "http://k9a106a.p.ssafy.io:*"
+    "http://localhost:8001/*",
+    "http://k9a106a.p.ssafy.io*"
 ]
 
 app.add_middleware(

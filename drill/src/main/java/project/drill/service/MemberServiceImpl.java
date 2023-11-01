@@ -105,6 +105,7 @@ public class MemberServiceImpl implements MemberService {
 		Optional<Member> member = memberRepository.findByMemberEmail(memberEmail);
 		if(member.isPresent()) {
 			Member updateMember = member.get();
+			updateMember.updateNickname(memberNickname);
 			updateMember.updateCenter(Center.valueOf(center));
 			updateMember.updateRole(Role.ROLE_DONE);
 			memberRepository.save(updateMember);

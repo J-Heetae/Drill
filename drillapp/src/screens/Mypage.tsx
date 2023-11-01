@@ -31,7 +31,7 @@ const Mypage = () => {
                 height: 40,
               }}
             />
-            클라이밍재밌다
+            DRILL
           </UserNameText>
           <UserExpView>
 

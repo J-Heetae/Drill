@@ -3,17 +3,74 @@ import styled from 'styled-components/native';
 import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown } from 'react-native-element-dropdown';
+import { setPlace } from '../modules/redux/slice/TemplateUserSlice';
+import axios from 'axios';
+import { RootState } from "../modules/redux/RootReducer";
+import { getAccessToken } from '@react-native-seoul/kakao-login';
+
+
+type DataItem = {
+  key: string;
+  value: string;
+  disabled?: boolean;
+};
 
 type RootStackParamList = {
   TabNavigator: undefined;
 };
 
 const Freplace = () => {
+  const dispatch = useDispatch()
+  const API_URL = 'http://10.0.2.2:8060/api/member/settings';
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>()
   const [text, setText] = useState('');
+  const [selectedCenter, setSelectedCenter] = useState("지점 선택");
+  const userInfo = useSelector((state: RootState) => state.templateUser);
+
+  const settingDto = {
+    memberNickname: userInfo.nickName,
+    center: userInfo.place
+  };
+  
+  const settingMyInfo = async () => {
+    try {
+      const response = await axios.put(API_URL, settingDto, {
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('개인정보 저장 성공:', response.data);
+    } catch (error) {
+      // 요청 실패
+      console.log('내 accesstoken', userInfo.accessToken);
+      console.error('개인정보 저장 실패', error);
+    }
+  };
+
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
+  };
+  const data: DataItem[] = [
+    {key:'center1',value:'더클라임 홍대'},
+    {key:'center2',value:'더클라임 일산'},
+    {key:'center3',value:'더클라임 양재'},
+    {key:'center4',value:'더클라임 마곡'},
+    {key:'center5',value:'더클라임 신림'},
+    {key:'center6',value:'더클라임 연남'},
+    {key:'center7',value:'더클라임 강남'},
+    {key:'center8',value:'더클라임 사당'},
+    {key:'center9',value:'더클라임 신사'},
+    {key:'center10',value:'더클라임 서울대'},
+  ];
+
+  const setUserInfo = () => {
+    settingMyInfo()
+    navigation.navigate('TabNavigator')
   };
 
   return (
@@ -22,18 +79,29 @@ const Freplace = () => {
         <TitleText>
           자주가는 지점을 설정해주세요.
         </TitleText>
-        <TextInput
-          onChangeText={onChangeText}
-          value={text}
-          placeholder='지점'
-          style={styles.input}  
-        />
+        <Dropdown 
+            style={styles.dropdown1}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            mode='default'
+            data={data}
+            maxHeight={200}
+            placeholder='지점 선택'
+            labelField="value"
+            valueField="key"
+            value={selectedCenter}
+            onChange={(item) => {
+              const selectedOption = data.find(option => option.value === item.value);
+              setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+              dispatch(setPlace(selectedCenter))
+            }}
+          />
       </ContentView>
       <ButtonView>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('TabNavigator')}>
-          <Text style={styles.buttonText}>다음</Text>
+          style={styles.button}>
+          <Text style={styles.buttonText} onPress={setUserInfo}>다음</Text>
         </TouchableOpacity>
       </ButtonView>
     </ContainerView>
@@ -47,19 +115,28 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   buttonText: {
-    color: '#fff', // 버튼 글자색상 추가
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  input: {
-    height: 40,
+  dropdown1: {
     width: 280,
-    borderColor: 'gray',
+    height: 40,
+    borderColor: '#000',
     borderWidth: 1,
-    paddingHorizontal: 8,
     marginTop: 20,
-    marginBottom: 20,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
 

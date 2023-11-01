@@ -82,6 +82,7 @@ def check_video(filename : str):
     file_path = os.path.join(now_path, f"{filename}.mp4")
     print('----------------------------------------------------------------')
     print(file_path)
+    print(os.getcwd())
     print('----------------------------------------------------------------')
     if os.path.isfile(file_path):
         print("파일 있어요")

@@ -46,9 +46,7 @@ async def read_root():
     # check = check_model()
     # return {"Hello": "jenkinsWorld",
     #         "check": check}
-    res = client_s3.list_buckets()
-    print(res['Buckets'])
-    return {"0" : res["Buckets"]}
+    return {"0" : "성공 기모링"}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
@@ -66,12 +64,17 @@ def read_name(name: str, status: str):
 
 @app.get("/download/video/{objectname}/{filename}")
 def amazon_s3(objectname: str, filename: str):
-    client_s3.download_file(str(os.environ.get("S3_BUCKET")), f"Video/{objectname}.mp4", f"video/{filename}.mp4")
+    file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"{filename}.mp4")
+    # return {"bucket" : os.environ.get("S3_BUCKET"), 
+    #         "object" : f"Video/{objectname}.mp4",
+    #         "file" : file_path}
+    # client_s3.download_file(os.environ.get("S3_BUCKET"), f"Video/{objectname}.mp4", file_path)
     # current_directory = os.getcwd()  # 현재 작업 디렉토리 가져오기
     # file_path = os.path.join(current_directory, 'video', f'{filename}.mp4')
-    # with open(f'.video/{filename}.mp4', 'wb') as f:
-    #     client_s3.download_fileobj(str(os.environ.get("S3_BUCKET")), f"Video/{objectname}.mp4", f)
-    return {"status" : "success 200"}
+    with open(file_path, 'wb') as f:
+        client_s3.download_fileobj(os.environ.get("S3_BUCKET"), f"Video/{objectname}.mp4", f)
+    return {"status" : "success 200",
+            "path" : file_path}
 
 @app.get("api/videopath/download")
 async def videopath(video_ids : str):

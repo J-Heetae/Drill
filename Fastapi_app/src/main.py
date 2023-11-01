@@ -77,6 +77,17 @@ def amazon_s3(objectname: str, filename: str):
     return {"status" : "success 200",
             "path" : file_path}
 
+@app.get("/remove/video/{filename}")
+def remove_video(filename : str):
+    now_path = docker_container_path_check()
+    file_path = os.path.join(now_path, f"{filename}.mp4")
+    if os.path.isfile(file_path):
+        print("파일 있어요. 제거합니다.")
+        os.remove(file_path)
+    else:
+        print("파일 없어요")
+    return {"check" : os.listdir(now_path)}
+
 @app.get("/video/process/{filename}")
 def process_video(filename: str): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
     now_path = docker_container_path_check()

@@ -22,7 +22,7 @@ public class LikedServiceImpl implements LikedService {
     public void save(LikedDto likedDto){
         Optional<Liked> findLiked = likedRepository.findByPostPostIdAndMemberMemberEmail(likedDto.getPostId(),likedDto.getMemberEmail());
         Optional<Post> post = postRepository.findById(likedDto.getPostId());
-        Optional<Member> member = memberRepository.findById(likedDto.getMemberEmail());
+        Optional<Member> member = memberRepository.findByMemberEmail(likedDto.getMemberEmail());
         if(!findLiked.isPresent()){
         Liked liked = Liked.builder()
                 .likedId(0L)

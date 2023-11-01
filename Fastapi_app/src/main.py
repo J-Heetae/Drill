@@ -80,11 +80,12 @@ def amazon_s3(objectname: str, filename: str):
 def check_video(filename : str):
     now_path = docker_container_path_check()
     file_path = os.path.join(now_path, f"{filename}.mp4")
-    # file_all = os.listdir(now_path)
-    # for f in file_all:
-    #     if '.mp4' in f:
-    cmd = f"ffplay -autoexit -nodisp -an {file_path}"
-    subprocess.call(cmd, shell=True)        
+    if os.path.isfile(file_path):
+        print("파일 있어요")
+        cmd = f"ffplay -autoexit -nodisp -an {file_path}"
+        subprocess.call(cmd, shell=True)
+    else:
+        print("파일 없어요")
     return {"check" : os.listdir(now_path)}
 
 @app.get("api/videopath/download")

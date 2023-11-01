@@ -95,7 +95,8 @@ public class SecurityConfig {
             new AntPathRequestMatcher("/webjars/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),
             new AntPathRequestMatcher("/docs"),
-            new AntPathRequestMatcher("/api/member/**")
+            new AntPathRequestMatcher("/api/member/login"),
+            new AntPathRequestMatcher("api/member/refresh")
         )
         .permitAll()
         .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()

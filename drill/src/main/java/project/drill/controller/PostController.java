@@ -18,6 +18,12 @@ import project.drill.service.PostService;
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;
+
+    @GetMapping
+    public ResponseEntity<?> writePost(){
+        System.out.println("hi");
+    }
+
     // 게시글 등록
     @PostMapping
     public ResponseEntity<?> writePost(@RequestBody PostDto postDto){

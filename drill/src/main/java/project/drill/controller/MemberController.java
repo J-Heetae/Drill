@@ -135,7 +135,7 @@ public class MemberController {
 			// 200 return
 			log.debug("정상적으로 액세스토큰 재발급!!!");
 			status = HttpStatus.OK;
-			message = "refreshToken";
+			message = memberDetail.getMember().getMemberNickname();
 		} else {
 			// 401 return
 			log.debug("리프레쉬토큰도 사용불가!!!!!!!");

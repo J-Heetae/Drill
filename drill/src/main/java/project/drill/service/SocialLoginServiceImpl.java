@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
 import project.drill.dto.KaKaoLoginResponse;
@@ -39,11 +40,12 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
   private final MemberRepository memberRepository;
 
+  @Transactional
   public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
     SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getKakaoToken());
     System.out.println("아이디: " + socialUserResponse.getId());
     System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
-    if (!memberRepository.findByMemberEmail(socialUserResponse.getEmail()).isPresent()) {
+    if (!memberRepository.findByMemberEmail(socialUserResponse.getId()).isPresent()) {
       Member member = new Member(null, socialUserResponse.getId(),
           null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null );
       System.out.println("save member");

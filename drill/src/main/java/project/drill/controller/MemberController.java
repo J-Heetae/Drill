@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,5 +111,12 @@ public class MemberController {
 //		memberService.updateUser(memberNickname,center,memberEmail);
 //	return new ResponseEntity<>( "Settings updated successfully",HttpStatus.OK);
 //	}
+	@GetMapping("/nickname/{nickname}")
+	public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
+		System.out.println("come?");
+		boolean isDuplicate = memberService.checkNickname(nickname);
+		return new ResponseEntity<>(isDuplicate, HttpStatus.OK);
+	}
+
 
 }

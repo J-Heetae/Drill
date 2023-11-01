@@ -113,4 +113,14 @@ public class MemberServiceImpl implements MemberService {
 
 		memberRepository.save(member2);
 	}
+
+	@Override
+	public boolean checkNickname(String nickname) {
+		Optional<Member> member = memberRepository.findByMemberNickname(nickname);
+		if (!member.isPresent()) {
+			return false;
+		}
+		return true;
+
+	}
 }

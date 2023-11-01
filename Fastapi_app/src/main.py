@@ -80,6 +80,7 @@ def amazon_s3(objectname: str, filename: str):
 def check_video(filename : str):
     now_path = docker_container_path_check()
     file_path = os.path.join(now_path, f"{filename}.mp4")
+    print(file_path)
     if os.path.isfile(file_path):
         print("파일 있어요")
         cmd = f"ffplay -autoexit -nodisp -an {file_path}"

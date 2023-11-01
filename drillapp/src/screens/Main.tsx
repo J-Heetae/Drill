@@ -29,7 +29,7 @@ const Main = () => {
           courseName: courseName,
         },
         headers: {
-          Authorization: `Bearer ${userInfo.accessToken}`, // accessToken을 헤더에 추가
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
 

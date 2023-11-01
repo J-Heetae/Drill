@@ -7,6 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DrillApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DrillApplication.class, args);
-		System.out.println("hi");
 	}
 }

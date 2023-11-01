@@ -17,7 +17,7 @@ const Main = () => {
   const API_URL = 'http://10.0.2.2:8060/api/ranking/list';
   // 요구하는 매개변수
   const centerName = 'center1';
-  const courseName = 'SampleCourse1';
+  const courseName = 'difficulty1Course1';
   const [top10Ranks, setTop10Ranks] = useState<string[]>([]);
 
   // Axios를 사용하여 GET 요청 보내기
@@ -27,6 +27,9 @@ const Main = () => {
         params: {
           centerName: centerName,
           courseName: courseName,
+        },
+        headers: {
+          Authorization: `Bearer ${userInfo.accessToken}`, // accessToken을 헤더에 추가
         },
       });
 
@@ -128,7 +131,6 @@ const Main = () => {
             onChange={(item) => {
               const selectedOption = holderColor.find(option => option.value === item.value);
               setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              fetchRankingData();
             }}
           />
           <Dropdown 

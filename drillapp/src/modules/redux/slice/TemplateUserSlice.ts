@@ -4,8 +4,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState = {
     name: '',
     nickName: '',
+    place: '',
     email: '',
     accessToken: '',
+    refreshToken: '',
 };
 
 /**
@@ -19,6 +21,7 @@ export const TemplateUserSlice = createSlice({
         setUser(state, action) {
             state.name = action.payload.name;
             state.nickName = action.payload.nickName;
+            state.place = action.payload.place;
             state.email = action.payload.email;
             state.accessToken = action.payload.accessToken;
         },
@@ -33,6 +36,11 @@ export const TemplateUserSlice = createSlice({
             state.nickName = action.payload;
         },
 
+        // 자주가는 지점을 상태에 저장
+        setPlace(state, action) {
+            state.place = action.payload;
+        },
+
         // 사용자 이메일을 상태에 저장
         setEmail(state, action) {
             state.email = action.payload;
@@ -43,9 +51,14 @@ export const TemplateUserSlice = createSlice({
             state.accessToken = action.payload;
         },
 
+        // 접근 토큰을 상태에 저장
+        setRefreshToken(state, action) {
+            state.refreshToken = action.payload;
+        },
+
     },
 });
 
-export const { setUser, setName, setNickName, setEmail, setAccessToken } = TemplateUserSlice.actions
+export const { setUser, setName, setNickName, setPlace, setEmail, setAccessToken, setRefreshToken } = TemplateUserSlice.actions
 
 export default TemplateUserSlice.reducer

@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 import boto3 # S3 연결
+import subprocess
 
 import sys
 # from .addcomponents.addmodel import check_model
@@ -75,9 +76,15 @@ def amazon_s3(objectname: str, filename: str):
     return {"status" : "success 200",
             "path" : file_path}
 
-@app.get("/check/video")
-def check_video():
+@app.get("/check/video/{filename}")
+def check_video(filename : str):
     now_path = docker_container_path_check()
+    file_path = os.path.join(now_path, f"{filename}.mp4")
+    file_all = os.listdir(now_path)
+    # for f in file_all:
+    #     if '.mp4' in f:
+    cmd = f"ffplay -autoexit -nodisp {file_path}"
+    subprocess.call(cmd, shell=True)        
     return {"check" : os.listdir(now_path)}
 
 @app.get("api/videopath/download")

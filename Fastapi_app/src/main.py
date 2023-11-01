@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 import boto3 # S3 연결
 import subprocess
+import cv2
 
 import sys
 # from .addcomponents.addmodel import check_model
@@ -91,6 +92,27 @@ def check_video(filename : str):
     else:
         print("파일 없어요")
     return {"check" : os.listdir(now_path)}
+
+@app.get("video/process/{filename}")
+async def process_video(filename : str):
+    now_path = docker_container_path_check()
+    file_path = os.path.join(now_path, f"{filename}.mp4")
+    video = cv2.VideoCapture(file_path)
+    while(video.isOpened()):
+        ret, frame = video.read()
+
+        if ret == False:
+            cv2.imshow('frame',frame)
+        
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # grayscale로 출력하고싶을 경우
+        # cv2.imshow('frame', gray)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        
+    video.release()
+    cv2.destroyAllWindows()
+    
 
 @app.get("api/videopath/download")
 async def videopath(video_ids : str):

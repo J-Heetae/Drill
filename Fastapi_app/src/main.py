@@ -79,8 +79,7 @@ def amazon_s3(objectname: str, filename: str):
 @app.get("/check/video/{filename}")
 def check_video(filename : str):
     now_path = docker_container_path_check()
-    # file_path = os.path.join(now_path, f"{filename}.mp4")
-    file_path = f"/src/{filename}.mp4"
+    file_path = os.path.join(now_path, f"{filename}.mp4")
     print('----------------------------------------------------------------')
     print(file_path)
     print(os.getcwd())

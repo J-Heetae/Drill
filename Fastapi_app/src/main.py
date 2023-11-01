@@ -77,44 +77,28 @@ def amazon_s3(objectname: str, filename: str):
     return {"status" : "success 200",
             "path" : file_path}
 
-@app.get("/check/video/{filename}")
-def check_video(filename : str):
+@app.get("/video/process/{filename}")
+def process_video(filename: str): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
     now_path = docker_container_path_check()
     file_path = os.path.join(now_path, f"{filename}.mp4")
-    print('----------------------------------------------------------------')
-    print(file_path)
-    print(os.getcwd())
-    print('----------------------------------------------------------------')
-    if os.path.isfile(file_path):
-        print("파일 있어요")
-        cmd = f"ffplay -autoexit -nodisp -an {file_path}"
-        subprocess.call(cmd, shell=True)
-    else:
-        print("파일 없어요")
-    return {"check" : os.listdir(now_path)}
-
-# @app.get("/video/process/{filename}")
-# def process_video(filename: str): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
-#     now_path = docker_container_path_check()
-#     file_path = os.path.join(now_path, f"{filename}.mp4")
     
-#     # 비디오 캡처 객체 생성
-#     video = cv2.VideoCapture(file_path)
+    # 비디오 캡처 객체 생성
+    video = cv2.VideoCapture(file_path)
 
-#     async def generate_frames():
-#         while video.isOpened():
-#             ret, frame = video.read()
-#             if not ret:
-#                 break
-#             # 프레임 처리 (예: 비디오에 어떤 가공을 한 후 이미지 반환)
-#             # 여기에서 프레임을 가공한 후 반환할 수 있습니다.
-#             ret, buffer = cv2.imencode('.jpg', frame)
-#             if ret:
-#                 frame = buffer.tobytes()
-#                 yield (b'--frame\r\n'
-#                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    async def generate_frames():
+        while video.isOpened():
+            ret, frame = video.read()
+            if not ret:
+                break
+            # 프레임 처리 (예: 비디오에 어떤 가공을 한 후 이미지 반환)
+            # 여기에서 프레임을 가공한 후 반환할 수 있습니다.
+            ret, buffer = cv2.imencode('.jpg', frame)
+            if ret:
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-#     return StreamingResponse(generate_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingResponse(generate_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
     
 
 @app.get("api/videopath/download")

@@ -1,21 +1,5 @@
-
-#??? ??
-variables:
-    # ???? ??? ??
-    port: 8060
-
-    #feurl
-    feUri: http://localhost:3060
-
-    #??????? ? url
-    beUri: http://localhost:${variables.port}
-    value: local
-
-    #????? ????
 server:
-    port: ${variables.port}
-
-
+    port: 8060
 
 spring:
     profiles:
@@ -26,13 +10,6 @@ spring:
         view:
             prefix: /WEB-INF/view/
             suffix: .jsp
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show_sql: true
-        properties:
-            hibernate:
-                format_sql: true #?? ??? ???
 
     security:
         oauth2:

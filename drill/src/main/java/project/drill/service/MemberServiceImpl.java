@@ -2,6 +2,7 @@ package project.drill.service;
 
 import java.util.Optional;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import project.drill.dto.PostDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.MemberRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -22,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 	private final CourseRepository courseRepository;
 
+	@Transactional
 	@Override
 	public Member save(PostDto postDto) {
 		Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());
@@ -66,47 +70,55 @@ public class MemberServiceImpl implements MemberService {
 			ndifficulty = Difficulty.valueOf(memberDifficulty);
 		}
 
-		Member member2 = Member.builder()
-			.memberEmail(member.get().getMemberEmail())
-			.center(Center.valueOf(postDto.getCenter()))
-			.memberNickname(member.get().getMemberNickname())
-			.role(member.get().getRole())
-			.member_score(score)
-			.max_score(memberMaxScore)
-			.difficulty(ndifficulty)
-			.build();
-		return memberRepository.save(member2);
+		if(member.isPresent()) {
+			Member updateMember = member.get();
+			updateMember.updateCenter(Center.valueOf((postDto.getCenter())));
+			updateMember.updateMemberScore(score);
+			updateMember.updateMaxScore(memberMaxScore);
+			updateMember.updateDifficulty(ndifficulty);
+			return memberRepository.save(updateMember);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public MemberDto findMyPage(String memberNickname) {
 		Optional<Member> memberOptional = memberRepository.findByMemberNickname(memberNickname);
 
-		MemberDto member = MemberDto.builder()
-			.memberNickname(memberOptional.get().getMemberNickname())
-			.member_score(memberOptional.get().getMember_score())
-			.max_score(memberOptional.get().getMax_score())
-			.difficulty(memberOptional.get().getDifficulty().toString())
-			.center(memberOptional.get().getCenter().toString())
-			.build();
-		return member;
+		if(memberOptional.isPresent()) {
+			MemberDto member = MemberDto.builder()
+					.memberNickname(memberOptional.get().getMemberNickname())
+					.member_score(memberOptional.get().getMember_score())
+					.max_score(memberOptional.get().getMax_score())
+					.difficulty(memberOptional.get().getDifficulty().toString())
+					.center(memberOptional.get().getCenter().toString())
+					.build();
+			return member;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void updateUser(String memberNickname,String center,String memberEmail) {
 		Optional<Member> member = memberRepository.findByMemberEmail(memberEmail);
+		if(member.isPresent()) {
+			Member updateMember = member.get();
+			updateMember.updateNickname(memberNickname);
+			updateMember.updateCenter(Center.valueOf(center));
+			updateMember.updateRole(Role.ROLE_DONE);
+			memberRepository.save(updateMember);
+		}
+	}
 
-		Member member2 = Member.builder()
-			.memberEmail(member.get().getMemberEmail())
-			.center(Center.valueOf(center))
-			.memberNickname(memberNickname)
-			.role(Role.ROLE_DONE)
-			.member_score(member.get().getMember_score())
-			.max_score(member.get().getMax_score())
-			.difficulty(member.get().getDifficulty())
-			.build();
+	@Override
+	public boolean checkNickname(String nickname) {
+		Optional<Member> member = memberRepository.findByMemberNickname(nickname);
+		if (!member.isPresent()) {
+			return false;
+		}
+		return true;
 
-
-		memberRepository.save(member2);
 	}
 }

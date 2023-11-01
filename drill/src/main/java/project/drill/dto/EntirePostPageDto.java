@@ -13,6 +13,7 @@ public class EntirePostPageDto {
     private String centerName;
     private String difficulty;
     private String courseName;
+    private String memberNickname;
     private String order;
     private int page;
     private int size;

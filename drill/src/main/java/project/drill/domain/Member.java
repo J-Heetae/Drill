@@ -18,7 +18,11 @@ import javax.persistence.*;
 @Builder
 public class Member implements Serializable {
     @Id
-    @Column(name="member_email")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="member_id")
+    private Long memberId;
+
+    @Column(name="member_email", unique = true, nullable = false)
     private String memberEmail;
 
     @Column(name="member_nickname",unique = true, nullable = true)
@@ -26,6 +30,7 @@ public class Member implements Serializable {
 
     @Column(nullable = true)
     @Enumerated(value = EnumType.STRING)
+    @ColumnDefault("'center0'")
     private Center center;
 
     @Enumerated(value = EnumType.STRING)
@@ -44,6 +49,28 @@ public class Member implements Serializable {
     @ColumnDefault("'difficulty1'")
     private Difficulty difficulty;
 
+    public void updateNickname(String memberNickname) {
+        this.memberNickname = memberNickname;
+    }
 
+    public void updateCenter(Center center) {
+        this.center = center;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+
+    public void updateMemberScore(Long memberScore) {
+        this.member_score = memberScore;
+    }
+
+    public void updateMaxScore(Long maxScore) {
+        this.max_score = maxScore;
+    }
+
+    public void updateDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
 }

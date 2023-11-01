@@ -18,12 +18,6 @@ import project.drill.service.PostService;
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;
-
-    @GetMapping
-    public void sayHi(){
-        System.out.println("hi");
-    }
-
     // 게시글 등록
     @PostMapping
     public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
@@ -48,22 +42,15 @@ public class PostController {
         return new ResponseEntity<String>("삭제 완료",HttpStatus.OK);
     }
 
-    // 해당 유저의 게시글만 보기
-    @PostMapping("/list")
-    public ResponseEntity<?> getMyPostPageByNickname (@RequestBody PostPageDto postPageDto) {
-        String memberEmail= postPageDto.getMemberEmail();
-        int page = postPageDto.getPage();
-        int size = postPageDto.getSize();
-        Page<Post> myPostPage = postService.findAllByMemberEmail(memberEmail,page,size);
-        return new ResponseEntity<>(myPostPage,HttpStatus.OK);
-    }
 
-    @PostMapping("/entire")
+
+
+    @PostMapping("/list")
     public ResponseEntity<?> getPostPage (@RequestBody EntirePostPageDto entirePostPageDto) {
         String order= entirePostPageDto.getOrder();
         int page = entirePostPageDto.getPage();
         int size = entirePostPageDto.getSize();
-        Page<Post> myPostPage = postService.findAllByOrder(entirePostPageDto);
+        PostPageAndCourseListDto myPostPage = postService.findAllByOrder(entirePostPageDto);
         return new ResponseEntity<>(myPostPage,HttpStatus.OK);
     }
 }

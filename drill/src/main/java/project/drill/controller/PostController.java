@@ -20,7 +20,7 @@ public class PostController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<?> writePost(){
+    public void sayHi(){
         System.out.println("hi");
     }
 

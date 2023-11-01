@@ -77,22 +77,6 @@ def amazon_s3(objectname: str, filename: str):
     return {"status" : "success 200",
             "path" : file_path}
 
-@app.get("/check/video/{filename}")
-def check_video(filename : str):
-    now_path = docker_container_path_check()
-    file_path = os.path.join(now_path, f"{filename}.mp4")
-    print('----------------------------------------------------------------')
-    print(file_path)
-    print(os.getcwd())
-    print('----------------------------------------------------------------')
-    if os.path.isfile(file_path):
-        print("파일 있어요")
-        cmd = f"ffplay -autoexit -nodisp -an {file_path}"
-        subprocess.call(cmd, shell=True)
-    else:
-        print("파일 없어요")
-    return {"check" : os.listdir(now_path)}
-
 @app.get("/video/process/{filename}")
 def process_video(filename: str):
     now_path = docker_container_path_check()

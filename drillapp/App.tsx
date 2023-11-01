@@ -13,6 +13,10 @@ function App() {
   const Stack = createNativeStackNavigator();
   const [accessToken, setAccessToken] = useState("");
 
+  // BACKEND 소통한번 하고
+  // 회원정보가 있으면 TabNavigator
+  // 회원정보가 없으면 Login
+
   return (
     <Provider store={Store}>
       <NavigationContainer>

@@ -20,9 +20,10 @@ const Nickname = () => {
   };
 
   const setUserInfo = () => {
-    const result = dispatch(setNickName("클라이밍재밌다"))
+    const result = dispatch(setNickName(text))
     console.log("result :: ", result)
-}
+    navigation.navigate('Freplace')
+  };
 
   return (
     <ContainerView>
@@ -42,8 +43,7 @@ const Nickname = () => {
       </ContentView>
       <ButtonView>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Freplace')}>
+          style={styles.button}>
           <Text style={styles.buttonText} onPress={setUserInfo}>다음</Text>
         </TouchableOpacity>
       </ButtonView>

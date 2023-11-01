@@ -14,7 +14,7 @@ import project.drill.service.PostService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping(value = "/api/post")
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;

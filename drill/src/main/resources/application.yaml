@@ -19,13 +19,7 @@ server:
 
 spring:
     profiles:
-        active:
-            - local
-    datasource:
-        url: jdbc:mysql://localhost:3306/drill?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
-        username: root
-        password: ssafy
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        default: dev
     mvc:
         pathmatch:
             matching-strategy: ant_path_matcher
@@ -68,7 +62,6 @@ spring:
 
 logging.level:
     org.hibernate.SQL : info
-
 
 
 servlet:

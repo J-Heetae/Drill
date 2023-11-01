@@ -1,6 +1,8 @@
 package project.drill.repository;
 
 import java.util.List;
+
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import project.drill.domain.*;
@@ -14,6 +16,7 @@ import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
 import static project.drill.domain.QLiked.liked;
 import static project.drill.domain.QPost.post;
 
+
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostCustomRepository {
 
@@ -26,78 +29,138 @@ public class PostRepositoryImpl implements PostCustomRepository {
 		QPost qPost= QPost.post;
 
 		return queryFactory
-			.select(qPost.member.memberNickname)
-			.from(qPost)
-			.join(qPost.course, qCourse)
-			.where(qCourse.center.eq(Center.valueOf(centerName))
-				.and(qCourse.courseName.eq(courseName))
-				.and(qCourse.isNew.eq(true)))
-			.orderBy(qPost.postWriteTime.asc())  // postWriteTime 오름차순 정렬
-			.limit(10)  // 최상위 10개만 가져옴
-			.fetch();
+				.select(qPost.member.memberNickname)
+				.from(qPost)
+				.join(qPost.course, qCourse)
+				.where(qCourse.center.eq(Center.valueOf(centerName))
+						.and(qCourse.courseName.eq(courseName))
+						.and(qCourse.isNew.eq(true)))
+				.orderBy(qPost.postWriteTime.asc())  // postWriteTime 오름차순 정렬
+				.limit(10)  // 최상위 10개만 가져옴
+				.fetch();
 	}
 
-    public Page<Post> findByLiked(Pageable pageable){
-        NumberTemplate<Integer> likedCounts = numberTemplate(Integer.class, "function('likedCounts', {0})", liked.member.memberEmail);
-        QueryResults<Post> queryResults = queryFactory
-                .selectFrom(post)
-                .leftJoin(liked).on(liked.post.eq(post))
-                .groupBy(post)
-                .orderBy(likedCounts.intValue().desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-        return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
-    }
+
+	public Page<Post> findByLiked(Pageable pageable){
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Post> queryResults = queryFactory
+				.selectFrom(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
+	}
 
 	public Page<Post> findByCenterNameOrderByLiked(Pageable pageable,String centerName){
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;
-		NumberTemplate<Integer> likedCounts = numberTemplate(Integer.class, "function('likedCounts', {0})", liked.member.memberEmail);
 		QueryResults<Post> queryResults = queryFactory
 				.selectFrom(post)
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.center.eq(Center.valueOf(centerName)))
 				.groupBy(post)
-				.orderBy(likedCounts.intValue().desc())
+				.orderBy(liked.likedId.count().desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
-		return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
 	}
-	public Page<Post> findAllByCenterCenterNameDifficultyOrdeyByLiked(Pageable pageable,String centerName,String difficulty){
+	public Page<Post> findAllByCenterCenterNameDifficultyOrderByLiked(Pageable pageable,String centerName,String difficulty){
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;
-		NumberTemplate<Integer> likedCounts = numberTemplate(Integer.class, "function('likedCounts', {0})", liked.member.memberEmail);
 		QueryResults<Post> queryResults = queryFactory
 				.selectFrom(post)
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.center.eq(Center.valueOf(centerName))
 						.and(post.course.difficulty.eq(Difficulty.valueOf(difficulty))))
 				.groupBy(post)
-				.orderBy(likedCounts.intValue().desc())
+				.orderBy(liked.likedId.count().desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
-		return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
 	}
 	public Page<Post> findAllByCenterCenterNameAndCourseCourseNameOrderByLiked(Pageable pageable,String centerName,String courseName){
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;
-		NumberTemplate<Integer> likedCounts = numberTemplate(Integer.class, "function('likedCounts', {0})", liked.member.memberEmail);
 		QueryResults<Post> queryResults = queryFactory
 				.selectFrom(post)
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.center.eq(Center.valueOf(centerName))
 						.and(post.course.courseName.eq(courseName)))
 				.groupBy(post)
-				.orderBy(likedCounts.intValue().desc())
+				.orderBy(liked.likedId.count().desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
-		return new PageImpl<>(queryResults.getResults(), pageable, queryResults.getTotal());
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
 	}
 
+	public Page<Post> findByMemberNicknameAndLiked(Pageable pageable, String memberNickname){
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Post> queryResults = queryFactory
+				.selectFrom(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.member.memberNickname.eq(memberNickname))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
+	}
 
+	public Page<Post> findByCenterNameAndMemberNicknameOrderByLiked(Pageable pageable,String centerName,String memberNickname){
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Post> queryResults = queryFactory
+				.selectFrom(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.center.eq(Center.valueOf(centerName))
+						.and(post.member.memberNickname.eq(memberNickname)))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
+	}
+	public Page<Post> findAllByCenterCenterNameDifficultyAndMemberNicknameOrderByLiked(Pageable pageable,String centerName,String difficulty, String memberNickname){
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Post> queryResults = queryFactory
+				.selectFrom(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.center.eq(Center.valueOf(centerName))
+						.and(post.course.difficulty.eq(Difficulty.valueOf(difficulty)))
+						.and(post.member.memberNickname.eq(memberNickname)))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
+	}
+	public Page<Post> findAllByCenterCenterNameAndCourseCourseNameAndMemberNicknameOrderByLiked(Pageable pageable,String centerName,String courseName,String memberNickname){
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Post> queryResults = queryFactory
+				.selectFrom(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.center.eq(Center.valueOf(centerName))
+						.and(post.course.courseName.eq(courseName))
+						.and(post.member.memberNickname.eq(memberNickname)))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		return new PageImpl<>(queryResults.getResults(),pageable, queryResults.getTotal());
+	}
 
 }

@@ -79,8 +79,8 @@ def amazon_s3(objectname: str, filename: str):
 @app.get("/check/video/{filename}")
 def check_video(filename : str):
     now_path = docker_container_path_check()
-    file_path = os.path.join(now_path, f"{filename}.mp4")
-    file_all = os.listdir(now_path)
+    file_path = os.path.join(now_path, f"{filename}")
+    # file_all = os.listdir(now_path)
     # for f in file_all:
     #     if '.mp4' in f:
     cmd = f"ffplay -autoexit -nodisp {file_path}"

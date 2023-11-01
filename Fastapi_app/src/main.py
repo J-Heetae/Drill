@@ -52,7 +52,7 @@ async def read_root():
     # check = check_model()
     # return {"Hello": "jenkinsWorld",
     #         "check": check}
-    return {"0" : "fastapi 2번째 8081 포트 성공 기모링"}
+    return {"0" : "fastapi 2번째 8001 포트 다시 체크"}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():

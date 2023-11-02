@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Image, StyleSheet, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -20,6 +20,17 @@ const Main = () => {
   const courseName = 'difficulty1Course1';
   const [top10Ranks, setTop10Ranks] = useState<string[]>([]);
 
+
+  let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
+  let time = {
+    year: today.getFullYear(),  //현재 년도
+    month: today.getMonth() + 1, // 현재 월
+    date: today.getDate(), // 현제 날짜
+    hours: today.getHours(), //현재 시간
+    minutes: today.getMinutes(), //현재 분
+  };
+  let currentDate = `${time.year}년 ${time.month}월 ${time.date}일`
+  
   // Axios를 사용하여 GET 요청 보내기
   const fetchRankingData = async () => {
     try {
@@ -95,7 +106,7 @@ const Main = () => {
           </UserNameText>
         </UserNameView>
         <DateView>
-          <DateText>Thu, 27 May 2021</DateText>
+          <DateText>{currentDate}</DateText>
         </DateView>
         <SelectView>
           <Dropdown 
@@ -157,7 +168,7 @@ const Main = () => {
       <BottomView>
         <RankingView>
           <RankTitleText>내 순위</RankTitleText>
-          <MyRankingText>11위 클라이밍재밌다</MyRankingText>
+          <MyRankingText>0위   {userInfo.nickName}</MyRankingText>
           <Top10RankView>
             {top10Ranks.map((rank, index) => (
               <Top10RankItem key={index}>

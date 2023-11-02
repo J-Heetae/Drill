@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, TextInput, StyleSheet, Image, Text } from 'react-native';
+import { FlatList, TextInput, StyleSheet, Image, Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootState } from "../modules/redux/RootReducer";
+import Login from './Login';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from "@react-navigation/native";
 
 const BASE_URI = 'https://source.unsplash.com/random?sig=';
 
+type RootStackParamList = {
+  Login: undefined;
+};
+
 const Mypage = () => {
   const [data, setData] = useState<number[]>([]);
-
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
   useEffect(() => {
     fetchMore();
   }, []);
@@ -16,6 +25,17 @@ const Mypage = () => {
       ...prevState,
       ...Array.from({ length: 20 }).map((_, i) => i + 1 + prevState.length),
     ]);
+  };
+
+  const Logout = async () => {
+    try {
+      // AsyncStorage에서 accessToken 값을 빈 문자열로 설정
+      await AsyncStorage.setItem('accessToken', '');
+      // 로그아웃 후 필요한 작업 수행
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+    }
   };
 
   return (
@@ -32,6 +52,10 @@ const Mypage = () => {
               }}
             />
             DRILL
+            <Button
+              title="로그아웃"
+              onPress={Logout}
+            />
           </UserNameText>
           <UserExpView>
 

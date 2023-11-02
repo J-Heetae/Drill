@@ -25,8 +25,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker rm -f drill_back || true'// 실행 중인 'drill_back' 컨테이너 제거
-                    sh 'docker run -d --name drill_back -p 8060:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
+                    sh 'docker rm -f drill_back_1 || true'// 실행 중인 'drill_back' 컨테이너 제거
+                    sh 'docker rm -f drill_back_2 || true'
+                    sh 'docker rm -f drill_back_3 || true'
+                    sh 'docker run -d --name drill_back_1 -p 8061:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
+                    sh 'docker run -d --name drill_back_2 -p 8062:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
+                    sh 'docker run -d --name drill_back_3 -p 8063:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
                 }
             }
         }

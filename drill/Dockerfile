@@ -11,6 +11,6 @@ RUN ./gradlew build -x test
 FROM openjdk:11-jdk-slim
 
 COPY --from=builder /app/build/libs/*.jar app.jar
-EXPOSE 8060
+# EXPOSE 8060
 
 ENTRYPOINT ["java", "-Dspring.profiles.active=prd", "-jar", "/app.jar"]

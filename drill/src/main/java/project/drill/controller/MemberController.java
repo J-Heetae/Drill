@@ -81,6 +81,7 @@ public class MemberController {
 				REFRESH_TOKEN_EXPIRATION_TIME);
 
 		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 201 응답 전송
+		// getMemberNickname 말고 getRole로 하는게 더 좋은 방법일 수 있음
 		if (member.getMemberNickname() == null) {
 			return new ResponseEntity<>("닉네임 설정 필요", HttpStatus.CREATED);
 		}

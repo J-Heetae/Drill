@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -8,7 +8,6 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { setPlace } from '../modules/redux/slice/TemplateUserSlice';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
-import { getAccessToken } from '@react-native-seoul/kakao-login';
 
 
 type DataItem = {
@@ -25,9 +24,13 @@ const Freplace = () => {
   const dispatch = useDispatch()
   const API_URL = 'http://10.0.2.2:8060/api/member/settings';
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>()
-  const [text, setText] = useState('');
-  const [selectedCenter, setSelectedCenter] = useState("지점 선택");
+  const [selectedCenter, setSelectedCenter] = useState("");
   const userInfo = useSelector((state: RootState) => state.templateUser);
+
+  useEffect(() => {
+    // selectedCenter 값이 변경될 때마다 dispatch(setPlace(selectedCenter))를 호출
+    dispatch(setPlace(selectedCenter));
+  }, [selectedCenter]); // selectedCenter 값이 변경될 때만 호출되도록 설정
 
   const settingDto = {
     memberNickname: userInfo.nickName,
@@ -51,10 +54,6 @@ const Freplace = () => {
     }
   };
 
-
-  const onChangeText = (inputText: string) => {
-    setText(inputText);
-  };
   const data: DataItem[] = [
     {key:'center1',value:'더클라임 홍대'},
     {key:'center2',value:'더클라임 일산'},
@@ -94,7 +93,6 @@ const Freplace = () => {
             onChange={(item) => {
               const selectedOption = data.find(option => option.value === item.value);
               setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              dispatch(setPlace(selectedCenter))
             }}
           />
       </ContentView>

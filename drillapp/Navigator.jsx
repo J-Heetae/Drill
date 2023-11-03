@@ -6,6 +6,7 @@ import Mypage from "./src/screens/Mypage";
 import VideoPage from "./src/screens/Video";
 import CameraPage from "./src/screens/Camera";
 import CalendarPage from "./src/screens/Calendar";
+import UploadPage from "./src/screens/Upload";
 
 const Tab = createBottomTabNavigator();
 
@@ -136,15 +137,15 @@ function BottomTabNavigationApp() {
         }}
       />
       <Tab.Screen
-        name="Calendar"
-        component={CalendarPage}
+        name="Upload"
+        component={UploadPage}
         options={{
-          tabBarLabel: '달력',
+          tabBarLabel: '업로드',
           tabBarIcon: ({focused}) => (
             focused ?
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image
-                source={require('../drillapp/src/asset/icons/Calendar_Active.png')}
+                source={require('../drillapp/src/asset/icons/Addpost_Active.png')}
                 resizeMode="contain"
                 style={{
                   width: 25,
@@ -155,7 +156,7 @@ function BottomTabNavigationApp() {
             </View> :
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <Image
-              source={require('../drillapp/src/asset/icons/Calendar.png')}
+              source={require('../drillapp/src/asset/icons/Addpost.png')}
               resizeMode="contain"
               style={{
                 width: 25,

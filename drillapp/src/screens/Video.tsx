@@ -1,26 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, TextInput, StyleSheet, Image, Text } from 'react-native';
+import { FlatList, TextInput, StyleSheet, Image, Text, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
 import AWS from 'aws-sdk';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from '@react-navigation/stack';
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
   secretAccessKey: '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',
   region: 'ap-northeast-2',
 });
+interface Post {
+  center: string;
+  course: {
+    center: string;
+    courseId: number;
+    courseName: string;
+    difficulty: string;
+    new: boolean;
+  };
+  member: {
+    center: string;
+    difficulty: string;
+    max_score: number;
+    memberEmail: string;
+    memberId: number;
+    memberNickname: string;
+    member_score: number;
+    role: string;
+  };
+  postContent: string;
+  postId: number;
+  postThumbnail: string;
+  postVideo: string;
+  postWriteTime: string;
+}
+type RootStackParamList = {
+  VideoDetail: {id: number};
+};
+
 
 const s3 = new AWS.S3();
 
 const Video = () => {
   const [text, setText] = useState('');
   const userInfo = useSelector((state: RootState) => state.templateUser);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'VideoDetail'>>();
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
+  };
+
+  const onPressVideoDetail = (postId: number) => {
+    navigation.navigate("VideoDetail", {id: postId});
   };
 
   // S3 Bucket 에서 Thumbnail 이미지 불러오기
@@ -28,6 +64,7 @@ const Video = () => {
     fetchS3Images();
   }, []);
 
+  const [posts, setPosts] = useState<Post[]>([]);
   const [imageList, setImageList] = useState<string[]>([]);
 
   const fetchS3Images = async () => {
@@ -50,11 +87,6 @@ const Video = () => {
     }
   };
 
-  const renderImage = ({ item }: { item: string }) => {
-    const imageUrl = `https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/${item}`;
-      return <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />;
-  };
-  const imageUrl2 = 'https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/holder.jpg';
   // --------------------------------------------
 
   const API_URL = 'http://10.0.2.2:8060/api/post/list';
@@ -67,7 +99,7 @@ const Video = () => {
     memberNickname: '',
     order: 'sss',
     page: 0,
-    size: 10,
+    size: 12,
   };
 
   // POST 요청 보내기
@@ -79,8 +111,8 @@ const Video = () => {
         },
       });
       // 성공
-      console.log('코스 목록:', response.data)
-      console.log('게시글 목록:', response.data.postPage.content[0]);
+      setPosts(response.data.postPage.content);
+
     } catch (error) { 
       // 요청
       console.error('게시글 목록을 불러오는 데 실패:', error);
@@ -92,6 +124,7 @@ const Video = () => {
     fetchPostList();
   }, []);
 
+  console.log('저장된값 출력하기-----------------------',posts)
   return(
     <ContainerView>
       <TopView>
@@ -110,14 +143,22 @@ const Video = () => {
 
       <BottomView>
         <SafeAreaView>
-          <FlatList
-          data={imageList}
-          renderItem={renderImage}
-          keyExtractor={(item, index) => index.toString()}
+        <FlatList
+          data={posts} // posts 배열을 데이터로 설정
+          renderItem={({ item }) => {
+            // 각 항목의 postThumbnail 값을 S3 URL로 변환
+            const imageUrl = `https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${item.postThumbnail}`;
+            
+            // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
+            return (
+              <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
+                <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item) => item.postId.toString()} // 각 항목의 postId를 key로 사용
           numColumns={3}
-          />
-          {/* <Image source={{ uri: imageUrl2 }} style={{ width: 100, height: 100, margin: 1 }} />
-          <Image source={{ uri: BASE_URI }} style={{ width: 100, height: 100, margin: 1 }} /> */}
+        />
         </SafeAreaView>
         
       </BottomView>

@@ -100,21 +100,21 @@ public class SecurityConfig {
         )
         .permitAll()
         .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
-        .requestMatchers(new AntPathRequestMatcher("/api/member", "GET")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .requestMatchers(new AntPathRequestMatcher("/api/member/id-check", "POST")).permitAll()
-        .requestMatchers(new AntPathRequestMatcher("/api/member", "POST")).permitAll()
-        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "GET")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "PATCH")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "PUT")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "DELETE")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .requestMatchers(new AntPathRequestMatcher("/api/member", "DELETE")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
-        .anyRequest().permitAll()
+//        .requestMatchers(new AntPathRequestMatcher("/api/member", "GET")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+//        .requestMatchers(new AntPathRequestMatcher("/api/member/id-check", "POST")).permitAll()
+//        .requestMatchers(new AntPathRequestMatcher("/api/member", "POST")).permitAll()
+//        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "GET")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+//        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "PATCH")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+//        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "PUT")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+//        .requestMatchers(new AntPathRequestMatcher("/api/member/**", "DELETE")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+//        .requestMatchers(new AntPathRequestMatcher("/api/member", "DELETE")).hasAnyAuthority("ROLE_ADMIN", "ROLE_BEFORE", "ROLE_BOSS", "ROLE_DONE")
+        .anyRequest().permitAll();
         // .anyRequest().authenticated()
-        .and()
-        .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/api/member/logout"))
-        .invalidateHttpSession(true)
-        .logoutSuccessHandler(new CustomLogoutSuccessHandler(refreshTokenService, jwtUtil, tokenRevocationService));
+//        .and()
+//        .logout()
+//        .logoutRequestMatcher(new AntPathRequestMatcher("/api/member/logout"))
+//        .invalidateHttpSession(true)
+//        .logoutSuccessHandler(new CustomLogoutSuccessHandler(refreshTokenService, jwtUtil, tokenRevocationService));
 
     http.exceptionHandling().accessDeniedHandler(new AccessDenyHandler());
     http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from "react-redux";
+import { RootState } from "../modules/redux/RootReducer";
 import { Alert, Button } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { ImagePickerResponse } from 'react-native-image-picker';
@@ -17,6 +19,8 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 const Camera = () => {
+  
+  const userInfo = useSelector((state: RootState) => state.templateUser);
   const showPicker = () => {
     Alert.alert(
       '선택하세요',
@@ -60,10 +64,16 @@ const Camera = () => {
       try {
         const response = await fetch(uri);
         const blob = await response.blob();
-  
+        const now = new Date();
+        const year =now.getFullYear();
+        const month = now.getMonth()+1;
+        const day = now.getDate();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const second = now.getSeconds();
         const params = {
           Bucket: 'drill-video-bucket', 
-          Key: `Video/${fileName}`,
+          Key: `Video/${userInfo.nickName}_${year}${month}${day}_${hour}${minute}${second}_${fileName}`,
           Body: blob,
           ContentType: 'video/mp4', 
         };

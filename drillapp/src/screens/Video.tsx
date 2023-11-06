@@ -98,8 +98,8 @@ const Video = () => {
     difficulty: 'difficulty0',
     memberNickname: '',
     order: 'sss',
-    page: 0,
-    size: 12,
+    page: 1,
+    size: 10,
   };
 
   // POST 요청 보내기

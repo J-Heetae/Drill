@@ -33,7 +33,7 @@ public class Post {
     private String postVideo;
 
     @Enumerated(value = EnumType.STRING)
-    @ColumnDefault("'Center'")
+    @ColumnDefault("'center0'")
     private Center center;
 
     @ManyToOne

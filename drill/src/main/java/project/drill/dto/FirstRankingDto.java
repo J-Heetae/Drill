@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.drill.domain.Course;
+import project.drill.domain.Difficulty;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +15,6 @@ import project.drill.domain.Course;
 @Builder
 public class FirstRankingDto {
 	List<String> ranking;
-	List<String> difficulty;
+	List<Difficulty> difficulty;
 	List<String> courseName;
 }

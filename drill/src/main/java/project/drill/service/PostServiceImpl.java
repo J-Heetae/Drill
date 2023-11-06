@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
                 .memberNickname(post.get().getMember().getMemberNickname())
                 .centerName(post.get().getCenter().toString())
                 .postContent(post.get().getPostContent())
-                .postVideo(post.get().getPostContent())
+                .postVideo(post.get().getPostVideo())
                 .postWriteTime(post.get().getPostWriteTime())
                 .courseName(post.get().getCourse().getCourseName())
                 .likedCount(likedCount)

@@ -47,11 +47,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ReadPostDto read(String memberEmail , Long postId) {
+    public ReadPostDto read(String memberNickname , Long postId) {
         Optional<Post> post = postRepository.findById(postId);
         Long likedCount = likedRepository.countByPostPostId(postId);
         Long commentCount = commentRepository.countByPostPostId(postId);
-        Optional<Liked> liked = likedRepository.findByPostPostIdAndMemberMemberEmail(postId, memberEmail);
+        Optional<Liked> liked = likedRepository.findByPostPostIdAndMemberMemberNickname(postId, memberNickname);
         boolean isLiked = true;
         if(!liked.isPresent()){
             isLiked = false;

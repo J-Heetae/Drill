@@ -7,6 +7,6 @@ import project.drill.domain.Post;
 import java.util.Optional;
 
 public interface LikedRepository extends JpaRepository<Liked, Long>{
-    Optional<Liked> findByPostPostIdAndMemberMemberEmail(Long postId, String memberEmail);
+    Optional<Liked> findByPostPostIdAndMemberMemberNickname(Long postId, String memberNickname);
     Long countByPostPostId(Long postId);
 }

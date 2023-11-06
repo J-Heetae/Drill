@@ -1,5 +1,6 @@
 package project.drill.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class CommentDto {
     private Long postId;
     private String memberNickname;
     private String commentContent;
+
 
 
 }

@@ -30,9 +30,9 @@ public class PostController {
     }
 
     // 게시글 상세 보기
-    @GetMapping("/{postId}")
-    public ResponseEntity<?> readPost(@PathVariable Long postId){
-        ReadPostDto post = postService.read(postId);
+    @PostMapping("/read")
+    public ResponseEntity<?> readPost(@RequestBody ReadDto readDto){
+        ReadPostDto post = postService.read(readDto.getMemberNickname(),readDto.getPostId());
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
     // 게시글 삭제

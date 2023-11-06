@@ -17,8 +17,8 @@ import sys
 app = FastAPI()
 
 origins = [
-    "http://localhost:8000/*",
-    "http://k9a106a.p.ssafy.io:*"
+    "http://localhost:8001/*",
+    "http://k9a106a.p.ssafy.io*"
 ]
 
 app.add_middleware(
@@ -52,7 +52,7 @@ async def read_root():
     # check = check_model()
     # return {"Hello": "jenkinsWorld",
     #         "check": check}
-    return {"0" : "성공 기모링"}
+    return {"0" : "fastapi 2번째 8001 포트 다시 체크"}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
@@ -89,7 +89,7 @@ def remove_video(filename : str):
     return {"check" : os.listdir(now_path)}
 
 @app.get("/video/process/{filename}")
-def process_video(filename: str):
+def process_video(filename: str): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
     now_path = docker_container_path_check()
     file_path = os.path.join(now_path, f"{filename}.mp4")
     
@@ -170,4 +170,4 @@ async def imguploadtoaws(img_ids: str):
 
  
 if __name__ == "__main__":
-    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8000, reload = True)
+    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8001, reload = True)

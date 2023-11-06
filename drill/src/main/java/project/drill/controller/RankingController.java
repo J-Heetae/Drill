@@ -32,7 +32,7 @@ public class RankingController {
 			// .stream()
 			// .map(Mate::convertToDto)
 			// .collect(Collectors.toList());
-
+		System.out.println(rankingList);
 		return new ResponseEntity<>(rankingList, HttpStatus.OK);
 	}
 

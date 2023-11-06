@@ -48,7 +48,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.selectFrom(post)
 				.leftJoin(liked).on(liked.post.eq(post))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -63,7 +63,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.center.eq(Center.valueOf(centerName)))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -78,7 +78,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.where(post.center.eq(Center.valueOf(centerName))
 						.and(post.course.difficulty.eq(Difficulty.valueOf(difficulty))))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -93,7 +93,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.where(post.center.eq(Center.valueOf(centerName))
 						.and(post.course.courseName.eq(courseName)))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -108,7 +108,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.member.memberNickname.eq(memberNickname))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -124,7 +124,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.where(post.center.eq(Center.valueOf(centerName))
 						.and(post.member.memberNickname.eq(memberNickname)))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -140,7 +140,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 						.and(post.course.difficulty.eq(Difficulty.valueOf(difficulty)))
 						.and(post.member.memberNickname.eq(memberNickname)))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();
@@ -156,7 +156,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 						.and(post.course.courseName.eq(courseName))
 						.and(post.member.memberNickname.eq(memberNickname)))
 				.groupBy(post)
-				.orderBy(liked.likedId.count().desc())
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.fetchResults();

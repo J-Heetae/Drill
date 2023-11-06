@@ -36,7 +36,7 @@ public class Post {
     @ColumnDefault("'center0'")
     private Center center;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="course_id")
     private Course course;
 

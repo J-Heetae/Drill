@@ -9,5 +9,5 @@ import java.util.List;
 public interface CommentService {
      void save(CommentDto commentDto);
      void delete(Long commentId);
-     List<Comment> getCommentList (Long postId);
+     List<CommentDto> getCommentList (Long postId);
 }

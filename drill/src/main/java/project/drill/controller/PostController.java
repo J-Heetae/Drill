@@ -32,7 +32,7 @@ public class PostController {
     // 게시글 상세 보기
     @PostMapping("/read")
     public ResponseEntity<?> readPost(@RequestBody ReadDto readDto){
-        ReadPostDto post = postService.read(readDto.getMemberEmail(),readDto.getPostId());
+        ReadPostDto post = postService.read(readDto.getMemberNickname(),readDto.getPostId());
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
     // 게시글 삭제

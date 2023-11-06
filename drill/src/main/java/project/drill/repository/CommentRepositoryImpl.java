@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import project.drill.domain.*;
 import project.drill.dto.CommentDto;
+import project.drill.dto.CommentListDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,17 +19,17 @@ import java.util.stream.Collectors;
 public class CommentRepositoryImpl {
     private final JPAQueryFactory queryFactory;
 
-    public List<CommentDto> findAllByPostPostIdOrderByCommentWriteTimeDesc (Long postId){
+    public List<CommentListDto> findAllByPostPostIdOrderByCommentWriteTimeAsc (Long postId){
         QComment qComment= QComment.comment;
         List<Tuple> lists= queryFactory
-                .select(qComment.post.postId,qComment.member.memberNickname,qComment.commentContent)
+                .select(qComment.member.member_score,qComment.member.memberNickname,qComment.commentContent)
                 .from(qComment)
                 .where(qComment.post.postId.eq(postId))
                 .orderBy(qComment.commentWriteTime.asc())
                 .fetch();
         return lists.stream()
-                .map(tuple -> CommentDto.builder()
-                        .postId(tuple.get(qComment.post.postId))
+                .map(tuple -> CommentListDto.builder()
+                        .member_score(tuple.get(qComment.member.member_score))
                         .memberNickname(tuple.get(qComment.member.memberNickname))
                         .commentContent(tuple.get(qComment.commentContent))
                         .build())

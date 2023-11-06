@@ -6,6 +6,7 @@ import project.drill.domain.Comment;
 import project.drill.domain.Member;
 import project.drill.domain.Post;
 import project.drill.dto.CommentDto;
+import project.drill.dto.CommentListDto;
 import project.drill.repository.CommentRepository;
 import project.drill.repository.MemberRepository;
 import project.drill.repository.PostRepository;
@@ -47,8 +48,8 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.deleteById(commentId);
     }
     @Override
-    public List<CommentDto> getCommentList(Long postId) {
-        List<CommentDto> commentList = commentRepository.findAllByPostPostIdOrderByCommentWriteTimeDesc(postId);
+    public List<CommentListDto> getCommentList(Long postId) {
+        List<CommentListDto> commentList = commentRepository.findAllByPostPostIdOrderByCommentWriteTimeAsc(postId);
         return commentList;
     }
 }

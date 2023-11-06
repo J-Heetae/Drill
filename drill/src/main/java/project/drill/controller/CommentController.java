@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.drill.domain.Comment;
 import project.drill.dto.CommentDto;
+import project.drill.dto.CommentListDto;
 import project.drill.service.CommentService;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class CommentController {
 
     @GetMapping("/list/{postId}")
     public ResponseEntity<?> getCommentList(@PathVariable Long postId){
-        List<CommentDto> commentList = commentService.getCommentList(postId);
+        List<CommentListDto> commentList = commentService.getCommentList(postId);
         return new ResponseEntity<>(commentList,HttpStatus.OK);
     }
 }

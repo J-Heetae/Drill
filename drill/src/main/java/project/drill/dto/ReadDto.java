@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReadDto {
-    private String memberEmail;
+    private String memberNickname;
     private Long postId;
 }

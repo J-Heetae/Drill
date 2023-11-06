@@ -14,6 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class LikedDto {
-    private String memberEmail;
+    private String memberNickname;
     private Long postId;
 }

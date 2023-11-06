@@ -9,7 +9,7 @@ import { setAccessToken, setRefreshToken } from '../modules/redux/slice/Template
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setNickName } from "../modules/redux/slice/TemplateUserSlice";
+import { setNickName,setPlace } from "../modules/redux/slice/TemplateUserSlice";
 
 type RootStackParamList = {
   Nickname: undefined;
@@ -74,7 +74,10 @@ const Login = () => {
       if ( response.data === "닉네임 설정 필요" ) {
         navigation.navigate("Nickname");
       } else {
-        dispatch(setNickName(response.data));
+        const nickname = response.data.split(" ")[0];
+        const place = response.data.split(" ")[1]
+        dispatch(setNickName(nickname));
+        dispatch(setPlace(place))
         setIsLoggedIn(true);
       }
       // 여기에서 프론트엔드에서 필요한 상태(state)를 업데이트하거나 다음 단계로 이동할 수 있습니다.

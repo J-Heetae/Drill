@@ -53,10 +53,7 @@ const Video = () => {
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
-  };
-
-  const onPressVideoDetail = (postId: number) => {
-    navigation.navigate("VideoDetail", {id: postId});
+    handleSearch;
   };
 
   // S3 Bucket 에서 Thumbnail 이미지 불러오기
@@ -98,7 +95,7 @@ const Video = () => {
     difficulty: 'difficulty0',
     memberNickname: '',
     order: 'sss',
-    page: 1,
+    page: 0,
     size: 10,
   };
 
@@ -112,12 +109,38 @@ const Video = () => {
       });
       // 성공
       setPosts(response.data.postPage.content);
-
+      console.log('게시글 가져오는데 성공',response.data)
     } catch (error) { 
       // 요청
       console.error('게시글 목록을 불러오는 데 실패:', error);
     }
   };
+
+  // 검색 기능
+  const searchPosts = async () => {
+    try {
+      const searchDto = {
+        ...entirePostPageDto,
+        memberNickname: text, // 사용자가 입력한 검색어를 memberNickname에 넣기
+      };
+
+      const response = await axios.post(API_URL, searchDto, {
+        headers: {
+          Authorization: userInfo.accessToken,
+        },
+      });
+
+      setPosts(response.data.postPage.content);
+      console.log('검색 결과:', response.data);
+    } catch (error) {
+      console.error('게시글 검색 실패:', error);
+    }
+  };  
+  const handleSearch = () => {
+    // 검색 버튼을 누르면 검색 요청을 보내기
+    searchPosts();
+  };
+
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 데이터를 불러오기 위해 useEffect를 사용합니다.
@@ -128,12 +151,17 @@ const Video = () => {
   return(
     <ContainerView>
       <TopView>
-       <TextInput
-          onChangeText={onChangeText}
-          value={text}
-          placeholder='검색'
-          style={styles.input}  
-        />
+        <SearchView>
+          <TextInput
+            onChangeText={onChangeText}
+            value={text}
+            placeholder='유저 검색'
+            style={styles.input}
+          />
+          <TouchableOpacity onPress={handleSearch}>
+            <Text>검색</Text>
+          </TouchableOpacity>
+        </SearchView>
         <SortMenuView>
           <SortMenu><Text>지점</Text></SortMenu>
           <SortMenu><Text>색</Text></SortMenu>
@@ -169,7 +197,7 @@ const Video = () => {
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    width: 280,
+    width: 250,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
@@ -202,9 +230,16 @@ const BottomView = styled.View`
   flex: 3;
 `;
 // -------------------------------
-
+const SearchView = styled.View`
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+`
 const SortMenuView = styled.View`
-  flex:1 ;
+  flex: 1;
   display: flex;
   flex-direction: row;
   gap: 10px;

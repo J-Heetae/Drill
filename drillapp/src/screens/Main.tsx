@@ -105,9 +105,9 @@ const Main = () => {
 
   const dispatch = useDispatch()
 
-  const [selectedCenter, setSelectedCenter] = useState("지점 선택");
-  const [selectedHolder, setSelectedHolder] = useState("홀드");
-  const [selectedCourse, setSelectedCourse] = useState("코스");
+  const [selectedCenter, setSelectedCenter] = useState(userInfo.place);
+  const [selectedHolder, setSelectedHolder] = useState("difficulty1");
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
 
@@ -142,7 +142,7 @@ const Main = () => {
   }
     
 
-  const [defaultCenter, setDefaultCenter] = useState("지점 선택");
+  const [defaultCenter, setDefaultCenter] = useState(userInfo.place);
 
   useEffect(() => {
     const fetchInitialData = async () => {

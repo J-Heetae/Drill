@@ -26,6 +26,7 @@ interface Detail {
   postVideo: string;
   postWriteTime: string;
   courseName: string;
+  liked: boolean;
   likedCount: number;
   commentCount: number;
 }
@@ -33,6 +34,7 @@ interface Comment {
   commentContent: string;
   commenetCount: number;
   commentWriteTime: string;
+  memberNickname: string;
   member: {
     center: string;
     difficulty: string;
@@ -61,13 +63,43 @@ const VideoDetail = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
 
   const [data, setData] = useState<Detail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const handleVideoLoad = () => {
+    // 비디오 로딩이 완료되면 로딩 상태를 false로 업데이트
+    setIsLoading(false);
+  };
   const videoRef = useRef<VideoRef>(null);
   const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/climb3.mp4"
   
+  const API_URL1 = 'http://10.0.2.2:8060/api/post/read';
+  const API_URL2 = 'http://10.0.2.2:8060/api/comment/';
+  const API_URL3 = `http://10.0.2.2:8060/api/comment/list/${route.params?.id}`;
+  const API_URL4 = 'http://10.0.2.2:8060/api/liked';
+
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태를 저장하는 상태 변수
+  const [countLiked, setCountLiked] = useState<number>(5);
+
+  const likedDto = {
+    memberNickname: userInfo.nickName,
+    postId: route.params?.id
+  }; 
   // 좋아요 버튼을 눌렀을 때 호출되는 함수
-  const handleLikeButtonPress = () => {
-    setIsLiked(!isLiked); // 좋아요 상태를 토글(toggle)
+  const handleLikeButtonPress = async () => { 
+    try {
+      const response = await axios.post(API_URL4, likedDto,{
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+      // 성공
+      console.log('게시글 좋아요 성공', response)
+      setIsLiked(!isLiked); // 좋아요 상태를 토글(toggle)
+      // 좋아요 버튼을 누를 때, isLiked 값에 따라 좋아요 개수 업데이트
+      setCountLiked(isLiked ? countLiked - 1 : countLiked + 1);
+    } catch (error) { 
+      // 요청
+      console.error('게시글 좋아요 실패:', error);
+    }
   };
 
   const [text, setText] = useState('');
@@ -75,12 +107,13 @@ const VideoDetail = () => {
     setText(inputText);
   };
 
-  const API_URL1 = `http://10.0.2.2:8060/api/post/${route.params?.id}`;
-  const API_URL2 = 'http://10.0.2.2:8060/api/comment/';
-  const API_URL3 = `http://10.0.2.2:8060/api/comment/list/${route.params?.id}`;
+  const readDto = {
+    memberNickname: userInfo.nickName,
+    postId: route.params?.id
+  }; 
   const VideoDetailget = async () => {
     try {
-      const response = await axios.get(API_URL1, {
+      const response = await axios.post(API_URL1, readDto,{
         headers: {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
@@ -88,6 +121,8 @@ const VideoDetail = () => {
       // 성공
       console.log('상세 게시글 불러오는데 성공', response.data)
       setData(response.data)
+      setIsLiked(response.data?.liked || false);
+      setCountLiked(response.data.likedCount)
     } catch (error) { 
       // 요청
       console.error('게시글 목록을 불러오는 데 실패:', error);
@@ -134,10 +169,24 @@ const VideoDetail = () => {
   };
 
   useEffect(() => {
+    // 컴포넌트가 마운트될 때 로딩 화면을 표시하기 위해 setTimeout을 사용한 가상의 로딩 시간 설정
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000); // 5초간 로딩 화면을 표시
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 clearTimeout으로 타이머를 제거하여 메모리 누수 방지
+      clearTimeout(loadingTimeout);
+    };
+  }, []);
+  
+  useEffect(() => {
     // 컴포넌트가 마운트될 때 데이터를 불러오기 위해 useEffect를 사용합니다.
     VideoDetailget();
     Commentpostget();
-    console.log('유저닉네임-----------------------------',userInfo.nickName)
+
+    console.log('현재 유저가 눌러서 좋아요 형식--------',isLiked)
+
   }, []);
 
   return (
@@ -146,14 +195,14 @@ const VideoDetail = () => {
         <UserNameView>
           <UserNameText>{data?.memberNickname}</UserNameText>
         </UserNameView>
-        <UserVideoView>
+        <UserVideoView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {isLoading && <Text>잠시 기다려 주세요</Text>}
           <Video 
             // Can be a URL or a local file.
             source={{uri: background}}
             // Store reference  
             ref={videoRef}
             controls={true}
-            // fullscreen={true}
             resizeMode={'cover'}
             // Callback when remote video is buffering                                      
             onBuffer={isBuffer}
@@ -184,7 +233,7 @@ const VideoDetail = () => {
               </View>
             </TouchableOpacity>
             <Text style={{fontSize:16, fontWeight: 'bold'}}>
-              좋아요 {data?.likedCount}개
+              좋아요 {countLiked}개
             </Text>
           </PostLikedView>
           <PostContentView>
@@ -211,7 +260,7 @@ const VideoDetail = () => {
               <View key={index} style={{display:'flex', flexDirection:'row', gap:10}}>
                 <View>
                   <Text style={{fontSize:18, fontWeight: 'bold'}}>
-                    {comment.member.memberNickname}  
+                    {comment.memberNickname}  
                   </Text>
                 </View>
                 <View>

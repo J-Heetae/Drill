@@ -81,10 +81,16 @@ const Upload = () => {
       try {
         const response = await fetch(uri);
         const blob = await response.blob();
-  
+        const now = new Date();
+        const year =now.getFullYear();
+        const month = now.getMonth()+1;
+        const day = now.getDate();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const second = now.getSeconds();
         const params = {
           Bucket: 'drill-video-bucket', 
-          Key: `Video/${fileName}`,
+          Key: `Video/${userInfo.nickName}_${year}${month}${day}_${hour}${minute}${second}_${fileName}`,
           Body: blob,
           ContentType: 'video/mp4', 
         };

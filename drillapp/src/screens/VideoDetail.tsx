@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { TextInput, StyleSheet, Image, Text, Button } from 'react-native';
+import { TextInput, StyleSheet, Image, Text, Button, View, TouchableOpacity } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
-import axios
- from 'axios';
+import Video from 'react-native-video';
+import VideoRef from "react-native-video"
+import axios from 'axios';
+import AWS from 'aws-sdk';
+import { isBuffer, isError } from 'lodash';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+AWS.config.update({
+  accessKeyId: 'AKIA32XVP6DS7XK33DGC',
+  secretAccessKey: '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',
+  region: 'ap-northeast-2',
+});
 type RootStackParamList = {
   VideoDetail: {id: number};
 };
@@ -19,6 +29,31 @@ interface Detail {
   likedCount: number;
   commentCount: number;
 }
+interface Comment {
+  commentContent: string;
+  commenetCount: number;
+  commentWriteTime: string;
+  member: {
+    center: string;
+    difficulty: string;
+    max_score: number;
+    memberEmail: string;
+    memberId: number;
+    memberNickname: string;
+    member_score: number;
+    role: string;
+  };
+  post: {
+    center: string;
+    course: object;
+    member: object;
+    postContent: string;
+    postId: number;
+    postThumbnail: string;
+    postVideo: string;
+    postWriteTime: string;
+  }
+}
 
 const VideoDetail = () => {
   type ScreenRouteProp = RouteProp<RootStackParamList,"VideoDetail">;
@@ -26,11 +61,26 @@ const VideoDetail = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
 
   const [data, setData] = useState<Detail | null>(null);
+  const videoRef = useRef<VideoRef>(null);
+  const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/climb3.mp4"
+  
+  const [isLiked, setIsLiked] = useState(false); // 좋아요 상태를 저장하는 상태 변수
+  // 좋아요 버튼을 눌렀을 때 호출되는 함수
+  const handleLikeButtonPress = () => {
+    setIsLiked(!isLiked); // 좋아요 상태를 토글(toggle)
+  };
 
-  const API_URL = `http://10.0.2.2:8060/api/post/${route.params?.id}`;
+  const [text, setText] = useState('');
+  const onChangeText = (inputText: string) => {
+    setText(inputText);
+  };
+
+  const API_URL1 = `http://10.0.2.2:8060/api/post/${route.params?.id}`;
+  const API_URL2 = 'http://10.0.2.2:8060/api/comment/';
+  const API_URL3 = `http://10.0.2.2:8060/api/comment/list/${route.params?.id}`;
   const VideoDetailget = async () => {
     try {
-      const response = await axios.get(API_URL, {
+      const response = await axios.get(API_URL1, {
         headers: {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
@@ -44,9 +94,50 @@ const VideoDetail = () => {
     }
   };
 
+
+  const commentDto = {
+    commentContent: text,
+    memberNickname: userInfo.nickName,
+    postId: route.params?.id
+  };  
+  const Commentpost = async () => {
+    try {
+      const response = await axios.post(API_URL2, commentDto, {
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+      // 성공
+      console.log('댓글 작성 성공', response)
+      
+    } catch (error) { 
+      // 요청
+      console.error('댓글 작성 실패:', error);
+    }
+  };
+
+  const [comments, setComments] = useState<Comment[]>([]);
+  const Commentpostget = async () => {
+    try {
+      const response = await axios.get(API_URL3, {
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+      // 성공
+      console.log('댓글 목록 불러오기 성공', response.data)
+      setComments(response.data)
+    } catch (error) { 
+      // 요청
+      console.error('댓글 목록 불러오기 실패:', error);
+    }
+  };
+
   useEffect(() => {
     // 컴포넌트가 마운트될 때 데이터를 불러오기 위해 useEffect를 사용합니다.
     VideoDetailget();
+    Commentpostget();
+    console.log('유저닉네임-----------------------------',userInfo.nickName)
   }, []);
 
   return (
@@ -56,31 +147,104 @@ const VideoDetail = () => {
           <UserNameText>{data?.memberNickname}</UserNameText>
         </UserNameView>
         <UserVideoView>
-      
-        </UserVideoView>
+          <Video 
+            // Can be a URL or a local file.
+            source={{uri: background}}
+            // Store reference  
+            ref={videoRef}
+            controls={true}
+            // fullscreen={true}
+            resizeMode={'cover'}
+            // Callback when remote video is buffering                                      
+            onBuffer={isBuffer}
+            // Callback when video cannot be loaded              
+            onError={isError}               
+            style={styles.backgroundVideo}
+          />
+        </UserVideoView>  
       </TopView>
 
       <BottomView>
         <PostTopView>
           <PostLikedView>
-            <Text>좋아요!!</Text>
+            <TouchableOpacity onPress={handleLikeButtonPress}>
+              <View>
+                <Image
+                  source={
+                    isLiked
+                      ? require('drillapp/src/asset/icons/Heart_Active.png')
+                      : require('drillapp/src/asset/icons/Heart.png')
+                  }
+                  resizeMode="contain"
+                  style={{
+                    width: 25,
+                    height: 25,
+                  }}
+                />
+              </View>
+            </TouchableOpacity>
+            <Text style={{fontSize:16, fontWeight: 'bold'}}>
+              좋아요 {data?.likedCount}개
+            </Text>
           </PostLikedView>
           <PostContentView>
-            <Text>{data?.postContent}</Text>
+            <Text style={{fontSize:18, fontWeight: 'bold'}}>{data?.memberNickname}</Text>
+            <Text style={{fontSize:16}} numberOfLines={2}>{data?.postContent}</Text>
           </PostContentView>
         </PostTopView>
         <PostBottomView>
-          <Text>
-            댓글
-          </Text>
+          <PostBottomSearch>
+            <TextInput
+              onChangeText={onChangeText}
+              value={text}
+              placeholder='댓글 달기'
+              style={styles.input}  
+            />
+            <TouchableOpacity onPress={Commentpost}>
+              <Text>
+                게시
+              </Text>
+            </TouchableOpacity>
+          </PostBottomSearch>
+          <PostBottomComment>
+            {comments.map((comment, index) => (
+              <View key={index} style={{display:'flex', flexDirection:'row', gap:10}}>
+                <View>
+                  <Text style={{fontSize:18, fontWeight: 'bold'}}>
+                    {comment.member.memberNickname}  
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{fontSize:16}}>
+                    {comment.commentContent}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </PostBottomComment>
         </PostBottomView>
+        
       </BottomView>
     </ContainerView>
   );
 };
 
 const styles = StyleSheet.create({
-  
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+  input: {
+    height: 40,
+    width: 240,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 15,
+    paddingHorizontal: 8,
+  },
 });
 
 const ContainerView = styled.View`
@@ -109,7 +273,6 @@ const UserNameText = styled.Text`
 `
 const UserVideoView = styled.View`
   flex: 5;
-  background-color: black;
 `
 
 // -------------------------------
@@ -118,13 +281,32 @@ const PostTopView = styled.View`
 `
 const PostBottomView = styled.View`
   flex: 1.2;
-  background-color: gray;
+  padding-left: 10px;
 `
 const PostLikedView = styled.View`
   flex: 1;
-  background-color: blue;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-left: 10px;
+  alignItems: center;
 `
 const PostContentView = styled.View`
   flex: 1.5;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
 `
+// -------------------------------
+const PostBottomSearch = styled.View`
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  alignItems: center;
+`
+const PostBottomComment = styled.View`
+  flex: 2;
+`
+
 export default VideoDetail;

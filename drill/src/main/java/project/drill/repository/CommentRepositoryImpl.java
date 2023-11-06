@@ -24,7 +24,7 @@ public class CommentRepositoryImpl {
                 .select(qComment.post.postId,qComment.member.memberNickname,qComment.commentContent)
                 .from(qComment)
                 .where(qComment.post.postId.eq(postId))
-                .orderBy(qComment.commentWriteTime.desc())
+                .orderBy(qComment.commentWriteTime.asc())
                 .fetch();
         return lists.stream()
                 .map(tuple -> CommentDto.builder()

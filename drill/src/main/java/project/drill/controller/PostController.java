@@ -30,7 +30,7 @@ public class PostController {
     }
 
     // 게시글 상세 보기
-    @PostMapping("/detail")
+    @PostMapping("/read")
     public ResponseEntity<?> readPost(@RequestBody ReadDto readDto){
         ReadPostDto post = postService.read(readDto.getMemberEmail(),readDto.getPostId());
         return new ResponseEntity<>(post,HttpStatus.OK);

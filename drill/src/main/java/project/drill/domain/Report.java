@@ -17,11 +17,11 @@ public class Report {
     @Column(name="report_id")
     private Long reportId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     private Post post;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_email",referencedColumnName = "member_email")
     private Member member;
 

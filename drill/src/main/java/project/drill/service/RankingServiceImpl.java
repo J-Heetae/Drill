@@ -23,7 +23,7 @@ public class RankingServiceImpl implements RankingService {
 
 	@Override
 	public List<String> findAllRanking(String centerName, String courseName) {
-		return postRepository.findByCenterNameAndCourseName(centerName,courseName);
+		return postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName),courseName);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class RankingServiceImpl implements RankingService {
 
 		List<Difficulty> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> courseNames = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(centerName));
-		List<String> rankings = postRepository.findByCenterNameAndCourseName(centerName, courseNames.get(0));
+		List<String> rankings = postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName), courseNames.get(0));
 
 		FirstRankingDto firstRankingDto = FirstRankingDto.builder()
 			.ranking(rankings)

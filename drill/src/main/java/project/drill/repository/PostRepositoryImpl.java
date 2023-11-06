@@ -24,7 +24,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 
 
 	@Override
-	public List<String> findByCenterNameAndCourseName(String centerName, String courseName) {
+	public List<String> findByCenterNameAndCourseName(Center centerName, String courseName) {
 		QCourse qCourse= QCourse.course;
 		QPost qPost= QPost.post;
 
@@ -32,7 +32,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.select(qPost.member.memberNickname)
 				.from(qPost)
 				.join(qPost.course, qCourse)
-				.where(qCourse.center.eq(Center.valueOf(centerName))
+				.where(qCourse.center.eq(centerName)
 						.and(qCourse.courseName.eq(courseName))
 						.and(qCourse.isNew.eq(true)))
 				.orderBy(qPost.postWriteTime.asc())  // postWriteTime 오름차순 정렬

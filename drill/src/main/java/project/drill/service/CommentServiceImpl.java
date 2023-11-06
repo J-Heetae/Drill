@@ -47,8 +47,8 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.deleteById(commentId);
     }
     @Override
-    public List<Comment> getCommentList(Long postId) {
-        List<Comment> commentList = commentRepository.findAllByPostPostIdOrderByCommentWriteTimeDesc(postId);
+    public List<CommentDto> getCommentList(Long postId) {
+        List<CommentDto> commentList = commentRepository.findAllByPostPostIdOrderByCommentWriteTimeDesc(postId);
         return commentList;
     }
 }

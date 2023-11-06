@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import project.drill.config.auth.MemberDetail;
+import project.drill.domain.Center;
 import project.drill.domain.Member;
 import project.drill.dto.LoginRequestDto;
 import project.drill.dto.MemberDto;
@@ -81,11 +82,16 @@ public class MemberController {
 				REFRESH_TOKEN_EXPIRATION_TIME);
 
 		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 201 응답 전송
+		// getMemberNickname 말고 getRole로 하는게 더 좋은 방법일 수 있음
 		if (member.getMemberNickname() == null) {
 			return new ResponseEntity<>("닉네임 설정 필요", HttpStatus.CREATED);
 		}
+		if (member.getCenter() == Center.center0) {
+			return new ResponseEntity<>("관심지점 설정 필요", HttpStatus.CREATED);
+		}
+		String ans = member.getMemberNickname() +" "+member.getCenter().toString();
 		// 닉네임 설정 했으면 정상 로그인, body에 닉네임 넣어서 주기
-		return new ResponseEntity<>(member.getMemberNickname(), HttpStatus.OK);
+		return new ResponseEntity<>(ans, HttpStatus.OK);
 	}
 
 	@GetMapping("/mypage")

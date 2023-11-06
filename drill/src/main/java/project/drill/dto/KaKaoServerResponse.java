@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KaKaoLoginResponse {
+public class KaKaoServerResponse {
     private String id;
     @Builder.Default
     private KakaoLoginData kakao_account = KakaoLoginData.builder().build();

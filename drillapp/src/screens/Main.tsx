@@ -14,11 +14,14 @@ type DataItem = {
 
 
 const Main = () => {
-  const API_URL = 'http://10.0.2.2:8060/api/ranking/list';
+  const userInfo = useSelector((state: RootState) => state.templateUser);
+  const API_URL = 'http://10.0.2.2:8060/api/ranking/first';
+  const API_URL2 = 'http://10.0.2.2:8060/api/ranking/list';
   // 요구하는 매개변수
-  const centerName = 'center1';
-  const courseName = 'difficulty1Course1';
+  const centerName = userInfo.place;
+  // const courseName = 'difficulty1Course1';
   const [top10Ranks, setTop10Ranks] = useState<string[]>([]);
+  
 
 
   let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
@@ -34,10 +37,11 @@ const Main = () => {
   // Axios를 사용하여 GET 요청 보내기
   const fetchRankingData = async () => {
     try {
-      const response = await axios.get(API_URL, {
+      console.log(centerName+" "+selectedCourse);
+      const response = await axios.get(API_URL2, {
         params: {
-          centerName: centerName,
-          courseName: courseName,
+          centerName: selectedCenter,
+          courseName: selectedCourse,
         },
         headers: {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
@@ -46,7 +50,48 @@ const Main = () => {
 
       // 요청 성공
       console.log('랭킹 데이터:', response.data);
-      setTop10Ranks(response.data)
+      setTop10Ranks(response.data);
+    } catch (error) {
+      // 요청 실패
+      console.error('랭킹 데이터를 불러오는 데 실패', error);
+    }
+  };
+
+  const giveMeDifficulty = async () => {
+    try {
+      console.log("selextedCenter: "+selectedCenter);
+      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findDifficulty', {
+        params: {
+          centerName: selectedCenter,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+    } catch (error) {
+      // 요청 실패
+      console.error('랭킹 데이터를 불러오는 데 실패', error);
+    }
+  };
+
+  const giveMeCoureName = async () => {
+    try {
+      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findCourseName', {
+        params: {
+          centerName: selectedCenter,
+          difficulty: selectedHolder,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+      setSelectedCourseName(response.data);
     } catch (error) {
       // 요청 실패
       console.error('랭킹 데이터를 불러오는 데 실패', error);
@@ -59,12 +104,14 @@ const Main = () => {
 
 
   const dispatch = useDispatch()
-  // Redux 저장소에서 데이터를 조회
-  const userInfo = useSelector((state: RootState) => state.templateUser);
 
   const [selectedCenter, setSelectedCenter] = useState("지점 선택");
   const [selectedHolder, setSelectedHolder] = useState("홀드");
   const [selectedCourse, setSelectedCourse] = useState("코스");
+  const [selectedCourseName, setSelectedCourseName] = useState([]);
+  const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
+
+  
 
   const data: DataItem[] = [
     {key:'center1',value:'더클라임 홍대'},
@@ -88,6 +135,72 @@ const Main = () => {
     {key:'difficulty7',value:'주황'},
     {key:'difficulty8',value:'초록'},
   ];
+
+  function findValueByKey(key: string, data: DataItem[]): string | undefined {
+    const foundItem = data.find(item => item.key === key);
+    return foundItem?.value; // 해당하는 key의 value를 반환하거나, 해당하는 값이 없으면 undefined를 반환합니다.
+  }
+    
+
+  const [defaultCenter, setDefaultCenter] = useState("지점 선택");
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        console.log(centerName);
+        const response = await axios.get(API_URL, {
+          params: {
+            centerName: centerName,
+          },
+          headers: {
+            Authorization: userInfo.accessToken,
+          },
+        });
+  
+        console.log('랭킹 데이터:', response.data);
+        setTop10Ranks(response.data.ranking);
+        setSelectedCourseName(response.data.courseName);
+        // console.log(response.data.courseName[0]);
+        setSelectedCourse(response.data.courseName[0]);
+        setSelectedHolder(response.data.difficulty[0]);
+        
+
+        const foundCenter = findValueByKey(centerName, data);
+        if (foundCenter) {
+          setDefaultCenter(foundCenter);
+        }
+      } catch (error) {
+        console.error('랭킹 데이터를 불러오는 데 실패', error);
+      }
+    };
+
+
+  
+    fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
+  
+  }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
+ 
+  useEffect(() => {
+    const transformed = selectedCourseName.map((course) => ({
+      label: course,
+      value: course, // or provide unique identifier for value
+    }));
+    setTransformedCourseName(transformed);
+    console.log("tlfgod?")
+  }, [selectedCourseName]); 
+
+  useEffect(() => {
+    fetchRankingData();
+  }, [selectedCourse]);
+
+  useEffect(() => {
+    giveMeDifficulty();
+    // console.log(selectedCenter);
+  }, [selectedCenter]);
+
+  useEffect(() => {
+    giveMeCoureName();
+  }, [selectedHolder]); 
 
   return (
     <ContainerView>
@@ -117,14 +230,14 @@ const Main = () => {
             mode='default'
             data={data}
             maxHeight={200}
-            placeholder='지점 선택'
+            placeholder={defaultCenter}
             labelField="value"
             valueField="key"
             value={selectedCenter}
             onChange={(item) => {
               const selectedOption = data.find(option => option.value === item.value);
               setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              fetchRankingData();
+              // fetchRankingData();
             }}
           />
           <Dropdown 
@@ -135,7 +248,7 @@ const Main = () => {
             mode='default'
             data={holderColor}
             maxHeight={200}
-            placeholder='홀드'
+            placeholder={selectedHolder}
             labelField="value"
             valueField="key"
             value={selectedHolder}
@@ -150,16 +263,16 @@ const Main = () => {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             mode='default'
-            data={holderColor}
+            data={transformedCourseName}
             maxHeight={200}
-            placeholder='코스'
-            labelField="value"
-            valueField="key"
+            placeholder={selectedCourse}
+            labelField="label" // labelField 설정
+            valueField="value" // valueField 설정
             value={selectedCourse}
-            onChange={(item) => {
-              const selectedOption = holderColor.find(option => option.value === item.value);
-              setSelectedCourse(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              fetchRankingData();
+            onChange={ (item) => {
+              const selectedOption = transformedCourseName.find(option => option.value === item.value);
+              setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
+              
             }}
           />
         </SelectView> 

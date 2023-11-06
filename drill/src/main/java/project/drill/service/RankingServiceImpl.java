@@ -3,10 +3,12 @@ package project.drill.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import project.drill.domain.Center;
 import project.drill.domain.Difficulty;
 import project.drill.domain.Member;
 import project.drill.dto.FirstRankingDto;
+import project.drill.repository.CourseCustomRepository;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.PostRepository;
 
@@ -14,16 +16,18 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RankingServiceImpl implements RankingService {
 	private final PostRepository postRepository;
 	private final CourseRepository courseRepository;
+
 	@Override
 	public List<String> findAllRanking(String centerName, String courseName) {
 		return postRepository.findByCenterNameAndCourseName(centerName,courseName);
 	}
 
 	@Override
-	public List<String> findDifficulty(String centerName) {
+	public List<Difficulty> findDifficulty(String centerName) {
 		return courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 	}
 
@@ -36,7 +40,7 @@ public class RankingServiceImpl implements RankingService {
 	@Override
 	public FirstRankingDto findFirstRanking(String centerName) {
 
-		List<String> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
+		List<Difficulty> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> courseNames = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> rankings = postRepository.findByCenterNameAndCourseName(centerName, courseNames.get(0));
 

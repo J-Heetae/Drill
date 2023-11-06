@@ -17,7 +17,7 @@ import project.drill.repository.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 
@@ -47,19 +47,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ReadPostDto read(Long postId) {
+    public ReadPostDto read(String memberNickname , Long postId) {
         Optional<Post> post = postRepository.findById(postId);
         Long likedCount = likedRepository.countByPostPostId(postId);
         Long commentCount = commentRepository.countByPostPostId(postId);
+        Optional<Liked> liked = likedRepository.findByPostPostIdAndMemberMemberNickname(postId, memberNickname);
+        boolean isLiked = true;
+        if(!liked.isPresent()){
+            isLiked = false;
+        }
         ReadPostDto readPostDto = ReadPostDto.builder()
                 .memberNickname(post.get().getMember().getMemberNickname())
                 .centerName(post.get().getCenter().toString())
                 .postContent(post.get().getPostContent())
-                .postVideo(post.get().getPostContent())
+                .postVideo(post.get().getPostVideo())
                 .postWriteTime(post.get().getPostWriteTime())
                 .courseName(post.get().getCourse().getCourseName())
                 .likedCount(likedCount)
                 .commentCount(commentCount)
+                .isLiked(isLiked)
                 .build();
         return readPostDto;
     }

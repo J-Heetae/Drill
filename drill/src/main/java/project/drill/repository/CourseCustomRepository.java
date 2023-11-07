@@ -7,6 +7,9 @@ import project.drill.domain.Difficulty;
 
 public interface CourseCustomRepository {
 	List<Difficulty> findDifficultyByCenterAndIsNewIsTrue(Center center);
+
+	List<String> findCourseNameByIsNewIsTrue();
+
 	List<String> findCourseNameByCenterAndIsNewIsTrue(Center center);
 
 	List<String> findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center center, Difficulty difficulty);

@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long>, CourseCustomRepository {
     Optional<Course> findByCourseNameAndCenterAndIsNewIsTrue(String courseName, Center center);
-    List<Course> findAllByIsNewIsTrue();
-    List<Course> findAllByCenterAndIsNewIsTrue(Center center);
-
-    List<Course> findAllByDifficultyAndCenterAndIsNewIsTrue(Difficulty difficulty, Center center);
+//    List<Course> findAllByIsNewIsTrue();
+//    List<Course> findAllByCenterAndIsNewIsTrue(Center center);
+//
+//    List<Course> findAllByDifficultyAndCenterAndIsNewIsTrue(Difficulty difficulty, Center center);
 }

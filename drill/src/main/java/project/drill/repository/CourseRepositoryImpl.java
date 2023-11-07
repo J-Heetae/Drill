@@ -25,6 +25,16 @@ public class CourseRepositoryImpl implements CourseCustomRepository{
 	}
 
 	@Override
+	public List<String> findCourseNameByIsNewIsTrue(){
+		QCourse course = QCourse.course;
+		return queryFactory
+				.select(course.courseName)
+				.from(course)
+				.where(course.isNew.eq(true))
+				.fetch();
+	}
+
+	@Override
 	public List<String> findCourseNameByCenterAndIsNewIsTrue(Center center) {
 		QCourse qCourse= QCourse.course;
 		return queryFactory

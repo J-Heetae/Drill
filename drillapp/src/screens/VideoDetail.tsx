@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { TextInput, StyleSheet, Image, Text, Button, View, TouchableOpacity } from 'react-native';
+import { TextInput, StyleSheet, Image, Text, Button, View, TouchableOpacity, ScrollView  } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
@@ -212,7 +212,7 @@ const VideoDetail = () => {
           />
         </UserVideoView>  
       </TopView>
-
+      
       <BottomView>
         <PostTopView>
           <PostLikedView>
@@ -260,7 +260,7 @@ const VideoDetail = () => {
               <View key={index} style={{display:'flex', flexDirection:'row', gap:10}}>
                 <View>
                   <Text style={{fontSize:18, fontWeight: 'bold'}}>
-                    {comment.memberNickname}  
+                    {comment.memberNickname}
                   </Text>
                 </View>
                 <View>
@@ -272,7 +272,6 @@ const VideoDetail = () => {
             ))}
           </PostBottomComment>
         </PostBottomView>
-        
       </BottomView>
     </ContainerView>
   );
@@ -331,6 +330,7 @@ const PostTopView = styled.View`
 const PostBottomView = styled.View`
   flex: 1.2;
   padding-left: 10px;
+  
 `
 const PostLikedView = styled.View`
   flex: 1;

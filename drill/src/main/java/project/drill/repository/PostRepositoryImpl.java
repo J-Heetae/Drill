@@ -44,6 +44,7 @@ public class PostRepositoryImpl implements PostCustomRepository {
 	}
 
 
+
 	public Page<PostPageDto> findByLiked(Pageable pageable){
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;

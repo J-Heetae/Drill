@@ -3,12 +3,9 @@ package project.drill.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
 import project.drill.domain.Center;
 import project.drill.domain.Difficulty;
-import project.drill.domain.Member;
 import project.drill.dto.FirstRankingDto;
-import project.drill.repository.CourseCustomRepository;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.PostRepository;
 
@@ -38,7 +35,6 @@ public class RankingServiceImpl implements RankingService {
 
 	@Override
 	public FirstRankingDto findFirstRanking(String centerName) {
-
 		List<Difficulty> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> courseNames = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> rankings = postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName), courseNames.get(0));

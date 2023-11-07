@@ -9,7 +9,7 @@ import project.drill.dto.PostPageDto;
 
 
 public interface PostCustomRepository {
-    List<String> findByCenterNameAndCourseName(String centerName, String courseName);
+    List<String> findByCenterNameAndCourseName(Center centerName, String courseName);
     Page<PostPageDto> findByLiked(Pageable pageable);
     Page<PostPageDto> findByCenterNameOrderByLiked(Pageable pageable,String centerName);
     Page<PostPageDto> findAllByCenterCenterNameDifficultyOrderByLiked(Pageable pageable,String centerName,String difficulty);

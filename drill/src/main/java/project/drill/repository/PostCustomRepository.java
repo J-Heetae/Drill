@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import project.drill.domain.Center;
+import project.drill.domain.Difficult
 import project.drill.domain.Difficulty;
-import project.drill.domain.Post;
 import project.drill.dto.PostPageDto;
 
 
@@ -20,7 +20,6 @@ public interface PostCustomRepository {
     Page<PostPageDto> findByCenterNameAndMemberNicknameOrderByLiked(Pageable pageable,String centerName ,String memberNickname);
     Page<PostPageDto> findAllByCenterCenterNameDifficultyAndMemberNicknameOrderByLiked(Pageable pageable,String centerName,String difficulty ,String memberNickname);
     Page<PostPageDto> findAllByCenterCenterNameAndCourseCourseNameAndMemberNicknameOrderByLiked(Pageable pageable, String centerName, String courseName ,String memberNickname);
-  // ----------------------------------------------------------
 
     Page<PostPageDto> findAllByOrderByPostWriteTimeDesc(Pageable pageable);
 

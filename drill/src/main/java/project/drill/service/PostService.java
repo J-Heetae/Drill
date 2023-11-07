@@ -11,6 +11,5 @@ public interface PostService {
     Post save(PostDto postDto);
     ReadPostDto read(String memberNickname , Long postId);
     void delete(Long postId);
-    Page<Post> findAllByMemberEmail(String memberEmail,int page, int size);
     PostPageAndCourseListDto findAllByOrder(EntirePostPageDto entirePostPageDto);
 }

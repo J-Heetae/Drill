@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostPageDto {
-    private String memberEmail;
-    private int page;
-    private int size;
-
+    private Long postId;
+    private String postThumbnail;
 }

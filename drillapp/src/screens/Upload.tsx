@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image } from 'react-native';
+import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image, View, Button } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary} from 'react-native-image-picker';
 import { ImagePickerResponse } from 'react-native-image-picker';
@@ -10,6 +10,7 @@ import AWS from 'aws-sdk';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
+import Modal from 'react-native-modal';
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -98,6 +99,7 @@ const Upload = () => {
         const result = await s3.upload(params).promise();
         console.log(result.Location);
         Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');
+        toggleModal();
       } catch (error) {
         console.error(error);
         Alert.alert('업로드 실패', '동영상을 업로드하지 못했습니다.');
@@ -154,6 +156,14 @@ const Upload = () => {
     }
   };
 
+  // 모달 상태 변경
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+
   return (
     <ContainerView>
       <TopView>
@@ -169,6 +179,14 @@ const Upload = () => {
               ) : (
               <UploadText>영상을 선택해주세요</UploadText>
             )}
+              <Modal isVisible={isModalVisible}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 200, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>홀드 색상 선택</Text>
+                    <Button title="Hide modal" onPress={toggleModal} />
+                  </View>
+                </View>
+              </Modal>
           </UploadView> 
         </TouchableHighlight>
       </TopView>

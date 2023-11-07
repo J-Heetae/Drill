@@ -50,7 +50,12 @@ public class PostController {
         String order= entirePostPageDto.getOrder();
         int page = entirePostPageDto.getPage();
         int size = entirePostPageDto.getSize();
+
         PostPageAndCourseListDto myPostPage = postService.findAllByOrder(entirePostPageDto);
-        return new ResponseEntity<>(myPostPage,HttpStatus.OK);
+        if(!myPostPage.getPostPage().isEmpty()){
+        return new ResponseEntity<>(myPostPage,HttpStatus.OK);}
+        else{
+            return new ResponseEntity<String>("게시글이 없습니다.",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

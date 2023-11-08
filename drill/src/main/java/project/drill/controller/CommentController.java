@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import project.drill.dto.CommentDto;
 import project.drill.dto.CommentListDto;
 import project.drill.service.CommentService;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
@@ -40,6 +42,7 @@ public class CommentController {
 	@GetMapping("/list/{postId}")
 	public ResponseEntity<?> getCommentList(@PathVariable Long postId) {
 		List<CommentListDto> commentList = commentService.getCommentList(postId);
+		log.info("요청 들어옴");
 		return new ResponseEntity<>(commentList, HttpStatus.OK);
 	}
 }

@@ -8,6 +8,7 @@ import Freplace from "./src/screens/Freplace";
 import Upload from "./src/screens/Upload";
 import VideoDetail from "./src/screens/VideoDetail";
 import LocalLogin from "./src/screens/LocalLogin";
+import Regist from "./src/screens/Regist";
 import { Provider } from 'react-redux';
 import {Store} from './src/modules/redux/Store';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -44,6 +45,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Regist" component={Regist} />
           <Stack.Screen name="LocalLogin" component={LocalLogin} />
           <Stack.Screen name="Nickname" component={Nickname} />
           <Stack.Screen name="Freplace" component={Freplace} />

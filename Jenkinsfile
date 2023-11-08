@@ -38,20 +38,18 @@ pipeline {
                     sh'''#!/bin/bash
                     for retry_count in \$(seq 10)
                     do
-                    if curl -s "http://${deployment_target_ip}:8080" > /dev/null
+                    if curl -s "https://http://k9a106.p.ssafy.io/" > /dev/null
                     then
-                        echo "Health check success ✅"
+                        echo "Health check success"
                         break
                     fi
 
                     if [ $retry_count -eq 10 ]
                     then
-                        echo "Health check failed ❌"
+                        echo "Health check faile"
                         exit 1
                     fi
-
-                    echo "The server is not alive yet. Retry health check in 10 seconds..."
-                    sleep 10
+                    sleep 5
                     done
                     '''
                 }

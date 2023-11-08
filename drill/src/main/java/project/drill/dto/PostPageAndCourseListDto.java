@@ -15,6 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PostPageAndCourseListDto {
-    Page<Post> postPage;
-    List<Course> courseList;
+    Page<PostPageDto> postPage;
+    List<String> courseNameList;
 }

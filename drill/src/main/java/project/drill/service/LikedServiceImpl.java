@@ -20,15 +20,16 @@ public class LikedServiceImpl implements LikedService {
     private final MemberRepository memberRepository;
     @Override
     public void save(LikedDto likedDto){
-        Optional<Liked> findLiked = likedRepository.findByPostPostIdAndMemberMemberEmail(likedDto.getPostId(),likedDto.getMemberEmail());
+        Optional<Liked> findLiked = likedRepository.findByPostPostIdAndMemberMemberNickname(likedDto.getPostId(),likedDto.getMemberNickname());
         Optional<Post> post = postRepository.findById(likedDto.getPostId());
-        Optional<Member> member = memberRepository.findByMemberEmail(likedDto.getMemberEmail());
+        Optional<Member> member = memberRepository.findByMemberNickname(likedDto.getMemberNickname());
         if(!findLiked.isPresent()){
         Liked liked = Liked.builder()
                 .likedId(0L)
                 .post(post.get())
                 .member(member.get())
-                .build();}
+                .build();
+            likedRepository.save(liked);}
         else{
             likedRepository.deleteById(findLiked.get().getLikedId());
         }

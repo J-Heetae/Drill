@@ -30,9 +30,9 @@ public class PostController {
     }
 
     // 게시글 상세 보기
-    @GetMapping("/{postId}")
-    public ResponseEntity<?> readPost(@PathVariable Long postId){
-        ReadPostDto post = postService.read(postId);
+    @PostMapping("/read")
+    public ResponseEntity<?> readPost(@RequestBody ReadDto readDto){
+        ReadPostDto post = postService.read(readDto.getMemberNickname(),readDto.getPostId());
         return new ResponseEntity<>(post,HttpStatus.OK);
     }
     // 게시글 삭제
@@ -50,7 +50,12 @@ public class PostController {
         String order= entirePostPageDto.getOrder();
         int page = entirePostPageDto.getPage();
         int size = entirePostPageDto.getSize();
+
         PostPageAndCourseListDto myPostPage = postService.findAllByOrder(entirePostPageDto);
-        return new ResponseEntity<>(myPostPage,HttpStatus.OK);
+        if(!myPostPage.getPostPage().isEmpty()){
+        return new ResponseEntity<>(myPostPage,HttpStatus.OK);}
+        else{
+            return new ResponseEntity<String>("게시글이 없습니다.",HttpStatus.OK);
+        }
     }
 }

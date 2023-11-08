@@ -203,6 +203,7 @@ const VideoDetail = () => {
             // Store reference  
             ref={videoRef}
             controls={true}
+            paused={false}
             resizeMode={'cover'}
             // Callback when remote video is buffering                                      
             onBuffer={isBuffer}

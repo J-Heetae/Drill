@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import {Image, TouchableOpacity, } from 'react-native';
+import {Image, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import  * as KakaoLogin from '@react-native-seoul/kakao-login';
@@ -60,7 +60,8 @@ const Login = () => {
   const loginToBackend = async (accessToken: string) => {
     try {
       const response = await axios.post(API_URL, {
-        kakaoToken: accessToken,
+        type: 'kakao',
+        socialToken: accessToken,
       });
   
       // 요청 성공
@@ -100,19 +101,32 @@ const Login = () => {
           }}
         />
       </LogoView>
-        <LoginView>
+        <GoogleLoginView>
           <TouchableOpacity onPress={login}>
-          <Image
-            source={require('../asset/icons/kakao_login.png')}
-            resizeMode="contain"
-            style={{
-              width: 230,
-              height: 230,
-              alignSelf: 'center',
-            }}
-          />
+            <Image
+              source={require('../asset/icons/google_login.png')}
+              resizeMode="contain"
+              style={{
+                width: 230,
+                height: 50,
+                alignSelf: 'center',
+              }}
+            />
           </TouchableOpacity>
-        </LoginView>
+        </GoogleLoginView>
+        <KakaoLoginView>
+          <TouchableOpacity onPress={login}>
+            <Image
+              source={require('../asset/icons/kakao_login2.png')}
+              resizeMode="contain"
+              style={{
+                width: 230,
+                height: 100,
+                alignSelf: 'center',
+              }}
+            />
+          </TouchableOpacity>
+        </KakaoLoginView>
     </ContainerView>
   );
 };
@@ -125,7 +139,11 @@ const LogoView = styled.View`
   flex: 2;
 `
 
-const LoginView = styled.View`
-  flex: 1;  
+const GoogleLoginView = styled.View`
+  position: absoulte;
+
+`
+const KakaoLoginView = styled.View`
+  position: absoulte;
 `
 export default Login;

@@ -275,6 +275,7 @@ const VideoDetail = () => {
         
       </BottomView>
     </ContainerView>
+
   );
 };
 

@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostPageDto {
-    private Long postId;
-    private String postThumbnail;
+public class CommentListDto {
+    private Long member_score;
+    private String memberNickname;
+    private String commentContent;
 }

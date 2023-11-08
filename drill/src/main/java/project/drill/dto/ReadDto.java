@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostPageDto {
+public class ReadDto {
+    private String memberNickname;
     private Long postId;
-    private String postThumbnail;
 }

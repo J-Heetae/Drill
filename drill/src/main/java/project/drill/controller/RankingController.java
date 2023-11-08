@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import project.drill.domain.Difficulty;
 import project.drill.dto.FirstRankingDto;
 import project.drill.service.RankingService;
 
@@ -31,7 +32,7 @@ public class RankingController {
 			// .stream()
 			// .map(Mate::convertToDto)
 			// .collect(Collectors.toList());
-
+		System.out.println(rankingList);
 		return new ResponseEntity<>(rankingList, HttpStatus.OK);
 	}
 
@@ -45,9 +46,9 @@ public class RankingController {
 
 	@GetMapping("/findDifficulty")
 	@ApiOperation(value = "초기 관심지점 가장 첫번째 코스 랭킹 제공")
-	public ResponseEntity<List<String>> findDifficult(
+	public ResponseEntity<List<Difficulty>> findDifficult(
 		@RequestParam String centerName) {
-		List<String> difficultyList = rankingService.findDifficulty(centerName);
+		List<Difficulty> difficultyList = rankingService.findDifficulty(centerName);
 		return new ResponseEntity<>(difficultyList, HttpStatus.OK);
 	}
 

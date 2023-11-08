@@ -21,4 +21,5 @@ public class ReadPostDto {
     private String courseName;
     private Long likedCount;
     private Long commentCount;
+    private boolean isLiked;
 }

@@ -5,8 +5,7 @@ import project.drill.domain.Comment;
 
 import java.util.List;
 
-public interface CommentRepository  extends JpaRepository<Comment, Long>{
-    List<Comment> findAllByPostPostIdOrderByCommentWriteTimeDesc(Long postId);
+public interface CommentRepository  extends JpaRepository<Comment, Long>,CommentCustomRepository{
 
     Long countByPostPostId(Long postId);
 }

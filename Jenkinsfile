@@ -86,7 +86,7 @@ pipeline {
                     echo "set \$service_url http://${ip}:${target_port};" > /etc/nginx/conf.d/service-url.inc
                     docker restart nginx
 
-                    if [ "${target_port}" == "${blue_port}" ]
+                    if [ "${target_port}" -eq "${blue_port}" ]
                     then
                         docker rm -f ${green_container_name} || true
                     else

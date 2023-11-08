@@ -113,10 +113,7 @@ const Mypage = () => {
       });
       // 성공
       setPosts(response.data.postPage.content);
-      console.log('게시글 가져오는데 성공',response);
-      console.log('지점 + 홀드에 대한 코스정보 리스트-----', response.data.courseNameList);
       setSelectedCourseName(response.data.courseNameList);
-      console.log('POSTDTO---------', entirePostPageDto);
     } catch (error) { 
       // 요청
       console.error('게시글 목록을 불러오는 데 실패:', error);
@@ -148,10 +145,6 @@ const Mypage = () => {
       if (response.data.postPage && response.data.postPage.content) {
         // 이전 페이지의 데이터와 새로 불러온 데이터를 합칩니다.
         setPosts([...posts, ...response.data.postPage.content]);
-        console.log('다음 페이지 데이터 가져오기 성공', response.data);
-      } else {
-        // 만약 postPage가 없거나 content가 없으면 더 이상 불러올 데이터가 없다고 판단할 수 있습니다.
-        console.log('더 이상 불러올 데이터가 없습니다.');
       }
     } catch (error) {
       console.error('다음 페이지 데이터를 불러오는 데 실패:', error);

@@ -36,25 +36,21 @@ const Login = () => {
 
   const login = () => {
     KakaoLogin.login().then((result) => {
-      console.log("Login Success", JSON.stringify(result));
-      
       getProfile();
-      console.log('-----------------------------------------------------------------------------')
       loginToBackend(result.accessToken)
     }).catch((error) => {
       if (error.code === 'E_CANCELLED_OPERATION') {
-          console.log("Login Cancel", error.message);
+          console.error("Login Cancel", error.message);
       } else {
-          console.log(`Login Fail(code:${error.code})`, error.message);
+          console.error(`Login Fail(code:${error.code})`, error.message);
       }
     });
   };
   
   const getProfile = () => {
     KakaoLogin.getProfile().then((result) => {
-        console.log("GetProfile Success", JSON.stringify(result));
     }).catch((error) => {
-        console.log(`GetProfile Fail(code:${error.code})`, error.message);
+        console.error(`GetProfile Fail(code:${error.code})`, error.message);
     });
   };
 
@@ -63,11 +59,7 @@ const Login = () => {
       const response = await axios.post(API_URL, {
         kakaoToken: accessToken,
       });
-  
       // 요청 성공
-      console.log('로그인 성공', response.headers);
-      console.log('로그인 닉네임', response.data);
-
       // AsyncStorage에 accessToken 저장
       await AsyncStorage.setItem('accessToken', response.headers.authorization); 
       dispatch(setAccessToken(response.headers.authorization));

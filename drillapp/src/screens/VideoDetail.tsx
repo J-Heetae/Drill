@@ -92,8 +92,6 @@ const VideoDetail = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-      // 성공
-      console.log('게시글 좋아요 성공', response)
       setIsLiked(!isLiked); // 좋아요 상태를 토글(toggle)
       // 좋아요 버튼을 누를 때, isLiked 값에 따라 좋아요 개수 업데이트
       setCountLiked(isLiked ? countLiked - 1 : countLiked + 1);
@@ -120,7 +118,6 @@ const VideoDetail = () => {
         },
       });
       // 성공
-      console.log('상세 게시글 불러오는데 성공', response.data)
       setData(response.data)
       setIsLiked(response.data?.liked || false);
       setCountLiked(response.data.likedCount)
@@ -143,12 +140,7 @@ const VideoDetail = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-      // 성공
-      console.log('댓글 작성 성공', response)
-      
     } catch (error) { 
-      // 요청
-      console.error('댓글 작성 실패:', error);
     }
   };
 
@@ -160,12 +152,8 @@ const VideoDetail = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-      // 성공
-      console.log('댓글 목록 불러오기 성공', response.data)
       setComments(response.data)
     } catch (error) { 
-      // 요청
-      console.error('댓글 목록 불러오기 실패:', error);
     }
   };
 
@@ -185,9 +173,6 @@ const VideoDetail = () => {
     // 컴포넌트가 마운트될 때 데이터를 불러오기 위해 useEffect를 사용합니다.
     VideoDetailget();
     Commentpostget();
-
-    console.log('현재 유저가 눌러서 좋아요 형식--------',isLiked)
-
   }, []);
 
   return (

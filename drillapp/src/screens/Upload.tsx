@@ -98,7 +98,6 @@ const Upload = () => {
         };
   
         const result = await s3.upload(params).promise();
-        console.log(result.Location);
         Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');
         toggleModal();
       } catch (error) {
@@ -112,17 +111,13 @@ const Upload = () => {
 
   const handleResponse = async (response: ImagePickerResponse) => {
     if (response.didCancel) {
-      console.log('취소');
     } else if (response.errorCode) {
       console.error(response.errorCode);
     } else if (response.assets && response.assets.length > 0) {
       const uri = response.assets[0].uri;
       const fileName = response.assets[0].fileName;
-      console.log('파일이름---------------------------', fileName);
-      console.log('URI---------------------------', uri);
       setPostVideo(fileName)
       const fileName_re = fileName?.replace(".mp4", ".jpg")
-      console.log("바뀐 파일이름", fileName_re)
       setPostThumbnail(fileName_re)
       uploadVideoToS3(uri, fileName);
       setVideourl(`https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${fileName_re}`)
@@ -144,7 +139,6 @@ const Upload = () => {
         },
       });
       // 요청 성공
-      console.log('게시물 게시 성공', response);
       Alert.alert('게시글 업로드 성공!');
       setVideourl('');
       setText('');

@@ -38,7 +38,6 @@ const Main = () => {
   // Axios를 사용하여 GET 요청 보내기
   const fetchRankingData = async () => {
     try {
-      console.log(centerName+" "+selectedCourse);
       const response = await axios.get(API_URL2, {
         params: {
           centerName: selectedCenter,
@@ -50,7 +49,6 @@ const Main = () => {
       });
 
       // 요청 성공
-      console.log('랭킹 데이터:', response.data);
       setTop10Ranks(response.data);
     } catch (error) {
       // 요청 실패
@@ -60,7 +58,6 @@ const Main = () => {
 
   const giveMeDifficulty = async () => {
     try {
-      console.log("selextedCenter: "+selectedCenter);
       const response = await axios.get('http://10.0.2.2:8060/api/ranking/findDifficulty', {
         params: {
           centerName: selectedCenter,
@@ -69,9 +66,6 @@ const Main = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-
-      // 요청 성공
-      console.log('랭킹 데이터:', response.data);
     } catch (error) {
       // 요청 실패
       console.error('랭킹 데이터를 불러오는 데 실패', error);
@@ -89,9 +83,7 @@ const Main = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-
       // 요청 성공
-      console.log('랭킹 데이터:', response.data);
       setSelectedCourseName(response.data);
     } catch (error) {
       // 요청 실패
@@ -148,7 +140,6 @@ const Main = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        console.log(centerName);
         const response = await axios.get(API_URL, {
           params: {
             centerName: centerName,
@@ -157,11 +148,8 @@ const Main = () => {
             Authorization: userInfo.accessToken,
           },
         });
-  
-        console.log('랭킹 데이터:', response.data);
         setTop10Ranks(response.data.ranking);
         setSelectedCourseName(response.data.courseName);
-        // console.log(response.data.courseName[0]);
         setSelectedCourse(response.data.courseName[0]);
         setSelectedHolder(response.data.difficulty[0]);
         
@@ -187,7 +175,6 @@ const Main = () => {
       value: course, // or provide unique identifier for value
     }));
     setTransformedCourseName(transformed);
-    console.log("tlfgod?")
   }, [selectedCourseName]); 
 
   useEffect(() => {
@@ -196,7 +183,6 @@ const Main = () => {
 
   useEffect(() => {
     giveMeDifficulty();
-    // console.log(selectedCenter);
   }, [selectedCenter]);
 
   useEffect(() => {

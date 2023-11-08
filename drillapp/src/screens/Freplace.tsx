@@ -44,12 +44,8 @@ const Freplace = () => {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },
       });
-
-      // 요청 성공
-      console.log('개인정보 저장 성공:', response.data);
     } catch (error) {
       // 요청 실패
-      console.log('내 accesstoken', userInfo.accessToken);
       console.error('개인정보 저장 실패', error);
     }
   };

@@ -45,14 +45,11 @@ const Camera = () => {
 
   const handleResponse = async (response: ImagePickerResponse) => {
     if (response.didCancel) {
-      console.log('취소');
     } else if (response.errorCode) {
       console.error(response.errorCode);
     } else if (response.assets && response.assets.length > 0) {
       const uri = response.assets[0].uri;
       const fileName = response.assets[0].fileName;
-      console.log('파일이름---------------------------', fileName);
-      console.log('URI---------------------------', uri);
       uploadVideoToS3(uri, fileName);
     } else {
       console.error('이미지가 선택되지 않았습니다.');
@@ -77,9 +74,7 @@ const Camera = () => {
           Body: blob,
           ContentType: 'video/mp4', 
         };
-  
         const result = await s3.upload(params).promise();
-        console.log(result.Location);
         Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');
       } catch (error) {
         console.error(error);

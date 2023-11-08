@@ -28,7 +28,6 @@ const Nickname : React.FC = () => {
    const debounceSearch = debounce(async (nickname: string) => {
 
     if (nickname.length > 0) {
-      console.log("nickname?")
       const response = await axios.get(`${Config.API_URL}member/nickname/${nickname}`, {
         headers: {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
@@ -62,7 +61,6 @@ const Nickname : React.FC = () => {
       Alert.alert("중복된 닉네임이 있습니다. 변경해주세요");
     } else {
       const result = dispatch(setNickName(text))
-      console.log("result :: ", result)
       navigation.navigate('Freplace')
     }
   };

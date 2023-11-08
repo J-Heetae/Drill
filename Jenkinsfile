@@ -38,5 +38,26 @@ pipeline {
                 sh 'docker image prune -f'  // 사용하지 않는 Docker 이미지 정리
             }
         }
+        stage('Merge Branch') {
+            when {
+                // 원하는 브랜치에만 머지를 실행할 조건을 지정
+                expression {
+                    return currentBuild.branch == 'deploy/BE'
+                }
+            }
+            steps {
+                script {
+                    // GitLab 브랜치 머지 작업 수행
+                    def targetBranch = 'deploy/BE2'
+                    def mergeResult = sh(script: "git checkout ${targetBranch} && git merge origin/${currentBuild.branch}",returnStatus: true)
+                    if (mergeResult == 0) {
+                        echo "Branch merged successfully into ${targetBranch}"
+                        // GitLab에 머지 결과를 보고할 수도 있음
+                    } else {
+                        error "Branch merge into ${targetBranch} failed"
+                    }
+                }
+            }
+        }
     }
 }

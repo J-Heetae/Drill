@@ -28,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 import project.drill.config.auth.MemberDetail;
 import project.drill.domain.Center;
 import project.drill.domain.Member;
+import project.drill.dto.LocalLoginDto;
+import project.drill.dto.LocalRegisterDto;
 import project.drill.dto.LoginRequestDto;
 import project.drill.dto.MemberDto;
 import project.drill.dto.SettingDto;
@@ -149,5 +151,63 @@ public class MemberController {
 			message = "refreshToken FAIL";
 		}
 		return new ResponseEntity<>(message, status);
+	}
+
+	// 소셜 로그인 회원가입
+	@PostMapping("/regist")
+	public ResponseEntity<String> localRegister(@RequestBody LocalRegisterDto localRegisterDto) throws Exception {
+		HttpStatus status;
+		String message;
+		// 중복 : 205 RESET_CONTENT 반환
+		// 회원 가입 완료 : 200 OK 반환
+		if (memberService.localRegister(localRegisterDto) == null) {
+			message = "중복된 회원입니다.";
+			status = HttpStatus.RESET_CONTENT;
+		} else {
+			message = "회원가입 완료";
+			status = HttpStatus.OK;
+		}
+		return new ResponseEntity<>(message, status);
+	}
+
+	@PostMapping("/locallogin")
+	public ResponseEntity<String> localLogin(@RequestBody LocalLoginDto localLoginDto,
+			HttpServletResponse response) throws Exception {
+
+		Member member = memberService.localLogin(localLoginDto);
+
+		if (member == null) {
+			return new ResponseEntity<>("존재하지 않거나 비밀번호가 틀렸습니다", HttpStatus.CREATED);
+		}
+
+		Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId",
+				String.valueOf(member.getMemberId()));
+
+		String accessToken = jwtTokenProvider.generateToken(member.getMemberEmail(),
+				ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
+		System.out.println(accessToken);
+		String refreshToken = jwtTokenProvider.generateToken(member.getMemberEmail(),
+				REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
+		System.out.println(refreshToken);
+		jwtTokenProvider.setHeaderAccessToken(response, accessToken);
+
+		// 사용자로부터 헤더 값으로 리프레시 토큰을 받는 것을 테스트하는 용도로, 실제 구현에서는 쿠키 값으로 전달하므로 빼야 함
+		jwtTokenProvider.addHeaderRefreshToken(response, refreshToken);
+
+		refreshTokenService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken,
+				REFRESH_TOKEN_EXPIRATION_TIME);
+
+		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 201 응답 전송
+		if (member.getMemberNickname() == null) {
+			return new ResponseEntity<>("닉네임 설정 필요", HttpStatus.CREATED);
+		}
+		if (member.getCenter() == Center.center0) {
+			return new ResponseEntity<>("관심지점 설정 필요", HttpStatus.CREATED);
+		}
+
+		String ans = member.getMemberNickname() +" "+member.getCenter().toString();
+		// 닉네임 설정 했으면 정상 로그인, body에 닉네임 넣어서 주기
+		return new ResponseEntity<>(ans, HttpStatus.OK);
+
 	}
 }

@@ -54,7 +54,7 @@ spring:
                         scope:
                             - profile
                             - email
-                        redirect-uri: ${varialbles.feUri}/login/oauth2/code/kakao
+                        redirect-uri: ${varialbles.feUri}/login/oauth2/code/google
                         authorization-grant-type: authorization
                 provider:
                     kakao:

@@ -48,7 +48,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
     System.out.println("SNS 타입 : " + loginRequestDto.getType());
     SocialUserResponse socialUserResponse = null;
-    if(loginRequestDto.getType() == "kakao") {
+    if(loginRequestDto.getType().equals("kakao")) {
       // 카카오 로그인
       socialUserResponse = getKakaoInfo(loginRequestDto.getSocialToken());
     } else {

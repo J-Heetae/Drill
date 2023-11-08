@@ -28,6 +28,9 @@ public class Member implements Serializable {
     @Column(name="member_nickname",unique = true, nullable = true)
     private String memberNickname;
 
+    @Column(name="password")
+    private String password;
+
     @Column(nullable = true)
     @Enumerated(value = EnumType.STRING)
     @ColumnDefault("'center0'")

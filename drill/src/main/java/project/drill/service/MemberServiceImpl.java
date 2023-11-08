@@ -11,6 +11,8 @@ import project.drill.domain.Course;
 import project.drill.domain.Difficulty;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
+import project.drill.dto.LocalLoginDto;
+import project.drill.dto.LocalRegisterDto;
 import project.drill.dto.MemberDto;
 import project.drill.dto.PostDto;
 import project.drill.repository.CourseRepository;
@@ -120,5 +122,30 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return true;
 
+	}
+
+	@Override
+	public Member localRegister(LocalRegisterDto localRegisterDto) {
+		Optional<Member> member = memberRepository.findByMemberEmail(localRegisterDto.getEmail());
+		if(!member.isPresent()) {
+			Member newMember = Member.builder().
+					memberEmail(localRegisterDto.getEmail()).
+					password(localRegisterDto.getPassword()).
+					build();
+			memberRepository.save(newMember);
+			return newMember;
+		} else {
+			// 중복
+			return null;
+		}
+	}
+
+	public Member localLogin(LocalLoginDto localLoginDto) {
+		Optional<Member> member = memberRepository.findByMemberEmail(localLoginDto.getEmail());
+		if(member.isPresent() && member.get().getPassword().equals(localLoginDto.getPassword())) {
+			return member.get();
+		} else {
+			return null;
+		}
 	}
 }

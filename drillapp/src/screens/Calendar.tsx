@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 const CalendarPage = () => {
   const [selected, setSelected] = useState('');
@@ -11,7 +11,11 @@ const CalendarPage = () => {
         setSelected(day.dateString);
       }}
       markedDates={{
-        [selected]: {selected: true, disableTouchEvent: true, selectedColor: 'green'}
+        [selected]: {
+          selected: true,
+          disableTouchEvent: true,
+          selectedColor: 'green',
+        },
       }}
     />
   );

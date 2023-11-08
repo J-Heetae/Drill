@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { Dropdown } from 'react-native-element-dropdown';
-import { setPlace } from '../modules/redux/slice/TemplateUserSlice';
+import {Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {Dropdown} from 'react-native-element-dropdown';
+import {setPlace} from '../modules/redux/slice/TemplateUserSlice';
 import axios from 'axios';
-import { RootState } from "../modules/redux/RootReducer";
+import {RootState} from '../modules/redux/RootReducer';
 import Config from 'react-native-config';
 
 type DataItem = {
@@ -21,10 +21,11 @@ type RootStackParamList = {
 };
 
 const Freplace = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const API_URL = `${Config.API_URL}member/settings`;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>()
-  const [selectedCenter, setSelectedCenter] = useState("");
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>();
+  const [selectedCenter, setSelectedCenter] = useState('');
   const userInfo = useSelector((state: RootState) => state.templateUser);
 
   useEffect(() => {
@@ -34,9 +35,9 @@ const Freplace = () => {
 
   const settingDto = {
     memberNickname: userInfo.nickName,
-    center: userInfo.place
+    center: userInfo.place,
   };
-  
+
   const settingMyInfo = async () => {
     try {
       const response = await axios.put(API_URL, settingDto, {
@@ -51,51 +52,52 @@ const Freplace = () => {
   };
 
   const data: DataItem[] = [
-    {key:'center1',value:'더클라임 홍대'},
-    {key:'center2',value:'더클라임 일산'},
-    {key:'center3',value:'더클라임 양재'},
-    {key:'center4',value:'더클라임 마곡'},
-    {key:'center5',value:'더클라임 신림'},
-    {key:'center6',value:'더클라임 연남'},
-    {key:'center7',value:'더클라임 강남'},
-    {key:'center8',value:'더클라임 사당'},
-    {key:'center9',value:'더클라임 신사'},
-    {key:'center10',value:'더클라임 서울대'},
+    {key: 'center1', value: '더클라임 홍대'},
+    {key: 'center2', value: '더클라임 일산'},
+    {key: 'center3', value: '더클라임 양재'},
+    {key: 'center4', value: '더클라임 마곡'},
+    {key: 'center5', value: '더클라임 신림'},
+    {key: 'center6', value: '더클라임 연남'},
+    {key: 'center7', value: '더클라임 강남'},
+    {key: 'center8', value: '더클라임 사당'},
+    {key: 'center9', value: '더클라임 신사'},
+    {key: 'center10', value: '더클라임 서울대'},
   ];
 
   const setUserInfo = () => {
-    settingMyInfo()
-    navigation.navigate('TabNavigator')
+    settingMyInfo();
+    navigation.navigate('TabNavigator');
   };
 
   return (
     <ContainerView>
       <ContentView>
-        <TitleText>
-          자주가는 지점을 설정해주세요.
-        </TitleText>
-        <Dropdown 
-            style={styles.dropdown1}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            mode='default'
-            data={data}
-            maxHeight={200}
-            placeholder='지점 선택'
-            labelField="value"
-            valueField="key"
-            value={selectedCenter}
-            onChange={(item) => {
-              const selectedOption = data.find(option => option.value === item.value);
-              setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-            }}
-          />
+        <TitleText>자주가는 지점을 설정해주세요.</TitleText>
+        <Dropdown
+          style={styles.dropdown1}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          mode="default"
+          data={data}
+          maxHeight={200}
+          placeholder="지점 선택"
+          labelField="value"
+          valueField="key"
+          value={selectedCenter}
+          onChange={item => {
+            const selectedOption = data.find(
+              option => option.value === item.value,
+            );
+            setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+          }}
+        />
       </ContentView>
       <ButtonView>
-        <TouchableOpacity
-          style={styles.button}>
-          <Text style={styles.buttonText} onPress={setUserInfo}>다음</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText} onPress={setUserInfo}>
+            다음
+          </Text>
         </TouchableOpacity>
       </ButtonView>
     </ContainerView>
@@ -138,23 +140,23 @@ const ContainerView = styled.View`
   flex: 1;
   background-color: white;
   align-items: center;
-`
+`;
 // -------------------------------
 
 const ContentView = styled.View`
   flex: 5;
   justify-content: center;
   align-items: center;
-`
+`;
 const ButtonView = styled.View`
   flex: 1;
   width: 280px;
   justify-content: center;
-`
+`;
 // -------------------------------
 
 const TitleText = styled.Text`
   font-size: 20px;
   font-family: 'SCDream4';
-`
+`;
 export default Freplace;

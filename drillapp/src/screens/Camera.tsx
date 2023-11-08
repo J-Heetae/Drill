@@ -1,13 +1,11 @@
 import React from 'react';
-import { useSelector } from "react-redux";
-import { RootState } from "../modules/redux/RootReducer";
-import { Alert, Button } from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../modules/redux/RootReducer';
+import {Alert, Button} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { ImagePickerResponse } from 'react-native-image-picker';
+import {ImagePickerResponse} from 'react-native-image-picker';
 import AWS from 'aws-sdk';
 import Styled from 'styled-components/native';
-
-
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -15,11 +13,9 @@ AWS.config.update({
   region: 'ap-northeast-2',
 });
 
-
 const s3 = new AWS.S3();
 
 const Camera = () => {
-  
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const showPicker = () => {
     Alert.alert(
@@ -29,17 +25,17 @@ const Camera = () => {
         {
           text: '카메라로 촬영',
           onPress: () => {
-            launchCamera({ mediaType: 'video' }, handleResponse); 
+            launchCamera({mediaType: 'video'}, handleResponse);
           },
         },
         {
           text: '앨범에서 선택',
           onPress: () => {
-            launchImageLibrary({ mediaType: 'video' }, handleResponse); 
+            launchImageLibrary({mediaType: 'video'}, handleResponse);
           },
         },
       ],
-      { cancelable: true }
+      {cancelable: true},
     );
   };
 
@@ -56,23 +52,26 @@ const Camera = () => {
     }
   };
 
-  const uploadVideoToS3 = async (uri: string | undefined, fileName: string | undefined) => {
-    if (uri && fileName) {  
+  const uploadVideoToS3 = async (
+    uri: string | undefined,
+    fileName: string | undefined,
+  ) => {
+    if (uri && fileName) {
       try {
         const response = await fetch(uri);
         const blob = await response.blob();
         const now = new Date();
-        const year =now.getFullYear();
-        const month = now.getMonth()+1;
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
         const day = now.getDate();
         const hour = now.getHours();
         const minute = now.getMinutes();
         const second = now.getSeconds();
         const params = {
-          Bucket: 'drill-video-bucket', 
+          Bucket: 'drill-video-bucket',
           Key: `Video/${userInfo.nickName}_${year}${month}${day}_${hour}${minute}${second}_${fileName}`,
           Body: blob,
-          ContentType: 'video/mp4', 
+          ContentType: 'video/mp4',
         };
         const result = await s3.upload(params).promise();
         Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');

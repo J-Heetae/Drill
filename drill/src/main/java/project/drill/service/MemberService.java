@@ -9,7 +9,7 @@ public interface MemberService {
 
 	MemberDto findMyPage(String memberNickname);
 
-	void updateUser(String memberNickname,String center,String memberEmail);
+	void updateUser(String memberNickname, String center, String memberEmail);
 
 	boolean checkNickname(String nickname);
 }

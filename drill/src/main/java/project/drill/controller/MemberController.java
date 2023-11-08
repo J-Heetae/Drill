@@ -1,15 +1,14 @@
 package project.drill.controller;
 
-import static project.drill.filter.JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME;
-import static project.drill.filter.JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME;
+import static project.drill.filter.JwtProperties.*;
 
 import java.util.HashMap;
-
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +22,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import project.drill.config.auth.MemberDetail;
+import project.drill.config.redis.RefreshTokenService;
 import project.drill.domain.Center;
 import project.drill.domain.Member;
 import project.drill.dto.LoginRequestDto;
 import project.drill.dto.MemberDto;
 import project.drill.dto.SettingDto;
-import project.drill.filter.JwtUtil;
-import project.drill.service.MemberService;
-import project.drill.config.redis.RefreshTokenService;
-import project.drill.repository.MemberRepository;
 import project.drill.filter.JwtTokenProvider;
+import project.drill.filter.JwtUtil;
+import project.drill.repository.MemberRepository;
+import project.drill.service.MemberService;
 import project.drill.service.SocialLoginService;
 
 @Slf4j
@@ -58,28 +59,24 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> doSocialLogin(
-			@RequestBody @Valid LoginRequestDto request, HttpServletResponse response)
-			throws Exception {
-		System.out.println(request.getKakaoToken());
+		@RequestBody @Valid LoginRequestDto request, HttpServletResponse response)
+		throws Exception {
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request))
-				.orElseThrow();
-		System.out.println("controller member : " + member.toString());
+			.orElseThrow();
 		Map<String, Object> customClaims = jwtUtil.setCustomClaims(new HashMap<>(), "memberId",
-				String.valueOf(member.getMemberId()));
+			String.valueOf(member.getMemberId()));
 
 		String accessToken = jwtTokenProvider.generateToken(member.getMemberEmail(),
-				ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
-		System.out.println(accessToken);
+			ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
 		String refreshToken = jwtTokenProvider.generateToken(member.getMemberEmail(),
-				REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
-		System.out.println(refreshToken);
+			REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
 		jwtTokenProvider.setHeaderAccessToken(response, accessToken);
 
 		// 사용자로부터 헤더 값으로 리프레시 토큰을 받는 것을 테스트하는 용도로, 실제 구현에서는 쿠키 값으로 전달하므로 빼야 함
 		jwtTokenProvider.addHeaderRefreshToken(response, refreshToken);
 
 		refreshTokenService.saveRefreshToken(String.valueOf(member.getMemberId()), refreshToken,
-				REFRESH_TOKEN_EXPIRATION_TIME);
+			REFRESH_TOKEN_EXPIRATION_TIME);
 
 		// 닉네임 설정 안했으면 로그인 창으로 리다이렉트 시키는 201 응답 전송
 		// getMemberNickname 말고 getRole로 하는게 더 좋은 방법일 수 있음
@@ -89,7 +86,7 @@ public class MemberController {
 		if (member.getCenter() == Center.center0) {
 			return new ResponseEntity<>("관심지점 설정 필요", HttpStatus.CREATED);
 		}
-		String ans = member.getMemberNickname() +" "+member.getCenter().toString();
+		String ans = member.getMemberNickname() + " " + member.getCenter().toString();
 		// 닉네임 설정 했으면 정상 로그인, body에 닉네임 넣어서 주기
 		return new ResponseEntity<>(ans, HttpStatus.OK);
 	}
@@ -103,8 +100,8 @@ public class MemberController {
 	@PutMapping("/settings")
 	@ApiOperation(value = "닉네임, 관심지점 세팅")
 	public ResponseEntity<String> findAllByMate(
-			@RequestBody SettingDto settingDto,
-			@RequestHeader HttpHeaders header) {
+		@RequestBody SettingDto settingDto,
+		@RequestHeader HttpHeaders header) {
 		String kakaoId = jwtTokenProvider.getIdFromToken(header.getFirst("Authorization"));
 		log.info("kakao Id : " + kakaoId);
 		log.info("nickname : " + settingDto.getMemberNickname());
@@ -112,6 +109,7 @@ public class MemberController {
 		memberService.updateUser(settingDto.getMemberNickname(), settingDto.getCenter(), kakaoId);
 		return new ResponseEntity<>("Settings updated successfully", HttpStatus.OK);
 	}
+
 	@GetMapping("/nickname/{nickname}")
 	public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
 		System.out.println("come?");
@@ -121,20 +119,20 @@ public class MemberController {
 
 	@PostMapping("/refresh")
 	public ResponseEntity<?> refreshToken(@AuthenticationPrincipal MemberDetail memberDetail,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+		HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
 		HttpStatus status;
 		String refreshToken = jwtUtil.resolveToken(request);
 		Object message = null;
 		log.debug("token : {}, memberDetail : {}", refreshToken, memberDetail);
 		if (refreshToken.equals(refreshTokenService.getRefreshToken(
-				String.valueOf(memberDetail.getMember().getMemberId())))) {
+			String.valueOf(memberDetail.getMember().getMemberId())))) {
 			Map<String, Object> customClaims = new HashMap<>();
 			customClaims.put("memberId", String.valueOf(memberDetail.getMember().getMemberId()));
 			String newAccessToken = jwtTokenProvider.generateToken(memberDetail.getUsername(),
-					ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
+				ACCESS_TOKEN_EXPIRATION_TIME, customClaims);
 			String newRefreshToken = jwtTokenProvider.generateToken(memberDetail.getUsername(),
-					REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
+				REFRESH_TOKEN_EXPIRATION_TIME, customClaims);
 			jwtTokenProvider.setHeaderAccessToken(response, newAccessToken);
 			jwtTokenProvider.addHeaderRefreshToken(response, newRefreshToken);
 			log.debug("token : {}", newAccessToken);

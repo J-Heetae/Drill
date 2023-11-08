@@ -1,10 +1,9 @@
 package project.drill.repository;
 
-import project.drill.dto.CommentDto;
-import project.drill.dto.CommentListDto;
-
 import java.util.List;
 
+import project.drill.dto.CommentListDto;
+
 public interface CommentCustomRepository {
-    List<CommentListDto> findAllByPostPostIdOrderByCommentWriteTimeAsc (Long postId);
+	List<CommentListDto> findAllByPostPostIdOrderByCommentWriteTimeAsc(Long postId);
 }

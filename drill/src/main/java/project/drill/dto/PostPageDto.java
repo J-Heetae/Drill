@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostPageDto {
-    private Long postId;
-    private String postThumbnail;
+	private Long postId;
+	private String postThumbnail;
 }

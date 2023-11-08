@@ -2,7 +2,8 @@ package project.drill.service;
 
 import java.util.Optional;
 
-import org.springframework.security.core.parameters.P;
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import project.drill.dto.MemberDto;
 import project.drill.dto.PostDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.MemberRepository;
-
-import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +31,10 @@ public class MemberServiceImpl implements MemberService {
 		Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto.getCourseName(),
 			Center.valueOf(postDto.getCenter()));
 		String courseD = course.get().getDifficulty().toString();
-		int courseR = courseD.charAt(courseD.length() - 1)-'0';
+		int courseR = courseD.charAt(courseD.length() - 1) - '0';
 
 		String memberD = member.get().getDifficulty().toString();
-		int memberR = memberD.charAt(memberD.length() - 1)-'0';
+		int memberR = memberD.charAt(memberD.length() - 1) - '0';
 
 		long score = 0;
 		long memberScore = member.get().getMember_score();
@@ -43,34 +42,34 @@ public class MemberServiceImpl implements MemberService {
 		String memberDifficulty = member.get().getDifficulty().toString();
 		Difficulty ndifficulty = null;
 
-		if(courseR-memberR<-2){
+		if (courseR - memberR < -2) {
 			score = 0;
-		}else if(courseR-memberR==-2){
+		} else if (courseR - memberR == -2) {
 			score = 1;
-		}else if(courseR-memberR==-1){
+		} else if (courseR - memberR == -1) {
 			score = 5;
-		}else if(courseR-memberR==0){
+		} else if (courseR - memberR == 0) {
 			score = 10;
-		}else if(courseR-memberR==1){
+		} else if (courseR - memberR == 1) {
 			score = 30;
-		}else if(courseR-memberR==2){
+		} else if (courseR - memberR == 2) {
 			score = 50;
-		}else {
+		} else {
 			score = 100;
 		}
 
-		if (memberScore+score>=memberMaxScore){
-			score = memberScore+score - memberMaxScore;
-			memberMaxScore = Math.round(memberMaxScore*1.5);
+		if (memberScore + score >= memberMaxScore) {
+			score = memberScore + score - memberMaxScore;
+			memberMaxScore = Math.round(memberMaxScore * 1.5);
 			memberR++;
-			ndifficulty = Difficulty.valueOf("difficulty"+memberR);
+			ndifficulty = Difficulty.valueOf("difficulty" + memberR);
 
-		}else{
-			score = memberScore+score;
+		} else {
+			score = memberScore + score;
 			ndifficulty = Difficulty.valueOf(memberDifficulty);
 		}
 
-		if(member.isPresent()) {
+		if (member.isPresent()) {
 			Member updateMember = member.get();
 			updateMember.updateCenter(Center.valueOf((postDto.getCenter())));
 			updateMember.updateMemberScore(score);
@@ -86,14 +85,14 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDto findMyPage(String memberNickname) {
 		Optional<Member> memberOptional = memberRepository.findByMemberNickname(memberNickname);
 
-		if(memberOptional.isPresent()) {
+		if (memberOptional.isPresent()) {
 			MemberDto member = MemberDto.builder()
-					.memberNickname(memberOptional.get().getMemberNickname())
-					.member_score(memberOptional.get().getMember_score())
-					.max_score(memberOptional.get().getMax_score())
-					.difficulty(memberOptional.get().getDifficulty().toString())
-					.center(memberOptional.get().getCenter().toString())
-					.build();
+				.memberNickname(memberOptional.get().getMemberNickname())
+				.member_score(memberOptional.get().getMember_score())
+				.max_score(memberOptional.get().getMax_score())
+				.difficulty(memberOptional.get().getDifficulty().toString())
+				.center(memberOptional.get().getCenter().toString())
+				.build();
 			return member;
 		} else {
 			return null;
@@ -101,9 +100,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void updateUser(String memberNickname,String center,String memberEmail) {
+	public void updateUser(String memberNickname, String center, String memberEmail) {
 		Optional<Member> member = memberRepository.findByMemberEmail(memberEmail);
-		if(member.isPresent()) {
+		if (member.isPresent()) {
 			Member updateMember = member.get();
 			updateMember.updateNickname(memberNickname);
 			updateMember.updateCenter(Center.valueOf(center));

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CommentListDto {
-    private Long member_score;
-    private String memberNickname;
-    private String commentContent;
+	private Long member_score;
+	private String memberNickname;
+	private String commentContent;
 }

@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostDto {
-    private String memberNickname;
-    private String center;
-    private String postContent;
-    private String postVideo;
-    private String courseName;
-    private String postThumbnail;
+	private String memberNickname;
+	private String center;
+	private String postContent;
+	private String postVideo;
+	private String courseName;
+	private String postThumbnail;
 }

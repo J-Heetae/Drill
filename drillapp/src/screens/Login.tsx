@@ -36,6 +36,10 @@ const Login = () => {
     }
   }, [isLoggedIn]);
 
+  const Locallogin = () => {
+    navigation.navigate("LocalLogin");
+  };
+  
   const login = () => {
     KakaoLogin.login().then((result) => {
       console.log("Login Success", JSON.stringify(result));
@@ -105,7 +109,7 @@ const Login = () => {
         />
       </LogoView>
         <GoogleLoginView>
-          <TouchableOpacity onPress={login}>
+          <TouchableOpacity onPress={Locallogin}>
             <Image
               source={require('../asset/icons/google_login.png')}
               resizeMode="contain"

@@ -49,12 +49,12 @@ pipeline {
                     if timeout 10s curl -s "http://${ip}:${blue_port}" > /dev/null
                     then
                         echo "http://${ip}:${blue_port} Health check success"
-                        target_container_name=$green_container_name
-                        target_port=$green_port
+                        target_container_name=${green_container_name}
+                        target_port=${green_port}
                     else
                         echo "http://${ip}:${blue_port} Health check fail"
-                        target_container_name=$blue_container_name
-                        target_port=$blue_port
+                        target_container_name=${blue_container_name}
+                        target_port=${blue_port}
                     fi
 
                     docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest

@@ -21,49 +21,30 @@ pipeline {
                 }
             }
         }
-        // Deploy stag : 이미 실행 중인 'drill_back' 컨테이너를 종료하고 새 컨테이너를 실행하여 배포.
-        stage('Deploy1') {
-            steps {
-                script {
-                    sh 'docker rm -f drill_back_1 || true'// 실행 중인 'drill_back' 컨테이너 제거
-                    sh 'docker run -d --name drill_back_1 -p 8061:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
-                    sh 'docker rm -f drill_back_2 || true'
-                    sh 'docker run -d --name drill_back_2 -p 8062:8060 -u root drill_back:latest'
-                }
-            }
-        }
         stage('HealthCheck') {
             steps {
                 script {
                     sh'''#!/bin/bash
-                    for retry_count in \$(seq 10)
-                    do
-                    if curl -s "https://k9a106.p.ssafy.io/" > /dev/null
-                    then
-                        echo "Health check success"
-                        break
-                    fi
 
-                    if [ $retry_count -eq 10 ]
+                    if curl -s "https://${ip}:${blue_port}" > /dev/null
                     then
-                        echo "Health check faile"
-                        exit 1
+                        target_container_name=$green_container_name
+                        target_port=$green_port
+                    else
+                        target_container_name=$blue_container_name
+                        target_port=$blue_port
                     fi
-                    sleep 5
                     done
                     '''
                 }
             }
         }
-
         // Deploy stag : 이미 실행 중인 'drill_back' 컨테이너를 종료하고 새 컨테이너를 실행하여 배포.
-        stage('Deploy2') {
+        stage('Deploy1') {
             steps {
                 script {
-                    sh 'docker rm -f drill_back_3 || true'// 실행 중인 'drill_back' 컨테이너 제거
-                    sh 'docker run -d --name drill_back_3 -p 8063:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
-                    sh 'docker rm -f drill_back_4 || true'
-                    sh 'docker run -d --name drill_back_4 -p 8064:8060 -u root drill_back:latest'
+                    sh 'docker rm -f ${target_container_name} || true'// 실행 중인 'drill_back' 컨테이너 제거
+                    sh 'docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
                 }
             }
         }

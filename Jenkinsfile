@@ -43,7 +43,7 @@ pipeline {
                     #!/bin/bash
                     echo "http://${ip}:${blue_port} Health check"
 
-                    if timeout 10s curl -s "https://${ip}:${blue_port}" > /dev/null
+                    if timeout 10s telnet "https://${ip}:${blue_port}" > /dev/null
                     then
                         echo "http://${ip}:${blue_port} Health check success"
                         target_container_name=$green_container_name

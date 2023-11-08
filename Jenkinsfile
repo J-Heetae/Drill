@@ -26,6 +26,16 @@ pipeline {
         //Blue Health check
         //사용중인 경우 green
         //사용중이 아니면 blue에 신버전 배포
+
+        //Deploy Health check
+        //새로 배포한 버전의 Health check를 진행한다.
+        //5초 간격으로 10번 진행
+        //실패시 종료
+
+        // Finish
+        //1. nginx의 리버스 프록시 방향을 새로운 서버로 설정한다.
+        //2. 기존의 서버를 종료한다.
+        //3. 사용하지 않는 이미지를 삭제한다.
         stage('Blue Health check and Deploy') {
             steps {
                 script {
@@ -45,18 +55,10 @@ pipeline {
                     fi
 
                     docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest
-                    '''
-                }
-            }
-        }
-        //Deploy Health check
-        //새로 배포한 버전의 Health check를 진행한다.
-        //5초 간격으로 10번 진행
-        //실패시 종료
-        stage('Deploy Health check') {
-            steps {
-                script {
-                    sh'''
+
+
+
+                    echo "deploy health check"
                     for retry_count in \$(seq 10)
                     do
                     if curl -s "http://${ip}:${target_port}" > /dev/null
@@ -72,31 +74,73 @@ pipeline {
                     fi
                     sleep 5
                     done
+
+
+
+                    echo "finish"
+                    echo "set \$service_url https://${ip}:${target_port};" > /etc/nginx/conf.d/service-url.inc
+                    docker restart nginx
+
+                    if ["${target_port}" == "${blue_port}"]
+                    then
+                        docker rm -f ${green_container_name} || true
+                    else
+                        docker rm -f ${blue_container_name} || true
+                    fi
+                    
+                    docker image prune -f
                     '''
                 }
             }
         }
+        // //Deploy Health check
+        // //새로 배포한 버전의 Health check를 진행한다.
+        // //5초 간격으로 10번 진행
+        // //실패시 종료
+        // stage('Deploy Health check') {
+        //     steps {
+        //         script {
+        //             sh'''
+        //             for retry_count in \$(seq 10)
+        //             do
+        //             if curl -s "http://${ip}:${target_port}" > /dev/null
+        //             then
+        //                 echo "Deploy Health check success"
+        //                 break
+        //             fi
 
-        // Finish stage
-        //1. nginx의 리버스 프록시 방향을 새로운 서버로 설정한다.
-        //2. 기존의 서버를 종료한다.
-        //3. 사용하지 않는 이미지를 삭제한다.
-        stage('Finish') {
-            steps {
-                sh '''
-                echo 'set \$service_url https://${ip}:${target_port};' > /etc/nginx/conf.d/service-url.inc
-                docker restart nginx
+        //             if [ $retry_count -eq 10 ]
+        //             then
+        //                 echo "Deploy Health check failed"
+        //                 exit 1
+        //             fi
+        //             sleep 5
+        //             done
+        //             '''
+        //         }
+        //     }
+        // }
 
-                if ["${target_port}" == "${blue_port}"]
-                then
-                    docker rm -f ${green_container_name} || true
-                else
-                    docker rm -f ${blue_container_name} || true
-                fi
+        // // Finish stage
+        // //1. nginx의 리버스 프록시 방향을 새로운 서버로 설정한다.
+        // //2. 기존의 서버를 종료한다.
+        // //3. 사용하지 않는 이미지를 삭제한다.
+        // stage('Finish') {
+        //     steps {
+        //         sh '''
+        //         echo 'set \$service_url https://${ip}:${target_port};' > /etc/nginx/conf.d/service-url.inc
+        //         docker restart nginx
+
+        //         if ["${target_port}" == "${blue_port}"]
+        //         then
+        //             docker rm -f ${green_container_name} || true
+        //         else
+        //             docker rm -f ${blue_container_name} || true
+        //         fi
                 
-                docker image prune -f
-                '''
-            }
-        }
+        //         docker image prune -f
+        //         '''
+        //     }
+        // }
     }
 }

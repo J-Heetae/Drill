@@ -41,15 +41,15 @@ pipeline {
                 script {
                     sh'''
                     #!/bin/bash
-                    echo "https://${ip}:${blue_port} Health check"
+                    echo "http://${ip}:${blue_port} Health check"
 
                     if timeout 10s curl -s "https://${ip}:${blue_port}" > /dev/null
                     then
-                        echo "https://${ip}:${blue_port} Health check success"
+                        echo "http://${ip}:${blue_port} Health check success"
                         target_container_name=$green_container_name
                         target_port=$green_port
                     else
-                        echo "https://${ip}:${blue_port} Health check fail"
+                        echo "http://${ip}:${blue_port} Health check fail"
                         target_container_name=$blue_container_name
                         target_port=$blue_port
                     fi

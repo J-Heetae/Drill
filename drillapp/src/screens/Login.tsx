@@ -15,6 +15,7 @@ import Config from 'react-native-config';
 type RootStackParamList = {
   Nickname: undefined;
   TabNavigator: undefined;
+  LocalLogin: undefined;
 };
 
 const Login = () => {
@@ -22,6 +23,7 @@ const Login = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const dispatch = useDispatch()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();
+  const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'LocalLogin'>>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onPressMoveTab = () => {

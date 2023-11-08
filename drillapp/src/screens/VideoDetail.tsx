@@ -276,6 +276,7 @@ const VideoDetail = () => {
         </PostBottomView>
       </BottomView>
     </ContainerView>
+
   );
 };
 

@@ -26,7 +26,7 @@ pipeline {
         //Blue Health check
         //사용중인 경우 green
         //사용중이 아니면 blue에 신버전 배포
-        stage('Blue Health check') {
+        stage('Blue Health check and Deploy') {
             steps {
                 script {
                     sh'''
@@ -43,16 +43,9 @@ pipeline {
                         target_container_name=$blue_container_name
                         target_port=$blue_port
                     fi
+
+                    docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest
                     '''
-                }
-            }
-        }
-        // Deploy
-        // 새 컨테이너를 실행하여 배포.
-        stage('Deploy') {
-            steps {
-                script {
-                    sh 'docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest'
                 }
             }
         }

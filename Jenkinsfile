@@ -63,7 +63,7 @@ pipeline {
 
                     echo "deploy health check"
 
-                    for retry_count in \$(seq 10)
+                    for retry_count in \$(seq 60)
                     do
                     if curl -s "http://${ip}:${target_port}" > /dev/null
                     then
@@ -71,19 +71,19 @@ pipeline {
                         break
                     fi
 
-                    if [ $retry_count -eq 10 ]
+                    if [ $retry_count -eq 60 ]
                     then
                         echo "Deploy Health check failed"
                         exit 1
                     fi
-                    sleep 5
+                    sleep 1
                     done
 
 
 
                     echo "finish"
 
-                    echo "set \$service_url http://${ip}:${target_port};" > /etc/nginx/conf.d/service-url.inc
+                    echo "set $service_url http://${ip}:${target_port};" > /etc/nginx/conf.d/service-url.inc
                     docker restart nginx
 
                     if [ "${target_port}" -eq "${blue_port}" ]

@@ -24,17 +24,19 @@ pipeline {
         stage('HealthCheck') {
             steps {
                 script {
-                    sh'''#!/bin/bash
-                    echo "https://${ip}:${blue_port} Health check failed ❌"
+                    sh'''
+                    #!/bin/bash
+                    echo "https://${ip}:${blue_port} Health check"
                     if curl -s "https://${ip}:${blue_port}" > /dev/null
                     then
+                        echo "https://${ip}:${blue_port} Health check success"
                         target_container_name=$green_container_name
                         target_port=$green_port
                     else
+                        echo "https://${ip}:${blue_port} Health check fail"
                         target_container_name=$blue_container_name
                         target_port=$blue_port
                     fi
-                    done
                     '''
                 }
             }

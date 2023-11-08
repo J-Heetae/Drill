@@ -60,7 +60,7 @@ public class MemberController {
 	public ResponseEntity<String> doSocialLogin(
 			@RequestBody @Valid LoginRequestDto request, HttpServletResponse response)
 			throws Exception {
-		System.out.println(request.getKakaoToken());
+		System.out.println(request.getSocialToken());
 		Member member = memberRepository.findById(socialLoginService.doSocialLogin(request))
 				.orElseThrow();
 		System.out.println("controller member : " + member.toString());

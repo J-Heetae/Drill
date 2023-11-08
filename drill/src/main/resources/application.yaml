@@ -48,6 +48,14 @@ spring:
                         scope:
                             - profile_nickname
                             - account_email
+                    google:
+                        client-id: 97356546336-88jenk0nvmlcg8o0vqc3v9lmgpnfsutv.apps.googleusercontent.com
+                        client-secret: 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
+                        scope:
+                            - profile
+                            - email
+                        redirect-uri: ${varialbles.feUri}/login/oauth2/code/kakao
+                        authorization-grant-type: authorization
                 provider:
                     kakao:
                         authorization-uri: https://kauth.kakao.com/oauth/authorize

@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.drill.domain.Member;
 import project.drill.domain.Role;
-import project.drill.dto.KaKaoLoginResponse;
+import project.drill.dto.GoogleServerResponse;
+import project.drill.dto.KaKaoServerResponse;
 import project.drill.dto.LoginRequestDto;
 import project.drill.dto.SocialAuthResponse;
 import project.drill.dto.SocialUserResponse;
+import project.drill.google.GoogleAuthApi;
+import project.drill.google.GoogleUserApi;
 import project.drill.util.GsonLocalDateTimeAdapter;
 import project.drill.kakao.KakaoAuthApi;
 import project.drill.kakao.KakaoUserApi;
@@ -30,6 +33,7 @@ import com.google.gson.Gson;
 public class SocialLoginServiceImpl implements SocialLoginService {
   private final KakaoAuthApi kakaoAuthApi;
   private final KakaoUserApi kakaoUserApi;
+  private final GoogleUserApi googleUserApi;
 
   @Value("${social.client.kakao.rest-api-key}")
   private String kakaoAppKey;
@@ -42,7 +46,16 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
   @Transactional
   public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
-    SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getKakaoToken());
+    System.out.println("SNS 타입 : " + loginRequestDto.getType());
+    SocialUserResponse socialUserResponse = null;
+    if(loginRequestDto.getType() == "kakao") {
+      // 카카오 로그인
+      socialUserResponse = getKakaoInfo(loginRequestDto.getSocialToken());
+    } else {
+      // 구글 로그인
+      socialUserResponse = getGoogleInfo(loginRequestDto.getSocialToken());
+    }
+
     System.out.println("아이디: " + socialUserResponse.getId());
     System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
     if (!memberRepository.findByMemberEmail(socialUserResponse.getId()).isPresent()) {
@@ -77,7 +90,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
   }
 
   @Override
-  public SocialUserResponse getUserInfo(String accessToken) {
+  public SocialUserResponse getKakaoInfo(String accessToken) {
     Map<String ,String> headerMap = new HashMap<>();
     headerMap.put("authorization", "Bearer " + accessToken);
 
@@ -93,19 +106,41 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         .registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeAdapter())
         .create();
 
-    KaKaoLoginResponse kaKaoLoginResponse = gson.fromJson(jsonString, KaKaoLoginResponse.class);
-    KaKaoLoginResponse.KakaoLoginData kakaoLoginData = Optional.ofNullable(kaKaoLoginResponse.getKakao_account())
-        .orElse(KaKaoLoginResponse.KakaoLoginData.builder().build());
+    KaKaoServerResponse kaKaoServerResponse = gson.fromJson(jsonString, KaKaoServerResponse.class);
+    KaKaoServerResponse.KakaoLoginData kakaoLoginData = Optional.ofNullable(kaKaoServerResponse.getKakao_account())
+        .orElse(KaKaoServerResponse.KakaoLoginData.builder().build());
 
     String name = Optional.ofNullable(kakaoLoginData.getProfile())
-        .orElse(KaKaoLoginResponse.KakaoLoginData.KakaoProfile.builder().build())
+        .orElse(KaKaoServerResponse.KakaoLoginData.KakaoProfile.builder().build())
         .getNickname();
 
     return SocialUserResponse.builder()
-        .id(kaKaoLoginResponse.getId())
+        .id(kaKaoServerResponse.getId())
         .gender(kakaoLoginData.getGender())
         .name(name)
         .email(kakaoLoginData.getEmail())
+        .build();
+  }
+
+  @Override
+  public SocialUserResponse getGoogleInfo(String accessToken) {
+    ResponseEntity<?> response = googleUserApi.getUserInfo(accessToken);
+
+    log.info("google user response");
+    log.info(response.toString());
+
+    String jsonString = response.getBody().toString();
+
+    Gson gson = new GsonBuilder()
+        .setPrettyPrinting()
+        .registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeAdapter())
+        .create();
+
+    GoogleServerResponse googleServerResponse = gson.fromJson(jsonString, GoogleServerResponse.class);
+
+    return SocialUserResponse.builder()
+        .id(googleServerResponse.getId())
+        .email(googleServerResponse.getEmail())
         .build();
   }
 }

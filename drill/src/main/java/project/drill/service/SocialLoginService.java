@@ -7,5 +7,6 @@ import project.drill.dto.SocialUserResponse;
 public interface SocialLoginService {
   public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception;
   SocialAuthResponse getAccessToken(String authorizationCode);
-  SocialUserResponse getUserInfo(String accessToken);
+  SocialUserResponse getKakaoInfo(String accessToken);
+  SocialUserResponse getGoogleInfo(String accessToken);
 }

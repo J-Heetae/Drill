@@ -69,10 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// Tip: 인증 프로바이더의 디폴트 서비스는 UserDetailsService 타입
 		// Tip: 인증 프로바이더의 디폴트 암호화 방식은 BCryptPasswordEncoder
 		// 결론은 인증 프로바이더에게 알려줄 필요가 없음.
-		Authentication authentication =
-			authenticationManager.authenticate(token);
-		MemberDetail memberDetail = (MemberDetail)authentication.getPrincipal();
-		if (memberDetail.getMember() != null)
+		Authentication authentication = authenticationManager.authenticate(token);
 		return authentication;
 	}
 
@@ -96,11 +93,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// 사용자로부터 헤더 값으로 리프레시 토큰을 받는 것을 테스트하는 용도로, 실제 구현에서는 쿠키 값으로 전달하므로 빼야 함
 		jwtTokenProvider.addHeaderRefreshToken(response, refreshToken);
 
-		//        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
 		refreshTokenService.saveRefreshToken(String.valueOf(memberDetail.getMember().getMemberId()), refreshToken,
 			REFRESH_TOKEN_EXPIRATION_TIME);
-
-		// RefreshToken을 쿠키에 담아 전송할 경우
-		//        jwtTokenProvider.addRefreshTokenToCookie(response, refreshToken);
 	}
 }

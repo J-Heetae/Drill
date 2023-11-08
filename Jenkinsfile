@@ -38,7 +38,7 @@ pipeline {
                     sh'''#!/bin/bash
                     for retry_count in \$(seq 10)
                     do
-                    if curl -s "https://http://k9a106.p.ssafy.io/" > /dev/null
+                    if curl -s "https://k9a106.p.ssafy.io/" > /dev/null
                     then
                         echo "Health check success"
                         break

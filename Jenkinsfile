@@ -21,13 +21,14 @@ pipeline {
                 }
             }
         }
-        stage('HealthCheck') {
+        stage('Health check and Deploy') {
             steps {
                 script {
                     sh'''
                     #!/bin/bash
                     echo "https://${ip}:${blue_port} Health check"
-                    if curl -s "https://${ip}:${blue_port}" > /dev/null
+
+                    if timeout 10s curl -s "https://${ip}:${blue_port}" > /dev/null
                     then
                         echo "https://${ip}:${blue_port} Health check success"
                         target_container_name=$green_container_name
@@ -37,19 +38,23 @@ pipeline {
                         target_container_name=$blue_container_name
                         target_port=$blue_port
                     fi
+
+                    echo "deploy"
+                    sh 'docker rm -f ${target_container_name} || true'// 실행 중인 'drill_back' 컨테이너 제거
+                    sh 'docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
                     '''
                 }
             }
         }
         // Deploy stag : 이미 실행 중인 'drill_back' 컨테이너를 종료하고 새 컨테이너를 실행하여 배포.
-        stage('Deploy1') {
-            steps {
-                script {
-                    sh 'docker rm -f ${target_container_name} || true'// 실행 중인 'drill_back' 컨테이너 제거
-                    sh 'docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
-                }
-            }
-        }
+        // stage('Deploy1') {
+        //     steps {
+        //         script {
+        //             sh 'docker rm -f ${target_container_name} || true'// 실행 중인 'drill_back' 컨테이너 제거
+        //             sh 'docker run -d --name ${target_container_name} -p ${target_port}:8060 -u root drill_back:latest' // 새로운 이미지로 'drill_back' 컨테이너를 백그라운드에서 실행
+        //         }
+        //     }
+        // }
         // Finish stage : 사용하지 않는 Docker 이미지를 정리.
         stage('Finish') {
             steps {

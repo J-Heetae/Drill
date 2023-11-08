@@ -32,6 +32,32 @@ pipeline {
                 }
             }
         }
+        stage('HealthCheck') {
+            steps {
+                script {
+                    sh'''#!/bin/bash
+                    for retry_count in \$(seq 10)
+                    do
+                    if curl -s "http://${deployment_target_ip}:8080" > /dev/null
+                    then
+                        echo "Health check success ✅"
+                        break
+                    fi
+
+                    if [ $retry_count -eq 10 ]
+                    then
+                        echo "Health check failed ❌"
+                        exit 1
+                    fi
+
+                    echo "The server is not alive yet. Retry health check in 10 seconds..."
+                    sleep 10
+                    done
+                    '''
+                }
+            }
+        }
+
         // Deploy stag : 이미 실행 중인 'drill_back' 컨테이너를 종료하고 새 컨테이너를 실행하여 배포.
         stage('Deploy2') {
             steps {

@@ -60,7 +60,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
     if (!memberRepository.findByMemberEmail(socialUserResponse.getId()).isPresent()) {
       Member member = new Member(null, socialUserResponse.getId(),
-          null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null );
+          null, null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null );
       System.out.println("save member");
       memberRepository.save(member);
     }

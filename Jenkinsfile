@@ -86,7 +86,7 @@ pipeline {
                     echo "set \$service_url http://${ip}:${target_port};" > /etc/nginx/conf.d/service-url.inc
                     docker restart nginx
 
-                    if ["${target_port}" == "8060"]
+                    if [ "${target_port}" == "${blue_port}" ]
                     then
                         docker rm -f ${green_container_name} || true
                     else
@@ -98,54 +98,5 @@ pipeline {
                 }
             }
         }
-        // //Deploy Health check
-        // //새로 배포한 버전의 Health check를 진행한다.
-        // //5초 간격으로 10번 진행
-        // //실패시 종료
-        // stage('Deploy Health check') {
-        //     steps {
-        //         script {
-        //             sh'''
-        //             for retry_count in \$(seq 10)
-        //             do
-        //             if curl -s "http://${ip}:${target_port}" > /dev/null
-        //             then
-        //                 echo "Deploy Health check success"
-        //                 break
-        //             fi
-
-        //             if [ $retry_count -eq 10 ]
-        //             then
-        //                 echo "Deploy Health check failed"
-        //                 exit 1
-        //             fi
-        //             sleep 5
-        //             done
-        //             '''
-        //         }
-        //     }
-        // }
-
-        // // Finish stage
-        // //1. nginx의 리버스 프록시 방향을 새로운 서버로 설정한다.
-        // //2. 기존의 서버를 종료한다.
-        // //3. 사용하지 않는 이미지를 삭제한다.
-        // stage('Finish') {
-        //     steps {
-        //         sh '''
-        //         echo 'set \$service_url https://${ip}:${target_port};' > /etc/nginx/conf.d/service-url.inc
-        //         docker restart nginx
-
-        //         if ["${target_port}" == "${blue_port}"]
-        //         then
-        //             docker rm -f ${green_container_name} || true
-        //         else
-        //             docker rm -f ${blue_container_name} || true
-        //         fi
-                
-        //         docker image prune -f
-        //         '''
-        //     }
-        // }
     }
 }

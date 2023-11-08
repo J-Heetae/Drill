@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     sh'''#!/bin/bash
-
+                    echo "https://${ip}:${blue_port} Health check failed ❌"
                     if curl -s "https://${ip}:${blue_port}" > /dev/null
                     then
                         target_container_name=$green_container_name

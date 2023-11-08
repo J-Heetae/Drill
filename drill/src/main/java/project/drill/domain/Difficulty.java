@@ -18,5 +18,4 @@ public enum Difficulty {
 	difficulty9("9단계"),
 	difficulty10("10단계");
 	private String description;
-
 }

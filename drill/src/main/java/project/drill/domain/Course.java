@@ -41,5 +41,4 @@ public class Course {
 	@ColumnDefault("true")
 	@Column(name = "is_new", nullable = false)
 	private boolean isNew;
-
 }

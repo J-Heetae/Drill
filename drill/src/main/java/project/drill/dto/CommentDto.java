@@ -13,5 +13,4 @@ public class CommentDto {
 	private Long postId;
 	private String memberNickname;
 	private String commentContent;
-
 }

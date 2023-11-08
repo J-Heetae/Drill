@@ -17,5 +17,4 @@ public class EntirePostPageDto {
 	private String order;
 	private int page;
 	private int size;
-
 }

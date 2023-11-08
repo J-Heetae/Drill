@@ -112,7 +112,6 @@ public class MemberController {
 
 	@GetMapping("/nickname/{nickname}")
 	public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
-		System.out.println("come?");
 		boolean isDuplicate = memberService.checkNickname(nickname);
 		return new ResponseEntity<>(isDuplicate, HttpStatus.OK);
 	}

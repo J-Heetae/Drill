@@ -47,17 +47,13 @@ public class JwtTokenProvider {
 	// 토큰에서 회원 정보 추출 (이메일 정보)
 	public String getIdFromToken(String token) {
 		String exractedToken = token.substring(JwtProperties.TOKEN_PREFIX.length()).trim();
-		Claims claims = Jwts.parser()
-			.setSigningKey(SECRET_KEY)
-			.parseClaimsJws(exractedToken)
-			.getBody();
+		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(exractedToken).getBody();
 		return claims.getSubject();
 	}
 
 	public boolean validateToken(String token) {
 		String memberId = jwtUtil.extractClaimValue(token, "memberId");
 		String revokedToken = tokenRevocationService.getRevokedToken(memberId);
-		System.out.println("revokedToken" + revokedToken);
 		return !token.equals(revokedToken);
 	}
 

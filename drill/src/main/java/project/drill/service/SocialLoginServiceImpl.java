@@ -44,12 +44,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 	@Transactional
 	public Long doSocialLogin(LoginRequestDto loginRequestDto) throws Exception {
 		SocialUserResponse socialUserResponse = getUserInfo(loginRequestDto.getKakaoToken());
-		System.out.println("아이디: " + socialUserResponse.getId());
-		System.out.println(memberRepository.findByMemberEmail(socialUserResponse.getId()));
 		if (!memberRepository.findByMemberEmail(socialUserResponse.getId()).isPresent()) {
 			Member member = new Member(null, socialUserResponse.getId(),
 				null, null, Role.ROLE_BEFORE, new Long(0), new Long(100), null);
-			System.out.println("save member");
 			memberRepository.save(member);
 		}
 

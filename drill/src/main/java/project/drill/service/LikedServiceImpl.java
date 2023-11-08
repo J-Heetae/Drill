@@ -36,6 +36,5 @@ public class LikedServiceImpl implements LikedService {
 		} else {
 			likedRepository.deleteById(findLiked.get().getLikedId());
 		}
-
 	}
 }

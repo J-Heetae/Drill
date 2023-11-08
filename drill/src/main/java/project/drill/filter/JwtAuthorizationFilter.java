@@ -67,11 +67,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		// JWT 토큰에서 memberId 부분만 추출
 		String memberId = jwtUtil.extractClaimValue(token, "memberId");
 
-		//        String memberId= JWT.require(Algorithm.HMAC512(secretKey)).build()
-		//                .verify(token)
-		//                .getClaim("memberId")
-		//                .asString();
-
 		// token 값을 권한 처리를 위해 Authentication에 주입
 		if (memberId != null) {
 			Member member = memberRepository.findById(Long.parseLong(memberId)).orElse(null);
@@ -90,5 +85,4 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		public static final String REQUIRED_HEADER = "Authorization";
 		public static final String TOKEN_PREFIX = "Bearer ";
 	}
-
 }

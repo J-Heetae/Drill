@@ -81,5 +81,4 @@ public class Member implements Serializable {
 	public void updateDifficulty(Difficulty difficulty) {
 		this.difficulty = difficulty;
 	}
-
 }

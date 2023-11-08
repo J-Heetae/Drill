@@ -218,6 +218,5 @@ public class PostServiceImpl implements PostService {
 			.courseNameList(courses)
 			.build();
 		return postPageAndCourseListDto;
-
 	}
 }

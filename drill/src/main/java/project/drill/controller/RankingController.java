@@ -28,10 +28,6 @@ public class RankingController {
 		@RequestParam String centerName,
 		@RequestParam String courseName) {
 		List<String> rankingList = rankingService.findAllRanking(centerName, courseName);
-		// .stream()
-		// .map(Mate::convertToDto)
-		// .collect(Collectors.toList());
-		System.out.println(rankingList);
 		return new ResponseEntity<>(rankingList, HttpStatus.OK);
 	}
 
@@ -59,6 +55,4 @@ public class RankingController {
 		List<String> courseNameList = rankingService.findCourseName(centerName, difficulty);
 		return new ResponseEntity<>(courseNameList, HttpStatus.OK);
 	}
-
-	//
 }

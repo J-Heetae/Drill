@@ -12,4 +12,3 @@ public enum Role {
 	ROLE_DONE("ROLE_DONE");
 	private String description;
 }
-

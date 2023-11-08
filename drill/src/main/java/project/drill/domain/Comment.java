@@ -44,5 +44,4 @@ public class Comment {
 
 	@Column(name = "comment_write_time")
 	private LocalDateTime commentWriteTime;
-
 }

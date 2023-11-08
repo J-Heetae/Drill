@@ -8,6 +8,7 @@ import { setNickName } from "../modules/redux/slice/TemplateUserSlice";
 import { debounce } from "lodash";
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
+import Config from 'react-native-config';
 
 
 type RootStackParamList = {
@@ -28,7 +29,7 @@ const Nickname : React.FC = () => {
 
     if (nickname.length > 0) {
       console.log("nickname?")
-      const response = await axios.get(`http://10.0.2.2:8060/api/member/nickname/${nickname}`, {
+      const response = await axios.get(`${Config.API_URL}member/nickname/${nickname}`, {
         headers: {
           Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
         },

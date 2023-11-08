@@ -8,7 +8,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { setPlace } from '../modules/redux/slice/TemplateUserSlice';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
-
+import Config from 'react-native-config';
 
 type DataItem = {
   key: string;
@@ -22,7 +22,7 @@ type RootStackParamList = {
 
 const Freplace = () => {
   const dispatch = useDispatch()
-  const API_URL = 'http://10.0.2.2:8060/api/member/settings';
+  const API_URL = `${Config.API_URL}member/settings`;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>()
   const [selectedCenter, setSelectedCenter] = useState("");
   const userInfo = useSelector((state: RootState) => state.templateUser);

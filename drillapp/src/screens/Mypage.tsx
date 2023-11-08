@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 type DataItem = {
   key: string;
@@ -89,7 +90,7 @@ const Mypage = () => {
     {key:'difficulty8',value:'초록'},
   ];
 
-  const API_URL = 'http://10.0.2.2:8060/api/post/list';
+  const API_URL = `${Config.API_URL}post/list`;
   const [currentPage, setCurrentPage] = useState(0);
   // EntirePostPageDto 객체 생성
   const entirePostPageDto = {

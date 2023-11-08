@@ -10,6 +10,7 @@ import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setNickName,setPlace } from "../modules/redux/slice/TemplateUserSlice";
+import Config from 'react-native-config';
 
 type RootStackParamList = {
   Nickname: undefined;
@@ -17,7 +18,7 @@ type RootStackParamList = {
 };
 
 const Login = () => {
-  const API_URL = 'http://10.0.2.2:8060/api/member/login';
+  const API_URL = `${Config.API_URL}member/login`;
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const dispatch = useDispatch()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();

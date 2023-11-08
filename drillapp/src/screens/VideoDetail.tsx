@@ -10,6 +10,7 @@ import axios from 'axios';
 import AWS from 'aws-sdk';
 import { isBuffer, isError } from 'lodash';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import Config from 'react-native-config';
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -71,10 +72,10 @@ const VideoDetail = () => {
   const videoRef = useRef<VideoRef>(null);
   const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/climb3.mp4"
   
-  const API_URL1 = 'http://10.0.2.2:8060/api/post/read';
-  const API_URL2 = 'http://10.0.2.2:8060/api/comment/';
-  const API_URL3 = `http://10.0.2.2:8060/api/comment/list/${route.params?.id}`;
-  const API_URL4 = 'http://10.0.2.2:8060/api/liked';
+  const API_URL1 = `${Config.API_URL}post/read`;
+  const API_URL2 = `${Config.API_URL}comment/`;
+  const API_URL3 = `${Config.API_URL}comment/list/${route.params?.id}`;
+  const API_URL4 = `${Config.API_URL}liked`;
 
   const [isLiked, setIsLiked] = useState(false); // 좋아요 상태를 저장하는 상태 변수
   const [countLiked, setCountLiked] = useState<number>(5);

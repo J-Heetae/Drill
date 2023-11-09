@@ -39,7 +39,7 @@ pipeline {
         stage('Blue Health check and Deploy') {
             steps {
                 script {
-                    sh -c '''
+                    sh '''
                     #!/bin/bash
 
 

@@ -8,6 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setAccessToken, setRefreshToken } from '../modules/redux/slice/TemplateUserSlice';
 import { API_URL_Local } from "@env";
+import { setNickName,setPlace } from "../modules/redux/slice/TemplateUserSlice";
+
 
 type RootStackParamList = {
   Nickname: undefined;
@@ -42,6 +44,10 @@ const LocalLogin = () => {
 
       if (response.status === 200) {
         // Redirect to Main 페이지
+        const nickname = response.data.split(" ")[0];
+        const place = response.data.split(" ")[1]
+        dispatch(setNickName(nickname));
+        dispatch(setPlace(place))
         navigation.navigate("TabNavigator");
       } else if (response.status === 201 && response.data === '닉네임 설정 필요') {
           // Redirect to Nickname 페이지
@@ -53,7 +59,7 @@ const LocalLogin = () => {
           // Handle other cases if needed
           console.log('Unknown response:', response);
       }
-     
+      console.log('로그인 성공', response)
 
     } catch (error) {
       console.log('이메일--------------------', username)

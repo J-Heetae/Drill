@@ -76,7 +76,7 @@ pipeline {
                         echo "Deploy Health check failed"
                         exit 1
                     fi
-                    sleep 1
+                    sleep 2
                     done
 
 

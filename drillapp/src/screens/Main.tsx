@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import {Image, StyleSheet, Text} from 'react-native';
-import {Dropdown} from 'react-native-element-dropdown';
-import {RootState} from '../modules/redux/RootReducer';
-import {useDispatch, useSelector} from 'react-redux';
+import { Image, StyleSheet, Text } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { RootState } from "../modules/redux/RootReducer";
+import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
-import Config from 'react-native-config';
+import { API_URL_Local } from "@env";
 
 type DataItem = {
   key: string;
@@ -13,28 +13,32 @@ type DataItem = {
   disabled?: boolean;
 };
 
+
 const Main = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
-  const API_URL = `${Config.API_URL}ranking/first`;
-  const API_URL2 = `${Config.API_URL}ranking/list`;
+  const API_URL = `${API_URL_Local}ranking/first`;
+  const API_URL2 = `${API_URL_Local}ranking/list`;
   // 요구하는 매개변수
   const centerName = userInfo.place;
   // const courseName = 'difficulty1Course1';
   const [top10Ranks, setTop10Ranks] = useState<string[]>([]);
+  
+
 
   let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
   let time = {
-    year: today.getFullYear(), //현재 년도
+    year: today.getFullYear(),  //현재 년도
     month: today.getMonth() + 1, // 현재 월
     date: today.getDate(), // 현제 날짜
     hours: today.getHours(), //현재 시간
     minutes: today.getMinutes(), //현재 분
   };
-  let currentDate = `${time.year}년 ${time.month}월 ${time.date}일`;
-
+  let currentDate = `${time.year}년 ${time.month}월 ${time.date}일`
+  
   // Axios를 사용하여 GET 요청 보내기
   const fetchRankingData = async () => {
     try {
+      console.log(centerName+" "+selectedCourse);
       const response = await axios.get(API_URL2, {
         params: {
           centerName: selectedCenter,
@@ -46,6 +50,7 @@ const Main = () => {
       });
 
       // 요청 성공
+      console.log('랭킹 데이터:', response.data);
       setTop10Ranks(response.data);
     } catch (error) {
       // 요청 실패
@@ -55,17 +60,18 @@ const Main = () => {
 
   const giveMeDifficulty = async () => {
     try {
-      const response = await axios.get(
-        'http://10.0.2.2:8060/api/ranking/findDifficulty',
-        {
-          params: {
-            centerName: selectedCenter,
-          },
-          headers: {
-            Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
-          },
+      console.log("selextedCenter: "+selectedCenter);
+      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findDifficulty', {
+        params: {
+          centerName: selectedCenter,
         },
-      );
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
     } catch (error) {
       // 요청 실패
       console.error('랭킹 데이터를 불러오는 데 실패', error);
@@ -74,19 +80,18 @@ const Main = () => {
 
   const giveMeCoureName = async () => {
     try {
-      const response = await axios.get(
-        'http://10.0.2.2:8060/api/ranking/findCourseName',
-        {
-          params: {
-            centerName: selectedCenter,
-            difficulty: selectedHolder,
-          },
-          headers: {
-            Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
-          },
+      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findCourseName', {
+        params: {
+          centerName: selectedCenter,
+          difficulty: selectedHolder,
         },
-      );
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
       // 요청 성공
+      console.log('랭킹 데이터:', response.data);
       setSelectedCourseName(response.data);
     } catch (error) {
       // 요청 실패
@@ -97,49 +102,53 @@ const Main = () => {
   // 함수 호출
   // fetchRankingData();
 
-  const dispatch = useDispatch();
+
+
+  const dispatch = useDispatch()
 
   const [selectedCenter, setSelectedCenter] = useState(userInfo.place);
-  const [selectedHolder, setSelectedHolder] = useState('difficulty1');
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedHolder, setSelectedHolder] = useState("difficulty1");
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedCourseName, setSelectedCourseName] = useState([]);
-  const [transformedCourseName, setTransformedCourseName] = useState<
-    {label: string; value: string}[]
-  >([]);
+  const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
+
+  
 
   const data: DataItem[] = [
-    {key: 'center1', value: '더클라임 홍대'},
-    {key: 'center2', value: '더클라임 일산'},
-    {key: 'center3', value: '더클라임 양재'},
-    {key: 'center4', value: '더클라임 마곡'},
-    {key: 'center5', value: '더클라임 신림'},
-    {key: 'center6', value: '더클라임 연남'},
-    {key: 'center7', value: '더클라임 강남'},
-    {key: 'center8', value: '더클라임 사당'},
-    {key: 'center9', value: '더클라임 신사'},
-    {key: 'center10', value: '더클라임 서울대'},
+    {key:'center1',value:'더클라임 홍대'},
+    {key:'center2',value:'더클라임 일산'},
+    {key:'center3',value:'더클라임 양재'},
+    {key:'center4',value:'더클라임 마곡'},
+    {key:'center5',value:'더클라임 신림'},
+    {key:'center6',value:'더클라임 연남'},
+    {key:'center7',value:'더클라임 강남'},
+    {key:'center8',value:'더클라임 사당'},
+    {key:'center9',value:'더클라임 신사'},
+    {key:'center10',value:'더클라임 서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key: 'difficulty1', value: '하양'},
-    {key: 'difficulty2', value: '노랑'},
-    {key: 'difficulty3', value: '주황'},
-    {key: 'difficulty4', value: '초록'},
-    {key: 'difficulty5', value: '하양'},
-    {key: 'difficulty6', value: '노랑'},
-    {key: 'difficulty7', value: '주황'},
-    {key: 'difficulty8', value: '초록'},
+    {key:'difficulty1',value:'하양'},
+    {key:'difficulty2',value:'노랑'},
+    {key:'difficulty3',value:'주황'},
+    {key:'difficulty4',value:'초록'},
+    {key:'difficulty5',value:'하양'},
+    {key:'difficulty6',value:'노랑'},
+    {key:'difficulty7',value:'주황'},
+    {key:'difficulty8',value:'초록'},
   ];
 
   function findValueByKey(key: string, data: DataItem[]): string | undefined {
     const foundItem = data.find(item => item.key === key);
     return foundItem?.value; // 해당하는 key의 value를 반환하거나, 해당하는 값이 없으면 undefined를 반환합니다.
   }
+    
 
   const [defaultCenter, setDefaultCenter] = useState(userInfo.place);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
+        console.log(centerName);
         const response = await axios.get(API_URL, {
           params: {
             centerName: centerName,
@@ -148,10 +157,14 @@ const Main = () => {
             Authorization: userInfo.accessToken,
           },
         });
+  
+        console.log('랭킹 데이터:', response.data);
         setTop10Ranks(response.data.ranking);
         setSelectedCourseName(response.data.courseName);
+        // console.log(response.data.courseName[0]);
         setSelectedCourse(response.data.courseName[0]);
         setSelectedHolder(response.data.difficulty[0]);
+        
 
         const foundCenter = findValueByKey(centerName, data);
         if (foundCenter) {
@@ -162,16 +175,20 @@ const Main = () => {
       }
     };
 
-    fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
-  }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
 
+  
+    fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
+  
+  }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
+ 
   useEffect(() => {
-    const transformed = selectedCourseName.map(course => ({
+    const transformed = selectedCourseName.map((course) => ({
       label: course,
       value: course, // or provide unique identifier for value
     }));
     setTransformedCourseName(transformed);
-  }, [selectedCourseName]);
+    console.log("tlfgod?")
+  }, [selectedCourseName]); 
 
   useEffect(() => {
     fetchRankingData();
@@ -179,11 +196,12 @@ const Main = () => {
 
   useEffect(() => {
     giveMeDifficulty();
+    // console.log(selectedCenter);
   }, [selectedCenter]);
 
   useEffect(() => {
     giveMeCoureName();
-  }, [selectedHolder]);
+  }, [selectedHolder]); 
 
   return (
     <ContainerView>
@@ -205,71 +223,66 @@ const Main = () => {
           <DateText>{currentDate}</DateText>
         </DateView>
         <SelectView>
-          <Dropdown
+          <Dropdown 
             style={styles.dropdown1}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
-            mode="default"
+            mode='default'
             data={data}
             maxHeight={200}
             placeholder={defaultCenter}
             labelField="value"
             valueField="key"
             value={selectedCenter}
-            onChange={item => {
-              const selectedOption = data.find(
-                option => option.value === item.value,
-              );
+            onChange={(item) => {
+              const selectedOption = data.find(option => option.value === item.value);
               setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
               // fetchRankingData();
             }}
           />
-          <Dropdown
+          <Dropdown 
             style={styles.dropdown2}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
-            mode="default"
+            mode='default'
             data={holderColor}
             maxHeight={200}
             placeholder={selectedHolder}
             labelField="value"
             valueField="key"
             value={selectedHolder}
-            onChange={item => {
-              const selectedOption = holderColor.find(
-                option => option.value === item.value,
-              );
+            onChange={(item) => {
+              const selectedOption = holderColor.find(option => option.value === item.value);
               setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
             }}
           />
-          <Dropdown
+          <Dropdown 
             style={styles.dropdown2}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
-            mode="default"
+            mode='default'
             data={transformedCourseName}
             maxHeight={200}
             placeholder={selectedCourse}
             labelField="label" // labelField 설정
             valueField="value" // valueField 설정
             value={selectedCourse}
-            onChange={item => {
-              const selectedOption = transformedCourseName.find(
-                option => option.value === item.value,
-              );
+            onChange={ (item) => {
+              const selectedOption = transformedCourseName.find(option => option.value === item.value);
               setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
+              
             }}
           />
-        </SelectView>
+        </SelectView> 
       </TopView>
 
       <BottomView>
         <RankingView>
           <RankTitleText>내 순위</RankTitleText>
-          <MyRankingText>0위 {userInfo.nickName}</MyRankingText>
+          <MyRankingText>0위   {userInfo.nickName}</MyRankingText>
           <Top10RankView>
             {top10Ranks.map((rank, index) => (
               <Top10RankItem key={index}>
@@ -281,7 +294,7 @@ const Main = () => {
         </RankingView>
       </BottomView>
     </ContainerView>
-  );
+  )
 };
 
 const styles = StyleSheet.create({
@@ -316,7 +329,7 @@ const styles = StyleSheet.create({
 const ContainerView = styled.View`
   flex: 1;
   background-color: white;
-`;
+`
 // -------------------------------
 
 const TopView = styled.View`
@@ -333,13 +346,13 @@ const BottomView = styled.View`
 const UserNameView = styled.View`
   flex: 4;
   justify-content: center;
-`;
+`
 const UserNameText = styled.Text`
   font-size: 25px;
   text-align: center;
   font-weight: 900;
   color: black;
-`;
+`
 const SelectView = styled.View`
   flex: 2;
   display: flex;
@@ -347,59 +360,60 @@ const SelectView = styled.View`
   justify-content: center;
   align-items: center;
   gap: 5px;
-`;
+  
+`
 const DateView = styled.View`
   flex: 1.3;
   justify-content: center;
   margin-bottom: 10px;
-`;
+`
 const DateText = styled.Text`
   font-size: 18px;
   text-align: center;
   background-color: white;
   color: black;
-`;
+`
 // -------------------------------
 
 const RankingView = styled.View`
   width: 80%;
   height: 85%;
-  background-color: #5ac77c;
+  background-color: #5AC77C;
   border-radius: 22px;
-`;
+`
 const RankTitleText = styled.Text`
   font-size: 20px;
   text-align: center;
   color: white;
   margin-top: 10px;
   margin-bottom: 10px;
-`;
+`
 const MyRankingText = styled.Text`
   font-size: 25px;
   font-weight: bold;
   text-align: center;
   color: white;
-`;
+`
 const Top10RankView = styled.View`
   flex: 1;
   width: 80%;
   justify-content: center;
   gap: 2px;
-`;
+`
 const Top10RankItem = styled.View`
   flex-direction: row;
   align-items: center;
-`;
+`
 const Top10RankNum = styled.Text`
   flex: 2.5;
   text-align: center;
   font-size: 20px;
   color: white;
-`;
+`
 const Top10RankNickname = styled.Text`
   flex: 2;
   text-align: center;
   font-size: 15px;
   color: white;
-`;
+`
 export default Main;

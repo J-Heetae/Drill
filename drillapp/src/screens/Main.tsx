@@ -5,7 +5,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { RootState } from "../modules/redux/RootReducer";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
-import Config from 'react-native-config';
+import { API_URL_Local } from "@env";
 
 type DataItem = {
   key: string;
@@ -16,8 +16,8 @@ type DataItem = {
 
 const Main = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
-  const API_URL = `http://10.0.2.2:8060/api/ranking/first`;
-  const API_URL2 = `http://10.0.2.2:8060/api/ranking/list`;
+  const API_URL = `${API_URL_Local}ranking/first`;
+  const API_URL2 = `${API_URL_Local}ranking/list`;
   // 요구하는 매개변수
   const centerName = userInfo.place;
   // const courseName = 'difficulty1Course1';

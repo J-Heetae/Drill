@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setAccessToken, setRefreshToken } from '../modules/redux/slice/TemplateUserSlice';
-
+import { API_URL_Local } from "@env";
 
 type RootStackParamList = {
   Nickname: undefined;
@@ -18,7 +18,7 @@ type RootStackParamList = {
 const LocalLogin = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();
   const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'Freplace'>>();
-  const API_URL = 'http://10.0.2.2:8060/api/member/locallogin'; 
+  const API_URL = `${API_URL_Local}member/locallogin`; 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch()

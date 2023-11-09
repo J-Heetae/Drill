@@ -11,7 +11,7 @@ import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
 import Modal from 'react-native-modal';
-import Config from 'react-native-config';
+import { API_URL_Local } from "@env";
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -135,7 +135,7 @@ const Upload = () => {
     launchImageLibrary({ mediaType: 'video' }, handleResponse); 
   }
 
-  const API_URL = `http://10.0.2.2:8060/api/post`;
+  const API_URL = `${API_URL_Local}post`;
   const Uploadpost = async () => {
     try {
       const response = await axios.post(API_URL, postDto, {

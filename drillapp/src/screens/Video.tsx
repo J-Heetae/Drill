@@ -9,7 +9,7 @@ import AWS from 'aws-sdk';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Dropdown } from 'react-native-element-dropdown';
-import Config from 'react-native-config';
+import { API_URL_Local } from "@env";
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -133,7 +133,7 @@ const Video = () => {
 
   // --------------------------------------------
 
-  const API_URL = `http://10.0.2.2:8060/api/post/list`;
+  const API_URL = `${API_URL_Local}post/list`;
   const [currentPage, setCurrentPage] = useState(0);
   // EntirePostPageDto 객체 생성
   const entirePostPageDto = {

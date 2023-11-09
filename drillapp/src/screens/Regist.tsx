@@ -5,6 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
+import { API_URL_Local } from "@env";
 
 type RootStackParamList = {
   LocalLogin: undefined;
@@ -13,7 +14,7 @@ type RootStackParamList = {
 
 const Regist = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'LocalLogin','TabNavigator'>>();
-  const API_URL = 'http://10.0.2.2:8060/api/member/regist'; 
+  const API_URL = `${API_URL_Local}member/regist`; 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

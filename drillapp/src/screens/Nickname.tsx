@@ -8,7 +8,7 @@ import { setNickName } from "../modules/redux/slice/TemplateUserSlice";
 import { debounce } from "lodash";
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
-import Config from 'react-native-config';
+import { API_URL_Local } from "@env";
 
 
 type RootStackParamList = {
@@ -23,13 +23,12 @@ const Nickname : React.FC = () => {
   const [isDuplicate, setIsDuplicate] = useState(false);
   const userInfo = useSelector((state: RootState) => state.templateUser);
 
-
    // debounce 함수를 사용하여 GET 요청을 보내는 함수
    const debounceSearch = debounce(async (nickname: string) => {
       try {
         if (nickname.length > 0) {
           console.log("nickname?")
-          const response = await axios.get(`http://10.0.2.2:8060/api/member/nickname/${nickname}`, {
+          const response = await axios.get(`${API_URL_Local}member/nickname/${nickname}`, {
             headers: {
               Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
             },

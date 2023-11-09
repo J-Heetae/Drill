@@ -1,15 +1,15 @@
 package project.drill.service;
 
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import project.drill.domain.Center;
 import project.drill.domain.Difficulty;
 import project.drill.dto.FirstRankingDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.PostRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class RankingServiceImpl implements RankingService {
 
 	@Override
 	public List<String> findAllRanking(String centerName, String courseName) {
-		return postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName), courseName);
+		return postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName),courseName);
 	}
 
 	@Override
@@ -35,11 +35,9 @@ public class RankingServiceImpl implements RankingService {
 
 	@Override
 	public FirstRankingDto findFirstRanking(String centerName) {
-		List<Difficulty> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(
-			Center.valueOf(centerName));
+		List<Difficulty> difficulties = courseRepository.findDifficultyByCenterAndIsNewIsTrue(Center.valueOf(centerName));
 		List<String> courseNames = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(centerName));
-		List<String> rankings = postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName),
-			courseNames.get(0));
+		List<String> rankings = postRepository.findByCenterNameAndCourseName(Center.valueOf(centerName), courseNames.get(0));
 
 		FirstRankingDto firstRankingDto = FirstRankingDto.builder()
 			.ranking(rankings)

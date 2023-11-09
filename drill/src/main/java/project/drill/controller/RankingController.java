@@ -1,19 +1,20 @@
 package project.drill.controller;
 
-import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import project.drill.domain.Difficulty;
 import project.drill.dto.FirstRankingDto;
 import project.drill.service.RankingService;
+
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +29,10 @@ public class RankingController {
 		@RequestParam String centerName,
 		@RequestParam String courseName) {
 		List<String> rankingList = rankingService.findAllRanking(centerName, courseName);
+			// .stream()
+			// .map(Mate::convertToDto)
+			// .collect(Collectors.toList());
+		System.out.println(rankingList);
 		return new ResponseEntity<>(rankingList, HttpStatus.OK);
 	}
 
@@ -52,7 +57,9 @@ public class RankingController {
 	public ResponseEntity<List<String>> findCourseName(
 		@RequestParam String centerName,
 		@RequestParam String difficulty) {
-		List<String> courseNameList = rankingService.findCourseName(centerName, difficulty);
+		List<String> courseNameList = rankingService.findCourseName(centerName,difficulty);
 		return new ResponseEntity<>(courseNameList, HttpStatus.OK);
 	}
+
+	//
 }

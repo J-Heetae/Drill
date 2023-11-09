@@ -4,5 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class LoginRequestDto {
-	private String kakaoToken;
+  private String type;
+  private String socialToken;
 }

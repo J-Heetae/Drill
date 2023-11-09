@@ -84,8 +84,18 @@ public class PostServiceImpl implements PostService {
         if(entirePostPageDto.getMemberNickname().equals("")){
             if (entirePostPageDto.getOrder().equals("new")) {
                 if (entirePostPageDto.getCenterName().equals("center0")) {
+                    if(entirePostPageDto.getDifficulty().equals("difficulty0")){
                     courses = courseRepository.findCourseNameByIsNewIsTrue();
-                    postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);
+                    postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);}
+                    else{
+                        if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                        } else if (!entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName());
+                        }
+                    }
                 } else {
                     if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
                         courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()));
@@ -98,13 +108,22 @@ public class PostServiceImpl implements PostService {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName());
                         }
-
                     }
                 }
             } else {
                 if (entirePostPageDto.getCenterName().equals("center0")) {
-                    courses = courseRepository.findCourseNameByIsNewIsTrue();
-                    postPage = postRepository.findByLiked(pageable);
+                    if(entirePostPageDto.getDifficulty().equals("difficulty0")){
+                        courses = courseRepository.findCourseNameByIsNewIsTrue();
+                        postPage = postRepository.findByLiked(pageable);}
+                    else{
+                        if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findByDifficultyOrderByLiked(pageable,entirePostPageDto.getDifficulty());
+                        } else if (!entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByCenterCenterNameAndCourseCourseNameOrderByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName());
+                        }
+                    }
                 } else {
                     if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
                         courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()));
@@ -124,8 +143,19 @@ public class PostServiceImpl implements PostService {
         else{
             if (entirePostPageDto.getOrder().equals("new")) {
                 if (entirePostPageDto.getCenterName().equals("center0")) {
-                    courses = courseRepository.findCourseNameByIsNewIsTrue();
-                    postPage = postRepository.findAllByMemberMemberNicknameOrderByPostWriteTimeDesc(pageable,nickname);
+                    if(entirePostPageDto.getDifficulty().equals("difficulty0")){
+                        courses = courseRepository.findCourseNameByIsNewIsTrue();
+                        postPage = postRepository.findAllByMemberMemberNicknameOrderByPostWriteTimeDesc(pageable,entirePostPageDto.getMemberNickname());
+                    }
+                    else{
+                        if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByMemberMemberNicknameAndDifficultyOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getMemberNickname(),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                        } else if (!entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName(),nickname);
+                        }
+                    }
                 } else {
                     if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
                         courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()));
@@ -138,13 +168,21 @@ public class PostServiceImpl implements PostService {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName(),nickname);
                         }
-
                     }
                 }
             } else {
                 if (entirePostPageDto.getCenterName().equals("center0")) {
-                    courses = courseRepository.findCourseNameByIsNewIsTrue();
-                    postPage = postRepository.findByMemberNicknameAndLiked(pageable,nickname);
+                    if(entirePostPageDto.getDifficulty().equals("difficulty0")){
+                        courses = courseRepository.findCourseNameByIsNewIsTrue();
+                        postPage = postRepository.findByLiked(pageable);}
+                    else{
+                        if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findByDifficultyOrderByLiked(pageable,entirePostPageDto.getDifficulty());
+                        } else if (!entirePostPageDto.getCourseName().equals("course0")) {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByCenterCenterNameAndCourseCourseNameAndMemberNicknameOrderByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName(),nickname);}
+                    }
                 } else {
                     if (entirePostPageDto.getDifficulty().equals("difficulty0")) {
                         postPage = postRepository.findByCenterNameAndMemberNicknameOrderByLiked(pageable, entirePostPageDto.getCenterName(),nickname);
@@ -158,13 +196,28 @@ public class PostServiceImpl implements PostService {
                         }
 
                     }
-                } }}
+                }} }
         PostPageAndCourseListDto postPageAndCourseListDto = PostPageAndCourseListDto.builder()
                 .postPage(postPage)
                 .courseNameList(courses)
                 .build();
         return postPageAndCourseListDto;
 
+    }
+
+    @Override
+    public List<String> findCourseName(UploadPostDto uploadPostDto) {
+        List<String> courses = null;
+                if (uploadPostDto.getCenterName().equals("center0")) {
+                    courses = courseRepository.findCourseNameByIsNewIsTrue();
+                } else {
+                    if (uploadPostDto.getDifficulty().equals("difficulty0")) {
+                        courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()));
+                    } else {
+                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()),Difficulty.valueOf(uploadPostDto.getDifficulty()));
+                    }
+                }
+        return courses;
     }
 }
 

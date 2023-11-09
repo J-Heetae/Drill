@@ -88,6 +88,29 @@ public class PostRepositoryImpl implements PostCustomRepository {
 		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
 	}
 
+	@Override
+	public Page<PostPageDto> findByDifficultyOrderByLiked(Pageable pageable, String difficulty) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.course.difficulty.eq(Difficulty.valueOf(difficulty)))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
 	public Page<PostPageDto> findAllByCenterCenterNameDifficultyOrderByLiked(Pageable pageable,String centerName,String difficulty){
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;
@@ -142,6 +165,30 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.from(post)
 				.leftJoin(liked).on(liked.post.eq(post))
 				.where(post.member.memberNickname.eq(memberNickname))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findByMemberNicknameAndDifficultyOrderByLiked(Pageable pageable, String memberNickname, String difficulty) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.leftJoin(liked).on(liked.post.eq(post))
+				.where(post.course.difficulty.eq(Difficulty.valueOf(difficulty))
+						.and(post.member.memberNickname.eq(memberNickname)))
 				.groupBy(post)
 				.orderBy(liked.likedId.count().coalesce(0L).desc())
 				.offset(pageable.getOffset())
@@ -270,6 +317,28 @@ public class PostRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
+	public Page<PostPageDto> findAllByDifficultyOrderByPostWriteTimeDesc(Pageable pageable, Difficulty difficulty) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.course.difficulty.eq(difficulty))
+				.groupBy(post)
+				.orderBy(post.postWriteTime.desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
 	public Page<PostPageDto> findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty) {
 		QPost post = QPost.post;
 		QLiked liked = QLiked.liked;
@@ -323,6 +392,29 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				.select(post.postId,post.postThumbnail)
 				.from(post)
 				.where(post.member.memberNickname.eq(memberNickname))
+				.groupBy(post)
+				.orderBy(post.postWriteTime.desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findAllByMemberMemberNicknameAndDifficultyOrderByPostWriteTimeDesc(Pageable pageable, String memberNickname, Difficulty difficulty) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.member.memberNickname.eq(memberNickname)
+						.and(post.course.difficulty.eq(difficulty)))
 				.groupBy(post)
 				.orderBy(post.postWriteTime.desc())
 				.offset(pageable.getOffset())

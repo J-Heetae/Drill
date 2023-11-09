@@ -10,6 +10,7 @@ public interface CourseCustomRepository {
 
 	List<String> findCourseNameByIsNewIsTrue();
 
+	List<String> findCourseNameByDifficultyAndIsNewIsTrue(Difficulty difficulty);
 	List<String> findCourseNameByCenterAndIsNewIsTrue(Center center);
 
 	List<String> findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center center, Difficulty difficulty);

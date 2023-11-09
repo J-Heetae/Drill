@@ -55,7 +55,7 @@ public class PostController {
         if(!myPostPage.getPostPage().isEmpty()){
         return new ResponseEntity<>(myPostPage,HttpStatus.OK);}
         else{
-            return new ResponseEntity<String>("게시글이 없습니다.",HttpStatus.OK);
+            return new ResponseEntity<String>("게시글이 없습니다.",HttpStatus.NO_CONTENT);
         }
     }
 }

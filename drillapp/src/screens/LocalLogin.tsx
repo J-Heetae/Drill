@@ -1,29 +1,22 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Image, TouchableOpacity, TextInput, Button, Alert } from 'react-native';
+import { Image, TextInput, Alert,ScrollView,KeyboardAvoidingView} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { setAccessToken, setRefreshToken } from '../modules/redux/slice/TemplateUserSlice';
-import { API_URL_Local } from "@env";
-import { setNickName,setPlace } from "../modules/redux/slice/TemplateUserSlice";
 
 
 type RootStackParamList = {
   Nickname: undefined;
   TabNavigator: undefined;
-  Freplace: undefined;
 };
 
 const LocalLogin = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();
-  const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'Freplace'>>();
-  const API_URL = `${API_URL_Local}member/locallogin`; 
+  const API_URL = 'http://10.0.2.2:8060/api/member/locallogin'; 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch()
 
   const LocalLoginDto = {
     email: username,
@@ -38,28 +31,12 @@ const LocalLogin = () => {
         },
       } );
 
-      await AsyncStorage.setItem('accessToken', response.headers.authorization);
-      dispatch(setAccessToken(response.headers.authorization));
-      dispatch(setRefreshToken(response.headers.refreshtoken));
+      // 요청 성공
+      console.log('로그인 성공', response.data);
 
-      if (response.status === 200) {
-        // Redirect to Main 페이지
-        const nickname = response.data.split(" ")[0];
-        const place = response.data.split(" ")[1]
-        dispatch(setNickName(nickname));
-        dispatch(setPlace(place))
-        navigation.navigate("TabNavigator");
-      } else if (response.status === 201 && response.data === '닉네임 설정 필요') {
-          // Redirect to Nickname 페이지
-          navigation.navigate("Nickname");
-      } else if (response.status === 201 && response.data === '관심지역 설정 필요') {
-          // Redirect to Freplace 페이지
-          navigation2.navigate("Freplace");
-      } else {
-          // Handle other cases if needed
-          console.log('Unknown response:', response);
-      }
-      console.log('로그인 성공', response)
+    
+      await AsyncStorage.setItem('accessToken', response.headers.authorization);
+      navigation.navigate("Nickname");
 
     } catch (error) {
       console.log('이메일--------------------', username)
@@ -70,44 +47,51 @@ const LocalLogin = () => {
   };
 
   return (
+    <KeyboardAvoidingView>
+      
+
     <ContainerView>
-      <LogoView>
-        <Image
-          source={require('../asset/icons/DRILL_green.png')}
-          resizeMode="contain"
-          style={{
-            width: 500,
-            height: 500,
-            alignSelf: 'center',
-          }}
-        />
-      </LogoView>
-      <TextInput
-        placeholder="아이디"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
-      />
-      <TextInput
-        placeholder="비밀번호"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
-      />
-      <LoginButton onPress={handleLogin} title="로그인" />
+      <ScrollView>
+          <LogoView>
+            <Image
+              source={require('../asset/icons/DRILL_green.png')}
+              resizeMode="contain"
+              style={{
+                width: 500,
+                height: 322,
+                alignSelf: 'center',
+              }}
+            />
+          </LogoView>
+          <TextInput 
+            placeholder="아이디"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10}}
+          />
+          <TextInput
+            placeholder="비밀번호"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+          />
+          <LoginButton onPress={handleLogin} title="로그인" />
+
+      </ScrollView>
     </ContainerView>
+    
+
+    </KeyboardAvoidingView>
   );
 };
 
 const ContainerView = styled.View`
-  flex: 1;
   background-color: white;
   justify-content: center;
 `;
 
 const LogoView = styled.View`
-  flex: 2;
   justify-content: center;
   align-items: center;
 `;

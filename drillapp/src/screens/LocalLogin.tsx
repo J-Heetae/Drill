@@ -5,17 +5,23 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { setAccessToken, setRefreshToken } from '../modules/redux/slice/TemplateUserSlice';
+
 
 type RootStackParamList = {
   Nickname: undefined;
   TabNavigator: undefined;
+  Freplace: undefined;
 };
 
 const LocalLogin = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();
+  const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'Freplace'>>();
   const API_URL = 'http://10.0.2.2:8060/api/member/locallogin'; 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
 
   const LocalLoginDto = {
     email: username,
@@ -30,12 +36,24 @@ const LocalLogin = () => {
         },
       } );
 
-      // 요청 성공
-      console.log('로그인 성공', response.data);
-
-    
       await AsyncStorage.setItem('accessToken', response.headers.authorization);
-      navigation.navigate("Nickname");
+      dispatch(setAccessToken(response.headers.authorization));
+      dispatch(setRefreshToken(response.headers.refreshtoken));
+
+      if (response.status === 200) {
+        // Redirect to Main 페이지
+        navigation.navigate("TabNavigator");
+      } else if (response.status === 201 && response.data === '닉네임 설정 필요') {
+          // Redirect to Nickname 페이지
+          navigation.navigate("Nickname");
+      } else if (response.status === 201 && response.data === '관심지역 설정 필요') {
+          // Redirect to Freplace 페이지
+          navigation2.navigate("Freplace");
+      } else {
+          // Handle other cases if needed
+          console.log('Unknown response:', response);
+      }
+     
 
     } catch (error) {
       console.log('이메일--------------------', username)

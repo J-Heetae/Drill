@@ -135,7 +135,7 @@ const Upload = () => {
     launchImageLibrary({ mediaType: 'video' }, handleResponse); 
   }
 
-  const API_URL = `${Config.API_URL}post`;
+  const API_URL = `http://10.0.2.2:8060/api/post`;
   const Uploadpost = async () => {
     try {
       const response = await axios.post(API_URL, postDto, {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import {Image, TouchableOpacity } from 'react-native';
+import {Image, TouchableOpacity, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import  * as KakaoLogin from '@react-native-seoul/kakao-login';
@@ -15,15 +15,16 @@ import Config from 'react-native-config';
 type RootStackParamList = {
   Nickname: undefined;
   TabNavigator: undefined;
+  Regist: undefined;
   LocalLogin: undefined;
 };
 
 const Login = () => {
-  const API_URL = `${Config.API_URL}member/login`;
+  const API_URL = `http://10.0.2.2:8060/api/member/login`;
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const dispatch = useDispatch()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Nickname','TabNavigator'>>();
-  const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'LocalLogin'>>();
+  const navigation2 = useNavigation<StackNavigationProp<RootStackParamList, 'Regist', 'LocalLogin'>>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const onPressMoveTab = () => {
@@ -37,9 +38,11 @@ const Login = () => {
   }, [isLoggedIn]);
 
   const Locallogin = () => {
-    navigation.navigate("LocalLogin");
+    navigation2.navigate("LocalLogin");
   };
-  
+  const LocalSignup = () => {
+    navigation2.navigate("Regist");
+  };
   const login = () => {
     KakaoLogin.login().then((result) => {
       console.log("Login Success", JSON.stringify(result));
@@ -109,16 +112,13 @@ const Login = () => {
         />
       </LogoView>
         <GoogleLoginView>
+          <TouchableOpacity onPress={LocalSignup}>
+            <Text>Local Signup</Text>
+          </TouchableOpacity>
+        </GoogleLoginView>
+        <GoogleLoginView>
           <TouchableOpacity onPress={Locallogin}>
-            <Image
-              source={require('../asset/icons/google_login.png')}
-              resizeMode="contain"
-              style={{
-                width: 230,
-                height: 50,
-                alignSelf: 'center',
-              }}
-            />
+            <Text>Local Login</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <KakaoLoginView>
@@ -141,6 +141,7 @@ const Login = () => {
 const ContainerView = styled.View`
   flex: 1;
   background-color: white;
+  align-items: center;
 `
 const LogoView = styled.View`
   flex: 2;
@@ -148,7 +149,14 @@ const LogoView = styled.View`
 
 const GoogleLoginView = styled.View`
   position: absoulte;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 230px;
+  height: 50px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  margin-top: 20px;
 `
 const KakaoLoginView = styled.View`
   position: absoulte;

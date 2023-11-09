@@ -90,7 +90,7 @@ const Mypage = () => {
     {key:'difficulty8',value:'초록'},
   ];
 
-  const API_URL = `${Config.API_URL}post/list`;
+  const API_URL = `http://10.0.2.2:8060/api/post/list`;
   const [currentPage, setCurrentPage] = useState(0);
   // EntirePostPageDto 객체 생성
   const entirePostPageDto = {
@@ -108,18 +108,27 @@ const Mypage = () => {
     try {
       const response = await axios.post(API_URL, entirePostPageDto, {
         headers: {
-          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+          Authorization: userInfo.accessToken,
         },
       });
-      // 성공
-      setPosts(response.data.postPage.content);
-      console.log('게시글 가져오는데 성공',response);
-      console.log('지점 + 홀드에 대한 코스정보 리스트-----', response.data.courseNameList);
-      setSelectedCourseName(response.data.courseNameList);
-      console.log('POSTDTO---------', entirePostPageDto);
-    } catch (error) { 
-      // 요청
+
+      // 서버 응답이 유효한 데이터를 포함하고 있는지 확인
+      if (response.data && response.data.postPage && response.data.postPage.content) {
+        // 게시글이 있을 때
+        setPosts(response.data.postPage.content);
+        console.log('게시글 가져오는데 성공', response);
+        console.log('지점 + 홀드에 대한 코스정보 리스트-----', response.data.courseNameList);
+        setSelectedCourseName(response.data.courseNameList);
+        console.log('POSTDTO---------', entirePostPageDto);
+      } else {
+        // 서버 응답이 유효한 데이터를 포함하고 있지 않을 때
+        console.log('불러올 게시글이 없습니다.');
+        // 화면에 "불러올 게시글이 없습니다." 메시지를 표시하거나 상태(state)를 업데이트하여 해당 메시지를 화면에 띄우세요.
+      }
+    } catch (error) {
+      // 요청 실패
       console.error('게시글 목록을 불러오는 데 실패:', error);
+      // 화면에 에러를 표시하거나 상태(state)를 업데이트하여 에러 메시지를 화면에 띄우세요.
     }
   };
 

@@ -26,17 +26,23 @@ const Nickname : React.FC = () => {
 
    // debounce 함수를 사용하여 GET 요청을 보내는 함수
    const debounceSearch = debounce(async (nickname: string) => {
-
-    if (nickname.length > 0) {
-      console.log("nickname?")
-      const response = await axios.get(`${Config.API_URL}member/nickname/${nickname}`, {
-        headers: {
-          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
-        },
-      });
-      setIsDuplicate(response.data); // 백에서 받은 데이터를 상태에 설정
-    }
-  }, 100);
+      try {
+        if (nickname.length > 0) {
+          console.log("nickname?")
+          const response = await axios.get(`http://10.0.2.2:8060/api/member/nickname/${nickname}`, {
+            headers: {
+              Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+            },
+          });
+          setIsDuplicate(response.data); // 백에서 받은 데이터를 상태에 설정
+        }
+      } catch (error) {
+        // 에러 발생 시 에러 처리 코드를 작성합니다.
+        console.error("Error during debounceSearch:", error);
+        // 예를 들어, 에러 메시지를 표시하거나 다른 처리를 수행할 수 있습니다.
+      }
+    }, 100);
+  
 
 
   const onChangeText = (text: string) => {

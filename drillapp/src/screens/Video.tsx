@@ -133,7 +133,7 @@ const Video = () => {
 
   // --------------------------------------------
 
-  const API_URL = `${Config.API_URL}post/list`;
+  const API_URL = `http://10.0.2.2:8060/api/post/list`;
   const [currentPage, setCurrentPage] = useState(0);
   // EntirePostPageDto 객체 생성
   const entirePostPageDto = {

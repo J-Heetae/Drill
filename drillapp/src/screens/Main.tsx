@@ -16,8 +16,8 @@ type DataItem = {
 
 const Main = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
-  const API_URL = `${Config.API_URL}ranking/first`;
-  const API_URL2 = `${Config.API_URL}ranking/list`;
+  const API_URL = `http://10.0.2.2:8060/api/ranking/first`;
+  const API_URL2 = `http://10.0.2.2:8060/api/ranking/list`;
   // 요구하는 매개변수
   const centerName = userInfo.place;
   // const courseName = 'difficulty1Course1';

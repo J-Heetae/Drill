@@ -37,10 +37,11 @@ const Regist = () => {
       } );
 
       // 요청 성공
+      console.log('-----------------------',response)
       console.log('로그인해 주세요.', response.data);
 
     
-      await AsyncStorage.setItem('accessToken', response.headers.authorization);
+      // await AsyncStorage.setItem('accessToken', response.headers.authorization);
       navigation.navigate("LocalLogin");
 
     } catch (error) {

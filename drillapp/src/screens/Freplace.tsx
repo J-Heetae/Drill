@@ -22,7 +22,7 @@ type RootStackParamList = {
 
 const Freplace = () => {
   const dispatch = useDispatch()
-  const API_URL = `${Config.API_URL}member/settings`;
+  const API_URL = `http://10.0.2.2:8060/api/member/settings`;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'TabNavigator'>>()
   const [selectedCenter, setSelectedCenter] = useState("");
   const userInfo = useSelector((state: RootState) => state.templateUser);

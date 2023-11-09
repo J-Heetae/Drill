@@ -11,6 +11,8 @@ import project.drill.dto.*;
 import project.drill.service.MemberService;
 import project.drill.service.PostService;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -50,12 +52,21 @@ public class PostController {
         String order= entirePostPageDto.getOrder();
         int page = entirePostPageDto.getPage();
         int size = entirePostPageDto.getSize();
-
         PostPageAndCourseListDto myPostPage = postService.findAllByOrder(entirePostPageDto);
         if(!myPostPage.getPostPage().isEmpty()){
         return new ResponseEntity<>(myPostPage,HttpStatus.OK);}
         else{
             return new ResponseEntity<String>("게시글이 없습니다.",HttpStatus.NO_CONTENT);
+        }
+    }
+    @PostMapping("/course")
+    public ResponseEntity<?> getCourse(@RequestBody UploadPostDto uploadPostDto){
+        List<String> courseNameList = postService.findCourseName(uploadPostDto);
+        if(!courseNameList.isEmpty()){
+            return new ResponseEntity<>(courseNameList,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("코스가 없습니다.",HttpStatus.NO_CONTENT);
         }
     }
 }

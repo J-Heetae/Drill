@@ -2,14 +2,15 @@ package project.drill.service;
 
 import org.springframework.data.domain.Page;
 import project.drill.domain.Post;
-import project.drill.dto.EntirePostPageDto;
-import project.drill.dto.PostDto;
-import project.drill.dto.PostPageAndCourseListDto;
-import project.drill.dto.ReadPostDto;
+import project.drill.dto.*;
+
+import java.util.List;
 
 public interface PostService {
     Post save(PostDto postDto);
     ReadPostDto read(String memberNickname , Long postId);
     void delete(Long postId);
     PostPageAndCourseListDto findAllByOrder(EntirePostPageDto entirePostPageDto);
+
+    List<String> findCourseName(UploadPostDto uploadPostDto);
 }

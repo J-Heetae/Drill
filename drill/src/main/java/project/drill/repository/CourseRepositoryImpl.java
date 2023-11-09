@@ -35,6 +35,17 @@ public class CourseRepositoryImpl implements CourseCustomRepository{
 	}
 
 	@Override
+	public List<String> findCourseNameByDifficultyAndIsNewIsTrue(Difficulty difficulty) {
+		QCourse course = QCourse.course;
+		return queryFactory
+				.select(course.courseName)
+				.from(course)
+				.where(course.difficulty.eq(difficulty))
+				.fetch();
+	}
+
+
+	@Override
 	public List<String> findCourseNameByCenterAndIsNewIsTrue(Center center) {
 		QCourse qCourse= QCourse.course;
 		return queryFactory

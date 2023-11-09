@@ -39,7 +39,7 @@ pipeline {
         stage('Blue Health check and Deploy') {
             steps {
                 script {
-                    sh'''
+                    sh -c '''
                     #!/bin/bash
 
 
@@ -83,7 +83,7 @@ pipeline {
 
                     echo "finish"
 
-                    echo 'set $service_port \${target_port};' > /etc/nginx/conf.d/service-url.inc
+                    echo 'set \$service_port ${target_port};' > /etc/nginx/conf.d/service-url.inc
                     docker restart nginx
 
                     if [ "${target_port}" -eq "${blue_port}" ]

@@ -83,7 +83,13 @@ pipeline {
 
                     echo "finish"
 
-                    echo "set \$service_port ${target_port};" > /etc/nginx/conf.d/service-url.inc
+                    if [ $target_port -eq 8060 ]
+                    then
+                        echo 'set $service_port 8060;' > /etc/nginx/conf.d/service-url.inc
+                    else
+                        echo 'set $service_port 8061;' > /etc/nginx/conf.d/service-url.inc
+                    fi
+
                     docker restart nginx
 
                     if [ "${target_port}" -eq "${blue_port}" ]

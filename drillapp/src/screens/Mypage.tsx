@@ -259,7 +259,7 @@ const Mypage = () => {
               <Progress.Bar
                 progress={nowLevel / maxLevel}
                 width={null}
-                height={15}
+                height={30}
                 color={"#5AC77C"}
               />
             </Bar>
@@ -286,8 +286,6 @@ const Mypage = () => {
                   setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
                 }}
               />
-            </SortMenu>
-            <SortMenu>
               <Dropdown 
                 style={styles.dropdown2}
                 placeholderStyle={styles.placeholderStyle}
@@ -305,8 +303,6 @@ const Mypage = () => {
                   setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
                 }}
               />
-            </SortMenu>
-            <SortMenu>
               <Dropdown 
                 style={styles.dropdown2}
                 placeholderStyle={styles.placeholderStyle}
@@ -340,7 +336,7 @@ const Mypage = () => {
               // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
               return (
                 <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
-                  <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
+                  <Image source={{ uri: imageUrl }} style={{ width: 136, height: 136, margin: 1 }} />
                 </TouchableOpacity>
               );
             }}
@@ -364,30 +360,33 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dropdown1: {
-    width: 90,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '35%',
+    height: '50%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '24%',
+    height: '50%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+    color: '#000',
   },
 });
 
@@ -414,11 +413,12 @@ const UserInfoView = styled.View`
 `
 const SortMenuView = styled.View`
   flex: 1;
-  padding-left: 30px;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
 `
 const UserNameText = styled.Text`
-  font-size: 25px;
+  font-size: 35px;
   text-align: center;
   font-weight: 900;
   color: black;
@@ -426,7 +426,8 @@ const UserNameText = styled.Text`
 // -------------------------------
 
 const SortMenuTitle = styled.Text`
-  font-size: 20px;
+  width: 80%;
+  font-size: 25px;
 `
 const MenuView = styled.View`
   flex:1 ;
@@ -435,16 +436,16 @@ const MenuView = styled.View`
   gap: 10px;
 `
 const SortMenu = styled.View`
-  width: 80px;
-  height: 30px;
-  background-color: #5AC77C;
-  border-radius: 50px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 5px;
 `
 
 const BarView = styled.View`
-  width: 280px;
+  width: 80%;
   padding: 0 15px;
   flex-direction: row;
 `

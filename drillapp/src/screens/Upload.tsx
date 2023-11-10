@@ -178,7 +178,7 @@ const Upload = () => {
           >
             <UploadView>
               {videourl ? (
-                <Image source={{ uri: videourl }} style={{ width: 280, height: 180 }} />
+                <Image source={{ uri: videourl }} style={{ width: 380, height: 200 }} />
                 ) : (
                 <UploadText>영상을 선택해주세요</UploadText>
               )}
@@ -207,6 +207,7 @@ const Upload = () => {
             />
           </ExplainView>
 
+          <Spacer />
           <Spacer />
           <SelectView>
 
@@ -248,6 +249,8 @@ const Upload = () => {
             </SelectOptionView>
           </SelectView>
           <Spacer />
+          <Spacer />
+          <Spacer />
           <ButtonView>
             <TouchableOpacity
               style={styles.button}
@@ -264,7 +267,7 @@ const Upload = () => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#5AC77C', // 버튼 배경색상 추가
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderRadius: 30,
   },
   buttonText: {
@@ -274,8 +277,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 80,
-    width: 280,
+    height: 150,
+    width: 380,
+    fontSize: 25,
     borderColor: '#ADA4A5',
     borderWidth: 1,
     borderRadius: 10,
@@ -291,15 +295,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   dropdown1: {
-    width: 130,
-    height: 40,
+    width: '50%',
+    height: '110%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 40,
+    width: '30%',
+    height: '110%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
@@ -324,6 +328,7 @@ const ContainerView = styled.View`
   flex: 1;
   background-color: white;
   align-items: center;
+  
 `
 // -------------------------------
 const TopView = styled.View`
@@ -339,15 +344,15 @@ const BottomView = styled.View`
 // -------------------------------
 
 const UploadView = styled.View`
-  width: 280px;
-  height: 180px;
+  width: 380px;
+  height: 200px;
   border-radius: 10px;
   border: 1px dashed #999;
   justify-content: center;
   align-items: center;
 `
 const UploadText = styled.Text`
-  font-size: 20px;
+  font-size: 30px;
 `
 // -------------------------------
 
@@ -368,11 +373,12 @@ const SelectOptionView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 280px;
+  width: 380px;
+  height: 100px;
   justify-content: center;
 `
 
 const Spacer = styled.View`
-  height: 20px; /* 원하는 여백 크기 */
+  height: 30px; /* 원하는 여백 크기 */
 `;
 export default Upload;

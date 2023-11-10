@@ -245,7 +245,6 @@ const Video = () => {
   console.log('저장된값 출력하기-----------------------',posts)
   return(
     <ContainerView>
-      <ScrollView>
         <TopView>
           <SearchView>
             <TextInput
@@ -337,7 +336,6 @@ const Video = () => {
           </SafeAreaView>
           
         </BottomView>
-      </ScrollView>
     </ContainerView>
   );
 };
@@ -352,6 +350,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginTop: 30,
     marginBottom: 20,
+    fontSize:20,
   },
   list: {
     width: '100%',
@@ -363,31 +362,31 @@ const styles = StyleSheet.create({
   },
   dropdown1: {
     width: '35%',
-    height: '110%',
+    height: '80%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
   },
   dropdown2: {
     width: '24%',
-    height: '110%',
+    height: '80%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     color: '#000',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     color: '#000',
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 18,
     color: '#000',
   },
 });

@@ -90,17 +90,17 @@ def get_hold_info(img):
   for box in box_info:
     cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
   
-  fig, (ax1, ax2) = plt.subplots(1, 2)
-  ax1.imshow(img[:, :, ::-1])
-  ax1.axis('off')
-  ax1.set_title('Original')
+  # fig, (ax1, ax2) = plt.subplots(1, 2)
+  # ax1.imshow(img[:, :, ::-1])
+  # ax1.axis('off')
+  # ax1.set_title('Original')
 
-  ax2.imshow(img2[:, :, ::-1])
-  ax2.axis('off')
-  ax2.set_title('Detected holds')
+  # ax2.imshow(img2[:, :, ::-1])
+  # ax2.axis('off')
+  # ax2.set_title('Detected holds')
 
-  fig.tight_layout()
-  plt.show()
+  # fig.tight_layout()
+  # plt.show()
   
   return box_info
   

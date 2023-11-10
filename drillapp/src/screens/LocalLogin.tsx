@@ -79,7 +79,7 @@ const LocalLogin = () => {
               resizeMode="contain"
               style={{
                 width: 500,
-                height: 500,
+                height: 408,
                 alignSelf: 'center',
               }}
             />

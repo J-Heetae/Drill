@@ -23,19 +23,13 @@ const Camera = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const showPicker = () => {
     Alert.alert(
-      '선택하세요',
-      '카메라로 촬영하거나 앨범에서 선택하세요',
+      '',
+      '카메라로 촬영해서 업로드해보세요.',
       [
         {
           text: '카메라로 촬영',
           onPress: () => {
             launchCamera({ mediaType: 'video' }, handleResponse); 
-          },
-        },
-        {
-          text: '앨범에서 선택',
-          onPress: () => {
-            launchImageLibrary({ mediaType: 'video' }, handleResponse); 
           },
         },
       ],
@@ -92,7 +86,7 @@ const Camera = () => {
 
   return (
     <Container>
-      <Button title="동영상 선택" onPress={showPicker} />
+      <Button title="카메라 열기" onPress={showPicker}/>
     </Container>
   );
 };

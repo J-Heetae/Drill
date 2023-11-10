@@ -15,5 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     // 닉네임에 해당하는 것 조회
     Page<Post> findAllByMemberMemberNickname(Pageable pageable,String memberNickname);
 
+    List<Post> findByMemberMemberNicknameAndCourseCourseNameAndCourseIsNewIsTrue(String memberNickname, String courseName);
 
 }

@@ -7,7 +7,7 @@ import project.drill.dto.*;
 import java.util.List;
 
 public interface PostService {
-    Post save(PostDto postDto);
+    Boolean save(PostDto postDto);
     ReadPostDto read(String memberNickname , Long postId);
     void delete(Long postId);
     PostPageAndCourseListDto findAllByOrder(EntirePostPageDto entirePostPageDto);

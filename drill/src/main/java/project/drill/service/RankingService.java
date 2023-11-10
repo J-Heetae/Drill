@@ -14,4 +14,6 @@ public interface RankingService {
 	List<String> findCourseName(String centerName, String difficulty);
 
 	FirstRankingDto findFirstRanking(String centerName);
+
+	Long findMyRanking(String memberNickname, String courseName);
 }

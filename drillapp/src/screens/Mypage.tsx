@@ -241,7 +241,6 @@ const Mypage = () => {
         <UserInfoView>
           <UserNameText>
             <Image
-            
               source={require('../asset/icons/profile_hold.png')}
               resizeMode="contain"
               style={{
@@ -251,7 +250,7 @@ const Mypage = () => {
             />
             {userInfo.nickName}
             <TouchableOpacity onPress={Logout}>
-              <Text>로그아웃</Text>
+              <Text style={{color:'black'}}>로그아웃</Text>
             </TouchableOpacity>
           </UserNameText>
           <BarView>
@@ -266,7 +265,7 @@ const Mypage = () => {
           </BarView>
         </UserInfoView>
         <SortMenuView>
-          <SortMenuTitle>내 영상 모아보기</SortMenuTitle>
+          <SortMenuTitle style={{color:'black'}}>내 영상 모아보기</SortMenuTitle>
           <MenuView>
             <SortMenu>
               <Dropdown 
@@ -274,6 +273,7 @@ const Mypage = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={data}
                 maxHeight={200}
@@ -291,6 +291,7 @@ const Mypage = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={holderColor}
                 maxHeight={200}
@@ -308,6 +309,7 @@ const Mypage = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={transformedCourseName}
                 maxHeight={200}
@@ -388,6 +390,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Image, TouchableOpacity, TextInput, Button, Alert,KeyboardAvoidingView,ScrollView } from 'react-native';
+import { Image, TouchableOpacity, TextInput, Button, Alert,KeyboardAvoidingView,ScrollView, Text} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -62,30 +62,33 @@ const Regist = () => {
               resizeMode="contain"
               style={{
                 width: 500,
-                height: 350,
+                height: 450,
                 alignSelf: 'center',
               }}
             />
           </LogoView>
+          <Text style={{color:'#000'}}>이메일</Text>
           <TextInput
             placeholder="이메일"
             value={username}
             onChangeText={(text) => setUsername(text)}
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+            style={{ height: 50, borderColor: 'black', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
           />
+          <Text style={{color:'#000'}}>비밀번호</Text>
           <TextInput
             placeholder="비밀번호"
             value={password}
             onChangeText={(text) => setPassword(text)}
             secureTextEntry
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+            style={{ height: 50, borderColor: 'black', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
           />
+          <Text style={{color:'#000'}}>비밀번호 확인</Text>
           <TextInput
             placeholder="비밀번호 확인"
             value={confirmPassword}
             onChangeText={(text) => setConfirmPassword(text)}
             secureTextEntry
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+            style={{ height: 50, borderColor: 'black', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
           />
           <LoginButton onPress={handleLogin} title="회원가입" />
         </ScrollView>

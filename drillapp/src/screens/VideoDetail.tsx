@@ -234,13 +234,13 @@ const VideoDetail = () => {
                 />
               </View>
             </TouchableOpacity>
-            <Text style={{fontSize:20, fontWeight: 'bold'}}>
+            <Text style={{fontSize:20, fontWeight: 'bold', color:'black'}}>
               좋아요 {countLiked}개
             </Text>
           </PostLikedView>
           <PostContentView>
-            <Text style={{fontSize:22, fontWeight: 'bold'}}>{data?.memberNickname}</Text>
-            <Text style={{fontSize:20}} numberOfLines={2}>{data?.postContent}</Text>
+            <Text style={{fontSize:22, fontWeight: 'bold', color:'black'}}>{data?.memberNickname}</Text>
+            <Text style={{fontSize:20, color:'black'}} numberOfLines={2}>{data?.postContent}</Text>
           </PostContentView>
         </PostTopView>
         <PostBottomView>
@@ -249,10 +249,11 @@ const VideoDetail = () => {
               onChangeText={onChangeText}
               value={text}
               placeholder='댓글 달기'
+              placeholderTextColor='black'
               style={styles.input}  
             />
             <TouchableOpacity onPress={Commentpost}>
-              <Text>
+              <Text style={{color:'black'}}>
                 게시
               </Text>
             </TouchableOpacity>
@@ -261,12 +262,12 @@ const VideoDetail = () => {
             {comments.map((comment, index) => (
               <View key={index} style={{display:'flex', flexDirection:'row', gap:10}}>
                 <View>
-                  <Text style={{fontSize:22, fontWeight: 'bold'}}>
+                  <Text style={{fontSize:22, fontWeight: 'bold', color:'black'}}>
                     {comment.memberNickname}
                   </Text>
                 </View>
                 <View>
-                  <Text style={{fontSize:20}}>
+                  <Text style={{fontSize:20, color:'black'}}>
                     {comment.commentContent}
                   </Text>
                 </View>

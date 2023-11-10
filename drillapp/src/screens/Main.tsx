@@ -228,6 +228,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={data}
             maxHeight={200}
@@ -246,6 +247,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={holderColor}
             maxHeight={200}
@@ -263,6 +265,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={transformedCourseName}
             maxHeight={200}
@@ -327,6 +330,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`

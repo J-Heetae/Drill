@@ -180,7 +180,7 @@ const Upload = () => {
               {videourl ? (
                 <Image source={{ uri: videourl }} style={{ width: 380, height: 200 }} />
                 ) : (
-                <UploadText>영상을 선택해주세요</UploadText>
+                <UploadText style={{color:'black'}}>영상을 선택해주세요</UploadText>
               )}
                 <Modal isVisible={isModalVisible}>
                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -203,6 +203,7 @@ const Upload = () => {
               onChangeText={onChangeText}
               value={text}
               placeholder='문구를 입력해주세요'
+              placeholderTextColor='black'
               style={styles.input}  
             />
           </ExplainView>
@@ -217,6 +218,7 @@ const Upload = () => {
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
               mode='default'
               data={data}
               maxHeight={200}
@@ -234,6 +236,7 @@ const Upload = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={holderColor}
                 maxHeight={200}
@@ -322,6 +325,9 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`

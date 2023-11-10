@@ -251,10 +251,11 @@ const Video = () => {
               onChangeText={onChangeText}
               value={text}
               placeholder='유저 검색'
+              placeholderTextColor='black'
               style={styles.input}
             />
             <TouchableOpacity onPress={handleSearch} style={{width:40, height:50, paddingTop:7, justifyContent:'center', alignItems:'center'}}>
-              <Text>검색</Text>
+              <Text style={{color:'black'}}>검색</Text>
             </TouchableOpacity>
           </SearchView>
           <SortMenuView>
@@ -263,6 +264,7 @@ const Video = () => {
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
               mode='default'
               data={data}
               maxHeight={200}
@@ -281,6 +283,7 @@ const Video = () => {
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
               mode='default'
               data={holderColor}
               maxHeight={200}
@@ -299,6 +302,7 @@ const Video = () => {
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
               mode='default'
               data={transformedCourseName}
               maxHeight={200}
@@ -351,6 +355,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
     fontSize:20,
+    color: 'black',
   },
   list: {
     width: '100%',
@@ -389,6 +394,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`

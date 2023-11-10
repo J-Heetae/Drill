@@ -113,12 +113,12 @@ const Login = () => {
       </LogoView>
         <GoogleLoginView>
           <TouchableOpacity onPress={LocalSignup}>
-            <Text style={{fontSize: 25}}>Local Signup</Text>
+            <Text style={{fontSize: 25, color:'#000'}}>Local Signup</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <GoogleLoginView>
           <TouchableOpacity onPress={Locallogin}>
-            <Text style={{fontSize: 25}}>Local Login</Text>
+            <Text style={{fontSize: 25, color:'#000'}}>Local Login</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <KakaoLoginView>

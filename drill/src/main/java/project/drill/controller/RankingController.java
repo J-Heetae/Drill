@@ -70,7 +70,7 @@ public class RankingController {
 			return new ResponseEntity<>(myRanking,HttpStatus.OK);
 		}
 		else{
-			return new ResponseEntity<String>("랭킹이 없습니다.", HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(0, HttpStatus.NO_CONTENT);
 		}
 	}
 

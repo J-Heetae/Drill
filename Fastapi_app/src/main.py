@@ -12,7 +12,7 @@ import cv2
 
 import sys
 # from .addcomponents.addmodel import check_model
-from addcomponents import utilities as ut
+from .addcomponents import utilities as ut
 
 app = FastAPI()
 

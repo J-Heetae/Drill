@@ -32,22 +32,22 @@ def get_hold_info(image):
       metadata=metadata
   )
 
-  out_predictions, predicted_color = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-  img_holds = out_predictions.get_image()
+  # out_predictions, predicted_color = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+  # img_holds = out_predictions.get_image()
   # img_colors = predicted_color
   # print(img_colors)
-  # display the results
-  fig, (ax1, ax2) = plt.subplots(1, 2)
-  ax1.imshow(img[:, :, ::-1])
-  ax1.axis('off')
-  ax1.set_title('Original')
+  # # display the results
+  # fig, (ax1, ax2) = plt.subplots(1, 2)
+  # ax1.imshow(img[:, :, ::-1])
+  # ax1.axis('off')
+  # ax1.set_title('Original')
 
-  ax2.imshow(img_holds)
-  ax2.axis('off')
-  ax2.set_title('Detected holds')
+  # ax2.imshow(img_holds)
+  # ax2.axis('off')
+  # ax2.set_title('Detected holds')
 
-  fig.tight_layout()
-  plt.show()
+  # fig.tight_layout()
+  # plt.show()
 
   # get coordinates
   # tensor(좌측 상단 x 좌표, 좌측 상단 y 좌표, 우측 하단 x좌표, 우측 하단 y 좌표)
@@ -90,6 +90,7 @@ def get_hold_info(image):
 
     box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, rgb_color])
 
+  # 이미지에 추출한 rgb 그려서 출력
   img2 = copy.deepcopy(img)
   for box in box_info:
     cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5][::-1], thickness=-1)
@@ -108,5 +109,5 @@ def get_hold_info(image):
   
   return box_info
   
-SAMPLE_IMAGE = "974.jpg"
-get_hold_info(SAMPLE_IMAGE)
+# SAMPLE_IMAGE = "974.jpg"
+# get_hold_info(SAMPLE_IMAGE)

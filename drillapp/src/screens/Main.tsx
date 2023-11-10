@@ -61,7 +61,7 @@ const Main = () => {
   const giveMeDifficulty = async () => {
     try {
       console.log("selextedCenter: "+selectedCenter);
-      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findDifficulty', {
+      const response = await axios.get('https://k9a106.p.ssafy.io/api/ranking/findDifficulty', {
         params: {
           centerName: selectedCenter,
         },
@@ -80,7 +80,7 @@ const Main = () => {
 
   const giveMeCoureName = async () => {
     try {
-      const response = await axios.get('http://10.0.2.2:8060/api/ranking/findCourseName', {
+      const response = await axios.get('https://k9a106.p.ssafy.io/api/ranking/findCourseName', {
         params: {
           centerName: selectedCenter,
           difficulty: selectedHolder,

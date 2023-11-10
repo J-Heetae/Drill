@@ -24,13 +24,8 @@ metadata = MetadataCatalog.get("meta")
 predictor = DefaultPredictor(cfg)
 
 
-def get_hold_info(image):
-  img = cv2.imread(image)
+def get_hold_info(img):
   outputs = predictor(img)
-  v = Visualizer(
-      img[:, :, ::-1],
-      metadata=metadata
-  )
 
   # out_predictions, predicted_color = v.draw_instance_predictions(outputs["instances"].to("cpu"))
   # img_holds = out_predictions.get_image()
@@ -85,15 +80,15 @@ def get_hold_info(image):
     category = "volume" if outputs["instances"].pred_classes[i] else "hold"
     
     # RGB 추출
-    rgb_color = (int(red/rgb_cnt), int(green/rgb_cnt), int(blue/rgb_cnt))
+    bgr_color = (int(blue/rgb_cnt), int(green/rgb_cnt), int(red/rgb_cnt))
     
 
-    box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, rgb_color])
+    box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, bgr_color])
 
   # 이미지에 추출한 rgb 그려서 출력
   img2 = copy.deepcopy(img)
   for box in box_info:
-    cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5][::-1], thickness=-1)
+    cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
   
   fig, (ax1, ax2) = plt.subplots(1, 2)
   ax1.imshow(img[:, :, ::-1])

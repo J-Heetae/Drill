@@ -31,6 +31,9 @@ app.add_middleware(
 
 static_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "static")
 
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.getcwd() + '/detectron2')
+
 load_dotenv() # .env 파일에 있는 키와 값을 환경변수로 등록해주는 library
 
 '''

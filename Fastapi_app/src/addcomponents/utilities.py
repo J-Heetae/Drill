@@ -81,9 +81,9 @@ def remove_video(video_name): # Function to delete video file in S3
     return res
 
 def compare_location(wrist_positions, hold_positions):
-    x, y, h, w = hold_positions
+    lx, ly, rx, ry = hold_positions
     wrist_y, wrist_x = wrist_positions
-    if y < wrist_y < y + h and x < wrist_x < x + w:
+    if ly < wrist_y < ry and lx < wrist_x < rx:
         return True
     return False
 
@@ -124,6 +124,7 @@ def video_process(video_name): # Function to extract the location of user's wris
                 imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
                 check_upload = thumbnail_upload(folderpath, imgname)
                 # color_classification(image) # 색상 분류 / 이미지 덮어씌우기
+                print('들어갑니다. detectron2')
                 hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
                 cnt += 1
             
@@ -153,7 +154,17 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 
-def hold_extraction(image_path): # Function to extract hold in image using detectron2
+def hold_extraction(image): # Function to extract hold in image using detectron2
+    # current_directory = os.path.dirname(os.path.abspath(__file__))
+    print(os.getcwd())
+    from detectron2 import newtectron as dt
+    func_path = "detectron2/newtectron"
+    # current_directory = os.getcwd() + '\\detectron2'
+    # print(current_directory)
+    # os.chdir(current_directory)
+    # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r)]]
+    results = dt.get_hold_info(image)
+    print(results)
     return [20, 20, 20, 20]
 
 def color_classification(img_path): # Function to classify color in image

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import project.drill.domain.*;
@@ -498,6 +499,26 @@ public class PostRepositoryImpl implements PostCustomRepository {
 				))
 				.collect(Collectors.toList());
 		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Long findMyRanking(String memberNickname, String courseName) {
+		List<Long> rankings = queryFactory
+				.select(post.postId)
+				.from(post)
+				.where(post.course.courseName.eq(courseName)
+						.and(post.course.isNew.eq(true))
+						.and(post.postWriteTime.lt(
+								JPAExpressions.select(post.postWriteTime)
+										.from(post)
+										.where(post.member.memberNickname.eq(memberNickname)
+												.and(post.course.courseName.eq(courseName))
+												.and(post.course.isNew.eq(true)))
+						)))
+				.orderBy(post.postWriteTime.asc())
+				.fetch();
+
+		return (long) rankings.size() + 1;
 	}
 
 }

@@ -26,10 +26,15 @@ public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
 
     @Override
-    public Post save(PostDto postDto) {
+    public Boolean save(PostDto postDto) {
         Optional<Member> member = memberRepository.findByMemberNickname(postDto.getMemberNickname());
         Optional<Course> course = courseRepository.findByCourseNameAndCenterAndIsNewIsTrue(postDto.getCourseName(),
             Center.valueOf(postDto.getCenter()));
+        List<Post> findPost = postRepository.findByMemberMemberNicknameAndCourseCourseNameAndCourseIsNewIsTrue(postDto.getMemberNickname(),postDto.getCourseName());
+        if(!findPost.isEmpty()){
+            return false;
+        }
+        else{
         Post post = Post.builder()
                 .postId(0L)
                 .member(member.get())
@@ -40,7 +45,9 @@ public class PostServiceImpl implements PostService {
                 .course(course.get())
                 .postThumbnail(postDto.getPostThumbnail())
                 .build();
-        return postRepository.save(post);
+            postRepository.save(post);
+        return true;
+        }
     }
 
     @Override

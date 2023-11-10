@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import project.drill.domain.Center;
 import project.drill.domain.Difficulty;
+import project.drill.domain.Post;
 import project.drill.dto.PostPageDto;
 
 
@@ -40,4 +41,8 @@ public interface PostCustomRepository {
     Page<PostPageDto> findAllByCenterAndCourseDifficultyAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty, String memberNickname);
 
     Page<PostPageDto> findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName, String memberNickname);
+
+    Long findMyRanking(String memberNickname, String courseName);
+
+
 }

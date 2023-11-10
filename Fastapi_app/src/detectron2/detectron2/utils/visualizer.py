@@ -404,7 +404,6 @@ class Visualizer:
             masks = [GenericMask(x, self.output.height, self.output.width) for x in masks]
         else:
             masks = None
-
         if self._instance_mode == ColorMode.SEGMENTATION and self.metadata.get("thing_colors"):
             colors = [
                 self._jitter([x / 255 for x in self.metadata.thing_colors[c]]) for c in classes
@@ -643,6 +642,7 @@ class Visualizer:
         Returns:
             output (VisImage): image object with visualizations.
         """
+        # print(masks)
         num_instances = 0
         if boxes is not None:
             boxes = self._convert_boxes(boxes)
@@ -685,7 +685,6 @@ class Visualizer:
             masks = [masks[idx] for idx in sorted_idxs] if masks is not None else None
             assigned_colors = [assigned_colors[idx] for idx in sorted_idxs]
             keypoints = keypoints[sorted_idxs] if keypoints is not None else None
-
         for i in range(num_instances):
             color = assigned_colors[i]
             if boxes is not None:

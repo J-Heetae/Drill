@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import project.drill.domain.Difficulty;
 import project.drill.dto.FirstRankingDto;
+import project.drill.dto.MyRankingDto;
 import project.drill.service.RankingService;
 
 
@@ -36,6 +37,7 @@ public class RankingController {
 		return new ResponseEntity<>(rankingList, HttpStatus.OK);
 	}
 
+
 	@GetMapping("/first")
 	@ApiOperation(value = "초기 관심지점 가장 첫번째 코스 랭킹 제공")
 	public ResponseEntity<FirstRankingDto> findFirstRanking(
@@ -59,6 +61,17 @@ public class RankingController {
 		@RequestParam String difficulty) {
 		List<String> courseNameList = rankingService.findCourseName(centerName,difficulty);
 		return new ResponseEntity<>(courseNameList, HttpStatus.OK);
+	}
+
+	@PostMapping("/myranking")
+	public ResponseEntity<?> myRanking (@RequestBody MyRankingDto myRankingDto){
+		Long myRanking = rankingService.findMyRanking(myRankingDto.getMemberNickname(),myRankingDto.getCourseName());
+		if(myRanking >0L){
+			return new ResponseEntity<>(myRanking,HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<String>("랭킹이 없습니다.", HttpStatus.NO_CONTENT);
+		}
 	}
 
 	//

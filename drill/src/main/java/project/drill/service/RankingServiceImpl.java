@@ -47,4 +47,11 @@ public class RankingServiceImpl implements RankingService {
 
 		return firstRankingDto;
 	}
+
+	@Override
+	public Long findMyRanking(String memberNickname, String courseName) {
+		Long myRanking = 0L;
+		myRanking = postRepository.findMyRanking(memberNickname, courseName);
+		return myRanking;
+	}
 }

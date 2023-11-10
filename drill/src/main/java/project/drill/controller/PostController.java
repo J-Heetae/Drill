@@ -23,12 +23,14 @@ public class PostController {
     // 게시글 등록
     @PostMapping
     public ResponseEntity<?> writePost(@RequestBody PostDto postDto){
-
-        postService.save(postDto);//영상 등록
+        Boolean isExist = postService.save(postDto);//영상 등록
         memberService.save(postDto); // 유저 레벨 업
-
         //맴버와 lv보내서 새로운 사람으로 등록
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(isExist){
+        return new ResponseEntity<>(HttpStatus.OK);}
+        else{
+            return new ResponseEntity<String>("이미 등록한 코스입니다.",HttpStatus.CONFLICT);
+        }
     }
 
     // 게시글 상세 보기

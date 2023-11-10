@@ -14,7 +14,7 @@ import project.drill.repository.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 
@@ -96,10 +96,10 @@ public class PostServiceImpl implements PostService {
                     postPage = postRepository.findAllByOrderByPostWriteTimeDesc(pageable);}
                     else{
                         if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
-                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
-                            postPage = postRepository.findAllByCenterAndCourseDifficultyOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            courses = courseRepository.findCourseNameByDifficultyAndIsNewIsTrue(Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            postPage = postRepository.findAllByDifficultyOrderByPostWriteTimeDesc(pageable, Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                         } else if (!entirePostPageDto.getCourseName().equals("course0")) {
-                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                            courses = courseRepository.findCourseNameByDifficultyAndIsNewIsTrue(Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByCenterAndCourseCourseNameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName());
                         }
                     }
@@ -158,6 +158,7 @@ public class PostServiceImpl implements PostService {
                         if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByMemberMemberNicknameAndDifficultyOrderByPostWriteTimeDesc(pageable, entirePostPageDto.getMemberNickname(),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
+                        log.info("findAllByMemberMemberNicknameAndDifficultyOrderByPostWriteTimeDesc");
                         } else if (!entirePostPageDto.getCourseName().equals("course0")) {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(pageable, Center.valueOf(entirePostPageDto.getCenterName()), entirePostPageDto.getCourseName(),nickname);
@@ -185,7 +186,7 @@ public class PostServiceImpl implements PostService {
                     else{
                         if (!entirePostPageDto.getDifficulty().equals("difficulty0") && entirePostPageDto.getCourseName().equals("course0")) {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
-                            postPage = postRepository.findByDifficultyOrderByLiked(pageable,entirePostPageDto.getDifficulty());
+                            postPage = postRepository.findByMemberNicknameAndDifficultyOrderByLiked(pageable,entirePostPageDto.getMemberNickname(),entirePostPageDto.getDifficulty());
                         } else if (!entirePostPageDto.getCourseName().equals("course0")) {
                             courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(entirePostPageDto.getCenterName()),Difficulty.valueOf(entirePostPageDto.getDifficulty()));
                             postPage = postRepository.findAllByCenterCenterNameAndCourseCourseNameAndMemberNicknameOrderByLiked(pageable, entirePostPageDto.getCenterName(), entirePostPageDto.getCourseName(),nickname);}

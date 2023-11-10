@@ -62,7 +62,7 @@ const Regist = () => {
               resizeMode="contain"
               style={{
                 width: 500,
-                height: 500,
+                height: 350,
                 alignSelf: 'center',
               }}
             />

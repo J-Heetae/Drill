@@ -299,30 +299,33 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   dropdown1: {
-    width: 130,
-    height: 40,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '35%',
+    height: '90%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 40,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '22%',
+    height: '90%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    height: '90%',
+    fontSize: 20,
+    color: '#000',
   },
 });
 
@@ -348,7 +351,7 @@ const UserNameView = styled.View`
   justify-content: center;
 `
 const UserNameText = styled.Text`
-  font-size: 25px;
+  font-size: 40px;
   text-align: center;
   font-weight: 900;
   color: black;
@@ -368,7 +371,7 @@ const DateView = styled.View`
   margin-bottom: 10px;
 `
 const DateText = styled.Text`
-  font-size: 18px;
+  font-size: 25px;
   text-align: center;
   background-color: white;
   color: black;
@@ -376,23 +379,23 @@ const DateText = styled.Text`
 // -------------------------------
 
 const RankingView = styled.View`
-  width: 80%;
+  width: 83%;
   height: 85%;
-  background-color: #5AC77C;
+  border: 1px solid #ADA4A5;
   border-radius: 22px;
 `
 const RankTitleText = styled.Text`
-  font-size: 20px;
+  font-size: 35px;
   text-align: center;
-  color: white;
+  color: black;
   margin-top: 10px;
   margin-bottom: 10px;
 `
 const MyRankingText = styled.Text`
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
-  color: white;
+  color: black;
 `
 const Top10RankView = styled.View`
   flex: 1;
@@ -407,13 +410,13 @@ const Top10RankItem = styled.View`
 const Top10RankNum = styled.Text`
   flex: 2.5;
   text-align: center;
-  font-size: 20px;
-  color: white;
+  font-size: 25px;
+  color: black;
 `
 const Top10RankNickname = styled.Text`
   flex: 2;
   text-align: center;
-  font-size: 15px;
-  color: white;
+  font-size: 25px;
+  color: black;
 `
 export default Main;

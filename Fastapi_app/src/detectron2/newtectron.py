@@ -23,6 +23,19 @@ metadata = MetadataCatalog.get("meta")
 
 predictor = DefaultPredictor(cfg)
 
+bgr_palette = {
+  "빨강" : (83, 75, 249),
+  "검정" : (21, 22, 20),
+  "노랑" : (6, 208, 227),
+  "보라" : (139, 68, 88),
+  "하양" : (224, 239, 237),
+  "초록" : (139, 170, 57),
+  "핑크" : (11, 52, 227),
+  "파랑" : (167, 64, 1),
+  "주황" : (1, 124, 231),
+  "민트" : (200, 181, 93),
+  "연두" : (25, 187, 142)
+}
 
 def get_hold_info(img):
   outputs = predictor(img)
@@ -47,6 +60,9 @@ def get_hold_info(img):
   # get coordinates
   # tensor(좌측 상단 x 좌표, 좌측 상단 y 좌표, 우측 하단 x좌표, 우측 하단 y 좌표)
   # [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (r, g, b)]] 형태로 저장
+  
+
+  
   box_info = []
   masks = outputs["instances"].pred_masks.tolist()
   for i in range(len(outputs["instances"].pred_boxes)):
@@ -82,13 +98,24 @@ def get_hold_info(img):
     # RGB 추출
     bgr_color = (int(blue/rgb_cnt), int(green/rgb_cnt), int(red/rgb_cnt))
     
+    predicted_color = ""
+    dist = 9999999
+    
+    # 유클리드 거리로 가장 가까운 색 찾기
+    for key, value in bgr_palette.items():
+      euc_dist = 0
+      for i in range(3):
+        euc_dist += (bgr_color[i] - value[i]) ** 2
+      if euc_dist < dist:
+        predicted_color = key
 
-    box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, bgr_color])
+    box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, bgr_color, predicted_color])
 
   # 이미지에 추출한 rgb 그려서 출력
   img2 = copy.deepcopy(img)
   for box in box_info:
     cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
+    print(box[6])
   
   fig, (ax1, ax2) = plt.subplots(1, 2)
   ax1.imshow(img[:, :, ::-1])

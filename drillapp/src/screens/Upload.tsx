@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image, View, Button } from 'react-native';
+import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image, View, Button,ScrollView } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary} from 'react-native-image-picker';
 import { ImagePickerResponse } from 'react-native-image-picker';
@@ -167,87 +167,89 @@ const Upload = () => {
 
   return (
     <ContainerView>
-      <TopView>
-        <TouchableHighlight
-          onPress={() => { UploadVideo() }}
-          underlayColor="#eee"
-          onShowUnderlay={() => setIsHovered(true)}
-          onHideUnderlay={() => setIsHovered(false)}
-        >
-          <UploadView>
-            {videourl ? (
-              <Image source={{ uri: videourl }} style={{ width: 280, height: 180 }} />
-              ) : (
-              <UploadText>영상을 선택해주세요</UploadText>
-            )}
-              <Modal isVisible={isModalVisible}>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                  <View style={{ width: 200, height: 200, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>홀드 색상 선택</Text>
-                    <Button title="Hide modal" onPress={toggleModal} />
+      <ScrollView>
+        <TopView>
+          <TouchableHighlight
+            onPress={() => { UploadVideo() }}
+            underlayColor="#eee"
+            onShowUnderlay={() => setIsHovered(true)}
+            onHideUnderlay={() => setIsHovered(false)}
+          >
+            <UploadView>
+              {videourl ? (
+                <Image source={{ uri: videourl }} style={{ width: 280, height: 180 }} />
+                ) : (
+                <UploadText>영상을 선택해주세요</UploadText>
+              )}
+                <Modal isVisible={isModalVisible}>
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ width: 200, height: 200, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                      <Text>홀드 색상 선택</Text>
+                      <Button title="Hide modal" onPress={toggleModal} />
+                    </View>
                   </View>
-                </View>
-              </Modal>
-          </UploadView> 
-        </TouchableHighlight>
-      </TopView>
+                </Modal>
+            </UploadView> 
+          </TouchableHighlight>
+        </TopView>
 
-      <BottomView>
-        <ExplainView>
-          <TextInput
-            multiline
-            onChangeText={onChangeText}
-            value={text}
-            placeholder='문구를 입력해주세요'
-            style={styles.input}  
-          />
-        </ExplainView>
-        <SelectView>
-          <SelectOptionView>
-            <Dropdown 
-            style={styles.dropdown1}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            mode='default'
-            data={data}
-            maxHeight={200}
-            placeholder='지점 선택'
-            labelField="value"
-            valueField="key"
-            value={selectedCenter}
-            onChange={(item) => {
-              const selectedOption = data.find(option => option.value === item.value);
-              setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-            }}
+        <BottomView>
+          <ExplainView>
+            <TextInput
+              multiline
+              onChangeText={onChangeText}
+              value={text}
+              placeholder='문구를 입력해주세요'
+              style={styles.input}  
             />
-            <Dropdown 
-              style={styles.dropdown2}
+          </ExplainView>
+          <SelectView>
+            <SelectOptionView>
+              <Dropdown 
+              style={styles.dropdown1}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               mode='default'
-              data={holderColor}
+              data={data}
               maxHeight={200}
-              placeholder='홀드'
+              placeholder='지점 선택'
               labelField="value"
               valueField="key"
-              value={selectedHolder}
+              value={selectedCenter}
               onChange={(item) => {
-                const selectedOption = holderColor.find(option => option.value === item.value);
-                setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                const selectedOption = data.find(option => option.value === item.value);
+                setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
               }}
-            />
-          </SelectOptionView>
-        </SelectView>
-        <ButtonView>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={Uploadpost}>
-            <Text style={styles.buttonText}>게시글 업로드</Text>
-          </TouchableOpacity>
-        </ButtonView>
-      </BottomView>
+              />
+              <Dropdown 
+                style={styles.dropdown2}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                mode='default'
+                data={holderColor}
+                maxHeight={200}
+                placeholder='홀드'
+                labelField="value"
+                valueField="key"
+                value={selectedHolder}
+                onChange={(item) => {
+                  const selectedOption = holderColor.find(option => option.value === item.value);
+                  setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                }}
+              />
+            </SelectOptionView>
+          </SelectView>
+          <ButtonView>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={Uploadpost}>
+              <Text style={styles.buttonText}>게시글 업로드</Text>
+            </TouchableOpacity>
+          </ButtonView>
+        </BottomView>
+      </ScrollView>
     </ContainerView>
   );
 };

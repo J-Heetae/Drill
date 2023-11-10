@@ -168,6 +168,7 @@ const Upload = () => {
   return (
     <ContainerView>
       <ScrollView>
+      <Spacer />
         <TopView>
           <TouchableHighlight
             onPress={() => { UploadVideo() }}
@@ -193,6 +194,8 @@ const Upload = () => {
           </TouchableHighlight>
         </TopView>
 
+        <Spacer />
+
         <BottomView>
           <ExplainView>
             <TextInput
@@ -203,7 +206,10 @@ const Upload = () => {
               style={styles.input}  
             />
           </ExplainView>
+
+          <Spacer />
           <SelectView>
+
             <SelectOptionView>
               <Dropdown 
               style={styles.dropdown1}
@@ -241,6 +247,7 @@ const Upload = () => {
               />
             </SelectOptionView>
           </SelectView>
+          <Spacer />
           <ButtonView>
             <TouchableOpacity
               style={styles.button}
@@ -364,4 +371,8 @@ const ButtonView = styled.View`
   width: 280px;
   justify-content: center;
 `
+
+const Spacer = styled.View`
+  height: 20px; /* 원하는 여백 크기 */
+`;
 export default Upload;

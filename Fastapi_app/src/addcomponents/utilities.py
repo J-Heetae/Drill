@@ -4,6 +4,7 @@ import os
 import mediapipe as mp
 import json
 
+
 def get_params(request): # Function to get params
     if 'video_name' not in request.args:
         return "None"
@@ -124,6 +125,8 @@ def video_process(video_name): # Function to extract the location of user's wris
                 imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
                 check_upload = thumbnail_upload(folderpath, imgname)
                 # color_classification(image) # 색상 분류 / 이미지 덮어씌우기
+                
+                # 홀드 하나당 [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (r, g, b)]로 만들어진 이차원 배열
                 hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
                 cnt += 1
             
@@ -154,7 +157,8 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 def hold_extraction(image_path): # Function to extract hold in image using detectron2
-    return [20, 20, 20, 20]
+    from ..detectron2.detectron import get_hold_info
+    return get_hold_info(image_path)
 
 def color_classification(img_path): # Function to classify color in image
     img_color = cv2.imread(img_path) # 이미지 파일을 컬러로 불러옴

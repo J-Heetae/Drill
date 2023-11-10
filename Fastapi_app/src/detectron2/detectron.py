@@ -24,13 +24,12 @@ metadata = MetadataCatalog.get("meta")
 predictor = DefaultPredictor(cfg)
 
 
-def get_hold_info(image):
-  img = cv2.imread(image)
+def get_hold_info(img):
   outputs = predictor(img)
-  v = Visualizer(
-      img[:, :, ::-1],
-      metadata=metadata
-  )
+  # v = Visualizer(
+  #     img[:, :, ::-1],
+  #     metadata=metadata
+  # )
 
   # out_predictions, predicted_color = v.draw_instance_predictions(outputs["instances"].to("cpu"))
   # img_holds = out_predictions.get_image()

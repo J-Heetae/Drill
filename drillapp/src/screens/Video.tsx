@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, TextInput, StyleSheet, Image, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { FlatList, TextInput, StyleSheet, Image, Text, TouchableOpacity, Alert, ActivityIndicator,ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
@@ -245,101 +245,103 @@ const Video = () => {
   console.log('저장된값 출력하기-----------------------',posts)
   return(
     <ContainerView>
-      <TopView>
-        <SearchView>
-          <TextInput
-            onChangeText={onChangeText}
-            value={text}
-            placeholder='유저 검색'
-            style={styles.input}
-          />
-          <TouchableOpacity onPress={handleSearch}>
-            <Text>검색</Text>
-          </TouchableOpacity>
-        </SearchView>
-        <SortMenuView>
-          <SortMenu>
-            <Dropdown 
-              style={styles.dropdown1}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              mode='default'
-              data={data}
-              maxHeight={200}
-              placeholder="지점"
-              labelField="value"
-              valueField="key"
-              value={selectedCenter}
-              onChange={(item) => {
-                const selectedOption = data.find(option => option.value === item.value);
-                setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              }}
+      <ScrollView>
+        <TopView>
+          <SearchView>
+            <TextInput
+              onChangeText={onChangeText}
+              value={text}
+              placeholder='유저 검색'
+              style={styles.input}
             />
-          </SortMenu>
-          <SortMenu>
-            <Dropdown 
-              style={styles.dropdown2}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              mode='default'
-              data={holderColor}
-              maxHeight={200}
-              placeholder="홀드"
-              labelField="value"
-              valueField="key"
-              value={selectedHolder}
-              onChange={(item) => {
-                const selectedOption = holderColor.find(option => option.value === item.value);
-                setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              }}
-            />
-          </SortMenu>
-          <SortMenu>
-            <Dropdown 
-              style={styles.dropdown2}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              mode='default'
-              data={transformedCourseName}
-              maxHeight={200}
-              placeholder="코스"
-              labelField="label" // labelField 설정
-              valueField="value" // valueField 설정
-              value={selectedCourse}
-              onChange={ (item) => {
-                const selectedOption = transformedCourseName.find(option => option.value === item.value);
-                setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
-              }}
-            />
-          </SortMenu>
-        </SortMenuView>
-      </TopView>
+            <TouchableOpacity onPress={handleSearch}>
+              <Text>검색</Text>
+            </TouchableOpacity>
+          </SearchView>
+          <SortMenuView>
+            <SortMenu>
+              <Dropdown 
+                style={styles.dropdown1}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                mode='default'
+                data={data}
+                maxHeight={200}
+                placeholder="지점"
+                labelField="value"
+                valueField="key"
+                value={selectedCenter}
+                onChange={(item) => {
+                  const selectedOption = data.find(option => option.value === item.value);
+                  setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                }}
+              />
+            </SortMenu>
+            <SortMenu>
+              <Dropdown 
+                style={styles.dropdown2}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                mode='default'
+                data={holderColor}
+                maxHeight={200}
+                placeholder="홀드"
+                labelField="value"
+                valueField="key"
+                value={selectedHolder}
+                onChange={(item) => {
+                  const selectedOption = holderColor.find(option => option.value === item.value);
+                  setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                }}
+              />
+            </SortMenu>
+            <SortMenu>
+              <Dropdown 
+                style={styles.dropdown2}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                mode='default'
+                data={transformedCourseName}
+                maxHeight={200}
+                placeholder="코스"
+                labelField="label" // labelField 설정
+                valueField="value" // valueField 설정
+                value={selectedCourse}
+                onChange={ (item) => {
+                  const selectedOption = transformedCourseName.find(option => option.value === item.value);
+                  setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
+                }}
+              />
+            </SortMenu>
+          </SortMenuView>
+        </TopView>
 
-      <BottomView>
-        <SafeAreaView>
-          <FlatList
-            data={posts} // posts 배열을 데이터로 설정
-            renderItem={({ item }) => {
-              // 각 항목의 postThumbnail 값을 S3 URL로 변환
-              const imageUrl = `https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${item.postThumbnail}`;
-              
-              // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
-              return (
-                <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
-                  <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
-                </TouchableOpacity>
-              );
-            }}
-            keyExtractor={(item) => item.postId.toString()} // 각 항목의 postId를 key로 사용
-            numColumns={3}
-            onEndReached={endPoint}
-          />
-        </SafeAreaView>
-        
-      </BottomView>
+        <BottomView>
+          <SafeAreaView>
+            <FlatList
+              data={posts} // posts 배열을 데이터로 설정
+              renderItem={({ item }) => {
+                // 각 항목의 postThumbnail 값을 S3 URL로 변환
+                const imageUrl = `https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${item.postThumbnail}`;
+                
+                // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
+                return (
+                  <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
+                    <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
+                  </TouchableOpacity>
+                );
+              }}
+              keyExtractor={(item) => item.postId.toString()} // 각 항목의 postId를 key로 사용
+              numColumns={3}
+              onEndReached={endPoint}
+            />
+          </SafeAreaView>
+          
+        </BottomView>
+      </ScrollView>
     </ContainerView>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Image, TouchableOpacity, TextInput, Button, Alert } from 'react-native';
+import { Image, TextInput, Alert,KeyboardAvoidingView,ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -70,33 +70,37 @@ const LocalLogin = () => {
   };
 
   return (
-    <ContainerView>
-      <LogoView>
-        <Image
-          source={require('../asset/icons/DRILL_green.png')}
-          resizeMode="contain"
-          style={{
-            width: 500,
-            height: 500,
-            alignSelf: 'center',
-          }}
-        />
-      </LogoView>
-      <TextInput
-        placeholder="아이디"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
-      />
-      <TextInput
-        placeholder="비밀번호"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
-      />
-      <LoginButton onPress={handleLogin} title="로그인" />
-    </ContainerView>
+    // <KeyboardAvoidingView>
+      <ContainerView>
+        <ScrollView>
+          <LogoView>
+            <Image
+              source={require('../asset/icons/DRILL_green.png')}
+              resizeMode="contain"
+              style={{
+                width: 500,
+                height: 500,
+                alignSelf: 'center',
+              }}
+            />
+          </LogoView>
+          <TextInput
+            placeholder="아이디"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+          />
+          <TextInput
+            placeholder="비밀번호"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+          />
+          <LoginButton onPress={handleLogin} title="로그인" />
+        </ScrollView>
+      </ContainerView>
+    // </KeyboardAvoidingView>
   );
 };
 

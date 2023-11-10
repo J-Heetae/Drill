@@ -105,20 +105,20 @@ const Login = () => {
           source={require('../asset/icons/DRILL_green.png')}
           resizeMode="contain"
           style={{
-            width: 500,
-            height: 500,
+            width: 600,
+            height: 600,
             alignSelf: 'center'
           }}
         />
       </LogoView>
         <GoogleLoginView>
           <TouchableOpacity onPress={LocalSignup}>
-            <Text>Local Signup</Text>
+            <Text style={{fontSize: 25}}>Local Signup</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <GoogleLoginView>
           <TouchableOpacity onPress={Locallogin}>
-            <Text>Local Login</Text>
+            <Text style={{fontSize: 25}}>Local Login</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <KakaoLoginView>
@@ -127,7 +127,7 @@ const Login = () => {
               source={require('../asset/icons/kakao_login2.png')}
               resizeMode="contain"
               style={{
-                width: 230,
+                width: 330,
                 height: 100,
                 alignSelf: 'center',
               }}
@@ -152,11 +152,11 @@ const GoogleLoginView = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 230px;
-  height: 50px;
+  width: 330px;
+  height: 70px;
   border: 1px solid gray;
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
 `
 const KakaoLoginView = styled.View`
   position: absoulte;

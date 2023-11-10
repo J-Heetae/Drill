@@ -21,8 +21,8 @@ const CustomTabBarButton = ({children, onPress}) => (
     onPress={onPress}
   >
     <View style={{
-      width: 60,
-      height: 60,
+      width: 65,
+      height: 65,
       borderRadius: 50,
       backgroundColor: '#5AC77C'
     }} >
@@ -41,7 +41,7 @@ function BottomTabNavigationApp() {
         tabBarShowLabel: false, 
         tabBarStyle: {
           backgroundColor: '#ffffff',
-          height: 60,
+          height: 70,
           borderTopColor: 'gray',
           ...styles.shadow
         }
@@ -59,8 +59,8 @@ function BottomTabNavigationApp() {
                 source={require('../drillapp/src/asset/icons/Home_Active.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? '#377A4C' : '#ADA4A5'
                 }}
               />
@@ -70,8 +70,8 @@ function BottomTabNavigationApp() {
               source={require('../drillapp/src/asset/icons/Home.png')}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
                 tintColor: focused ? '#377A4C' : '#ADA4A5'
               }}
             />
@@ -92,8 +92,8 @@ function BottomTabNavigationApp() {
                 source={require('../drillapp/src/asset/icons/Search_Active.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? '#377A4C' : '#ADA4A5'
                 }}
               />
@@ -103,8 +103,8 @@ function BottomTabNavigationApp() {
               source={require('../drillapp/src/asset/icons/Search.png')}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
                 tintColor: focused ? '#377A4C' : '#ADA4A5'
               }}
             />
@@ -123,8 +123,8 @@ function BottomTabNavigationApp() {
                 source={require('../drillapp/src/asset/icons/Camera.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? '#377A4C' : '#ffffff',
                 }}
               />
@@ -148,8 +148,8 @@ function BottomTabNavigationApp() {
                 source={require('../drillapp/src/asset/icons/Addpost_Active.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? '#377A4C' : '#ADA4A5'
                 }}
               />
@@ -159,8 +159,8 @@ function BottomTabNavigationApp() {
               source={require('../drillapp/src/asset/icons/Addpost.png')}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
                 tintColor: focused ? '#377A4C' : '#ADA4A5'
               }}
             />
@@ -181,8 +181,8 @@ function BottomTabNavigationApp() {
                 source={require('../drillapp/src/asset/icons/Profile_Active.png')}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? '#377A4C' : '#ADA4A5'
                 }}
               />
@@ -192,8 +192,8 @@ function BottomTabNavigationApp() {
               source={require('../drillapp/src/asset/icons/Profile.png')}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
                 tintColor: focused ? '#377A4C' : '#ADA4A5'
               }}
             />

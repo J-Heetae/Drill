@@ -234,13 +234,13 @@ const VideoDetail = () => {
                 />
               </View>
             </TouchableOpacity>
-            <Text style={{fontSize:16, fontWeight: 'bold'}}>
+            <Text style={{fontSize:20, fontWeight: 'bold'}}>
               좋아요 {countLiked}개
             </Text>
           </PostLikedView>
           <PostContentView>
-            <Text style={{fontSize:18, fontWeight: 'bold'}}>{data?.memberNickname}</Text>
-            <Text style={{fontSize:16}} numberOfLines={2}>{data?.postContent}</Text>
+            <Text style={{fontSize:22, fontWeight: 'bold'}}>{data?.memberNickname}</Text>
+            <Text style={{fontSize:20}} numberOfLines={2}>{data?.postContent}</Text>
           </PostContentView>
         </PostTopView>
         <PostBottomView>
@@ -261,12 +261,12 @@ const VideoDetail = () => {
             {comments.map((comment, index) => (
               <View key={index} style={{display:'flex', flexDirection:'row', gap:10}}>
                 <View>
-                  <Text style={{fontSize:18, fontWeight: 'bold'}}>
+                  <Text style={{fontSize:22, fontWeight: 'bold'}}>
                     {comment.memberNickname}
                   </Text>
                 </View>
                 <View>
-                  <Text style={{fontSize:16}}>
+                  <Text style={{fontSize:20}}>
                     {comment.commentContent}
                   </Text>
                 </View>
@@ -289,8 +289,8 @@ const styles = StyleSheet.create({
     right: 0,
   },
   input: {
-    height: 40,
-    width: 240,
+    height: '60%',
+    width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
@@ -317,7 +317,7 @@ const UserNameView = styled.View`
   justify-content: center;
 `
 const UserNameText = styled.Text`
-  fontSize: 20px;
+  fontSize: 25px;
   font-weight: 900;
   color: black;
   margin-left: 10px;
@@ -332,7 +332,7 @@ const PostTopView = styled.View`
 `
 const PostBottomView = styled.View`
   flex: 1.2;
-  padding-left: 10px;
+  padding-left: 20px;
   
 `
 const PostLikedView = styled.View`
@@ -340,14 +340,16 @@ const PostLikedView = styled.View`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  padding-left: 10px;
+  padding-left: 20px;
   alignItems: center;
 `
 const PostContentView = styled.View`
   flex: 1.5;
   display: flex;
-  padding-left: 10px;
+  padding-left: 20px;
   padding-right: 10px;
+  border-bottom-width: 1px;
+  border-color: gray;
 `
 // -------------------------------
 const PostBottomSearch = styled.View`

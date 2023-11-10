@@ -4,7 +4,6 @@ import os
 import mediapipe as mp
 import json
 
-
 def get_params(request): # Function to get params
     if 'video_name' not in request.args:
         return "None"
@@ -124,7 +123,6 @@ def video_process(video_name): # Function to extract the location of user's wris
                 folderpath = make_thumbnail_folder() # thumbnails folder 만드는 함수
                 imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
                 check_upload = thumbnail_upload(folderpath, imgname)
-                # color_classification(image) # 색상 분류 / 이미지 덮어씌우기
                 print('들어갑니다. detectron2')
                 hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
                 cnt += 1
@@ -156,16 +154,19 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 def hold_extraction(image): # Function to extract hold in image using detectron2
-    # current_directory = os.path.dirname(os.path.abspath(__file__))
+    # print(os.getcwd())
+    newpath = os.getcwd() + '\\detectron2'
+    os.chdir(newpath)
     print(os.getcwd())
-    from detectron2 import newtectron as dt
-    func_path = "detectron2/newtectron"
-    # current_directory = os.getcwd() + '\\detectron2'
-    # print(current_directory)
-    # os.chdir(current_directory)
-    # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r)]]
+    import newtectron as dt
+    # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
     results = dt.get_hold_info(image)
-    print(results)
+    # print(results)
+    # print(os.getcwd())
+    newpath = os.getcwd()[:-11]
+    # print(newpath)
+    os.chdir(newpath)
+    # print(os.getcwd())
     return [20, 20, 20, 20]
 
 def color_classification(img_path): # Function to classify color in image
@@ -227,4 +228,3 @@ def color_classification(img_path): # Function to classify color in image
     cv2.imshow('img_color', img_result)
 
     cv2.waitKey(0)
-

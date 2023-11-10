@@ -30,7 +30,7 @@ bgr_palette = {
   "보라" : (139, 68, 88),
   "하양" : (224, 239, 237),
   "초록" : (139, 170, 57),
-  "핑크" : (11, 52, 227),
+  "핑크" : (216, 81, 158),
   "파랑" : (167, 64, 1),
   "주황" : (1, 124, 231),
   "민트" : (200, 181, 93),
@@ -108,16 +108,18 @@ def get_hold_info(img):
         euc_dist += (bgr_color[i] - value[i]) ** 2
       if euc_dist < dist:
         predicted_color = key
+        dist = euc_dist
 
     box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, bgr_color, predicted_color])
 
   # 이미지에 추출한 rgb 그려서 출력
   img2 = copy.deepcopy(img)
+  img3 = copy.deepcopy(img)
   for box in box_info:
     cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
-    print(box[6])
+    cv2.rectangle(img=img3, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=bgr_palette[box[6]], thickness=-1)
   
-  fig, (ax1, ax2) = plt.subplots(1, 2)
+  fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
   ax1.imshow(img[:, :, ::-1])
   ax1.axis('off')
   ax1.set_title('Original')
@@ -125,6 +127,10 @@ def get_hold_info(img):
   ax2.imshow(img2[:, :, ::-1])
   ax2.axis('off')
   ax2.set_title('Detected holds')
+  
+  ax3.imshow(img3[:, :, ::-1])
+  ax3.axis('off')
+  ax3.set_title('Categorized holds')
 
   fig.tight_layout()
   plt.show()

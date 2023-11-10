@@ -65,13 +65,14 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 mp_pose = mp.solutions.pose
 
-video_path = "../video/test2.mp4"
-cap = cv2.VideoCapture(video_path)
+video_path = "../video/test1.mp4"
+# cap = cv2.VideoCapture(video_path)
 # with mp_hands.Hands(
-#     model_complexity=0,
+#     static_image_mode = True,
+#     model_complexity=1,
 #     max_num_hands=2,
-#     min_detection_confidence=0.5,
-#     min_tracking_confidence=0.5) as hands:
+#     min_detection_confidence=0.3,
+#     min_tracking_confidence=0.4) as hands:
 #     while True:
 #         status, image = cap.read()
 #         # print(status, image)
@@ -113,24 +114,30 @@ cap = cv2.VideoCapture(video_path)
 
 cap = cv2.VideoCapture(video_path)
 with mp_pose.Pose(
-        min_detection_confidence=0.5,
-        min_tracking_confidence=0.5) as pose:
-    while cap.isOpened():
+    static_image_mode=True,
+    min_detection_confidence=0.3,
+    min_tracking_confidence=0.4,
+    model_complexity = 2) as pose:
+    while True:
         success, image = cap.read()
         image = cv2.resize(image, (450, 450))
         if not success:
             print("동영상을 찾을 수 없습니다.")
-            # 동영상을 불러올 경우는 'continue' 대신 'break'를 사용합니다.
             break
 
-        # 필요에 따라 성능 향상을 위해 이미지 작성을 불가능함으로 기본 설정합니다.
         image.flags.writeable = False
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = pose.process(image)
-
-        # 포즈 주석을 이미지 위에 그립니다.
+        h, w, c = image.shape
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        for i in range(15, 17):
+            position_wrist = results.pose_landmarks.landmark[mp_pose.PoseLandmark(i).value]
+            if position_wrist:
+                print(mp_pose.PoseLandmark(i).name)
+                print(position_wrist)
+                dx, dy = position_wrist.x * w, position_wrist.y * h
+                print('dx, dy', dx, dy)
         mp_drawing.draw_landmarks(
             image,
             results.pose_landmarks,

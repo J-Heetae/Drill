@@ -68,7 +68,7 @@ const Mypage = () => {
 
   const [nowLevel, setNowLevel] = useState(0);
   const [maxLevel, setMaxLevel] = useState(81);
-  const [memberL, setMemberL] = useState("difficulty1");
+  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
 
   const giveLevel = async () => {
     console.log("go?")
@@ -86,7 +86,29 @@ const Mypage = () => {
       console.log('랭킹 데이터:', response.data);
       setMaxLevel(response.data.max_score);
       setNowLevel(response.data.member_score);
-      setMemberL(response.data.difficulty); 
+      setMemberL(response.data.difficulty);
+      if(response.data.difficulty=='difficulty1'){
+        setMemberL(require("../asset/icons/difficulty1.png"));
+      }else if(response.data.difficulty=='difficulty2'){
+        setMemberL(require("../asset/icons/difficulty2.png"));
+      }else if(response.data.difficulty=='difficulty3'){
+        setMemberL(require("../asset/icons/difficulty3.png"));
+      }else if(response.data.difficulty=='difficulty4'){
+        setMemberL(require("../asset/icons/difficulty4.png"));
+      }else if(response.data.difficulty=='difficulty5'){
+        setMemberL(require("../asset/icons/difficulty5.png"));
+      }else if(response.data.difficulty=='difficulty6'){
+        setMemberL(require("../asset/icons/difficulty6.png"));
+      }else if(response.data.difficulty=='difficulty7'){
+        setMemberL(require("../asset/icons/difficulty7.png"));
+      }else if(response.data.difficulty=='difficulty8'){
+        setMemberL(require("../asset/icons/difficulty8.png"));
+      }else if(response.data.difficulty=='difficulty9'){
+        setMemberL(require("../asset/icons/difficulty9.png"));
+      }else{
+        setMemberL(require("../asset/icons/difficulty10.png"));
+      }
+
 
     } catch (error) {
       // 요청 실패
@@ -221,18 +243,7 @@ const Mypage = () => {
       console.error('로그아웃 오류:', error);
     }
   };
-  const img = {
-    difficulty1: require("../asset/icons/difficulty1.png"),
-    difficulty2: require("../asset/icons/difficulty2.png"),
-    difficulty3: require("../asset/icons/difficulty3.png"),
-    difficulty4: require("../asset/icons/difficulty4.png"),
-    difficulty5: require("../asset/icons/difficulty5.png"),
-    difficulty6: require("../asset/icons/difficulty6.png"),
-    difficulty7: require("../asset/icons/difficulty7.png"),
-    difficulty8: require("../asset/icons/difficulty8.png"),
-    difficulty9: require("../asset/icons/difficulty9.png"),
-    difficulty10: require("../asset/icons/difficulty10.png"),
-  }
+  
 
 
   return (
@@ -241,7 +252,7 @@ const Mypage = () => {
         <UserInfoView>
           <UserNameText>
             <Image
-              source={require('../asset/icons/profile_hold.png')}
+              source={memberL}
               resizeMode="contain"
               style={{
                 width: 30,

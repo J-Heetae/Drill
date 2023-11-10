@@ -111,6 +111,7 @@ const Main = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
+  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
 
   
 
@@ -145,6 +146,48 @@ const Main = () => {
 
   const [defaultCenter, setDefaultCenter] = useState(userInfo.place);
 
+  const giveLevel = async () => {
+    console.log("go?")
+    try {
+        const response = await axios.get('https://k9a106.p.ssafy.io/api/member/mypage', {
+        params: {
+          memberNickname: userInfo.nickName,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+      setMemberL(response.data.difficulty);
+      if(response.data.difficulty=='difficulty1'){
+        setMemberL(require("../asset/icons/difficulty1.png"));
+      }else if(response.data.difficulty=='difficulty2'){
+        setMemberL(require("../asset/icons/difficulty2.png"));
+      }else if(response.data.difficulty=='difficulty3'){
+        setMemberL(require("../asset/icons/difficulty3.png"));
+      }else if(response.data.difficulty=='difficulty4'){
+        setMemberL(require("../asset/icons/difficulty4.png"));
+      }else if(response.data.difficulty=='difficulty5'){
+        setMemberL(require("../asset/icons/difficulty5.png"));
+      }else if(response.data.difficulty=='difficulty6'){
+        setMemberL(require("../asset/icons/difficulty6.png"));
+      }else if(response.data.difficulty=='difficulty7'){
+        setMemberL(require("../asset/icons/difficulty7.png"));
+      }else if(response.data.difficulty=='difficulty8'){
+        setMemberL(require("../asset/icons/difficulty8.png"));
+      }else if(response.data.difficulty=='difficulty9'){
+        setMemberL(require("../asset/icons/difficulty9.png"));
+      }else{
+        setMemberL(require("../asset/icons/difficulty10.png"));
+      }
+    } catch (error) {
+      // 요청 실패
+      console.error('유저 데이터를 불러오는 데 실패', error);
+    }
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -178,7 +221,8 @@ const Main = () => {
 
   
     fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
-  
+    giveLevel();
+
   }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
  
   useEffect(() => {
@@ -209,7 +253,7 @@ const Main = () => {
         <UserNameView>
           <UserNameText>
             <Image
-              source={require('../asset/icons/profile_hold.png')}
+              source={memberL}
               resizeMode="contain"
               style={{
                 width: 40,

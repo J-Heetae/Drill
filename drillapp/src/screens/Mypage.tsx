@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { API_URL_Local } from "@env";
+import * as Progress from "react-native-progress";
 
 type DataItem = {
   key: string;
@@ -64,6 +65,34 @@ const Mypage = () => {
   const [selectedCourse, setSelectedCourse] = useState("course0");
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
+
+  const [nowLevel, setNowLevel] = useState(0);
+  const [maxLevel, setMaxLevel] = useState(81);
+  const [memberL, setMemberL] = useState("difficulty1");
+
+  const giveLevel = async () => {
+    console.log("go?")
+    try {
+        const response = await axios.get('https://k9a106.p.ssafy.io/api/member/mypage', {
+        params: {
+          memberNickname: userInfo.nickName,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+      setMaxLevel(response.data.max_score);
+      setNowLevel(response.data.member_score);
+      setMemberL(response.data.difficulty); 
+
+    } catch (error) {
+      // 요청 실패
+      console.error('유저 데이터를 불러오는 데 실패', error);
+    }
+  };
 
   const data: DataItem[] = [
     {key:'center0',value:'전체'},
@@ -169,6 +198,7 @@ const Mypage = () => {
 
   useEffect(() => {
     fetchPostList();
+    giveLevel();
   }, []);
   useEffect(() => {
     fetchPostList();
@@ -191,6 +221,19 @@ const Mypage = () => {
       console.error('로그아웃 오류:', error);
     }
   };
+  const img = {
+    difficulty1: require("../asset/icons/difficulty1.png"),
+    difficulty2: require("../asset/icons/difficulty2.png"),
+    difficulty3: require("../asset/icons/difficulty3.png"),
+    difficulty4: require("../asset/icons/difficulty4.png"),
+    difficulty5: require("../asset/icons/difficulty5.png"),
+    difficulty6: require("../asset/icons/difficulty6.png"),
+    difficulty7: require("../asset/icons/difficulty7.png"),
+    difficulty8: require("../asset/icons/difficulty8.png"),
+    difficulty9: require("../asset/icons/difficulty9.png"),
+    difficulty10: require("../asset/icons/difficulty10.png"),
+  }
+
 
   return (
     <ContainerView>
@@ -198,11 +241,12 @@ const Mypage = () => {
         <UserInfoView>
           <UserNameText>
             <Image
+            
               source={require('../asset/icons/profile_hold.png')}
               resizeMode="contain"
               style={{
-                width: 40,
-                height: 40,
+                width: 30,
+                height: 30,
               }}
             />
             {userInfo.nickName}
@@ -210,9 +254,16 @@ const Mypage = () => {
               <Text>로그아웃</Text>
             </TouchableOpacity>
           </UserNameText>
-          <UserExpView>
-
-          </UserExpView>
+          <BarView>
+            <Bar>
+              <Progress.Bar
+                progress={nowLevel / maxLevel}
+                width={null}
+                height={15}
+                color={"#5AC77C"}
+              />
+            </Bar>
+          </BarView>
         </UserInfoView>
         <SortMenuView>
           <SortMenuTitle>내 영상 모아보기</SortMenuTitle>
@@ -372,12 +423,6 @@ const UserNameText = styled.Text`
   font-weight: 900;
   color: black;
 `
-const UserExpView = styled.View`
-  width: 280px;
-  height: 30px;
-  background-color: #DDDADA;
-  border-radius: 30px;
-`
 // -------------------------------
 
 const SortMenuTitle = styled.Text`
@@ -396,5 +441,16 @@ const SortMenu = styled.View`
   border-radius: 50px;
   justify-content: center;
   align-items: center;
+`
+
+const BarView = styled.View`
+  width: 280px;
+  padding: 0 15px;
+  flex-direction: row;
+`
+ 
+const Bar = styled.View`
+  margin: 3px 0;
+  flex: 1;
 `
 export default Mypage;

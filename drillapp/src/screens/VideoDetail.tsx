@@ -197,7 +197,7 @@ const VideoDetail = () => {
           <UserNameText>{data?.memberNickname}</UserNameText>
         </UserNameView>
         <UserVideoView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          {isLoading && <Text>잠시 기다려 주세요</Text>}
+          {isLoading && <Text style={{color: 'black', fontSize:20}}>잠시 기다려 주세요</Text>}
           <Video 
             // Can be a URL or a local file.
             source={{uri: background}}

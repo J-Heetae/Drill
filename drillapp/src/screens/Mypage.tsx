@@ -142,6 +142,7 @@ const Mypage = () => {
       });
 
       // 서버 응답이 유효한 데이터를 포함하고 있는지 확인
+      console.log('마이페이지 유저 닉네임', userInfo.nickName)
       if (response.data && response.data.postPage && response.data.postPage.content) {
         // 게시글이 있을 때
         setPosts(response.data.postPage.content);

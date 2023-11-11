@@ -75,7 +75,7 @@ const Freplace = () => {
   return (
     <ContainerView>
       <ContentView>
-        <TitleText>
+        <TitleText style={{color: 'black'}}>
           자주가는 지점을 설정해주세요.
         </TitleText>
         <Dropdown 
@@ -83,6 +83,7 @@ const Freplace = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={data}
             maxHeight={200}
@@ -118,24 +119,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dropdown1: {
-    width: 280,
-    height: 40,
+    width: 350,
+    height: 50,
     borderColor: '#000',
     borderWidth: 1,
     marginTop: 20,
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
+    color: '#000',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
+    color: '#000',
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 18,
+    color: '#000',
   },
+  itemTextStyle: {
+    color: '#000',
+    fontSize: 18,
+  }
 });
 
 const ContainerView = styled.View`
@@ -152,13 +160,13 @@ const ContentView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 280px;
+  width: 350px;
   justify-content: center;
 `
 // -------------------------------
 
 const TitleText = styled.Text`
-  font-size: 20px;
+  font-size: 25px;
   font-family: 'SCDream4';
 `
 export default Freplace;

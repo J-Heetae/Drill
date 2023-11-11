@@ -75,13 +75,14 @@ const Nickname : React.FC = () => {
   return (
     <ContainerView>
       <ContentView>
-        <TitleText>
+        <TitleText style={{color:'black'}}>
           닉네임을 설정해주세요.
         </TitleText>
         <TextInput
           onChange={(e) => onChangeText(e.nativeEvent.text)}
           value={text}
           placeholder='닉네임'
+          placeholderTextColor='black'
           style={styles.input}  
         />
         {text.length > 0 && isDuplicate && (
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
-    width: 280,
+    height: 50,
+    width: 350,
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 8,
@@ -137,7 +138,7 @@ const ContentView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 280px;
+  width: 350px;
   justify-content: center;
 `
 // -------------------------------

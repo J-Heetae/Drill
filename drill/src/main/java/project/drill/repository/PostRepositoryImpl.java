@@ -523,6 +523,126 @@ public class PostRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
+	public Page<PostPageDto> findByMemberMemberNicknameAndLiked(Pageable pageable, String memberNickname) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.course.isNew.eq(true)
+						.and(post.member.memberNickname.eq(memberNickname)))
+				.leftJoin(liked).on(liked.post.eq(post))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findByCourseNameAndMemberNicknameByLiked(Pageable pageable, String courseName, String memberNickname) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.course.isNew.eq(true)
+						.and(post.member.memberNickname.eq(memberNickname))
+						.and(post.course.courseName.eq(courseName)))
+				.leftJoin(liked).on(liked.post.eq(post))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findByCourseNameAndMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, String courseName, String memberNickname) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.member.memberNickname.eq(memberNickname)
+						.and(post.course.courseName.eq(courseName))
+						.and(post.course.isNew.eq(true)))
+				.groupBy(post)
+				.orderBy(post.postWriteTime.desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findByCourseNameByLiked(Pageable pageable, String courseName) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.course.isNew.eq(true)
+						.and(post.course.courseName.eq(courseName)))
+				.leftJoin(liked).on(liked.post.eq(post))
+				.groupBy(post)
+				.orderBy(liked.likedId.count().coalesce(0L).desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
+	public Page<PostPageDto> findByCourseNameOrderByPostWriteTimeDesc(Pageable pageable, String courseName) {
+		QPost post = QPost.post;
+		QLiked liked = QLiked.liked;
+		QueryResults<Tuple> queryResults = queryFactory
+				.select(post.postId,post.postThumbnail)
+				.from(post)
+				.where(post.course.isNew.eq(true)
+						.and(post.course.courseName.eq(courseName)))
+				.groupBy(post)
+				.orderBy(post.postWriteTime.desc())
+				.offset(pageable.getOffset())
+				.limit(pageable.getPageSize())
+				.fetchResults();
+		List<PostPageDto> postPageDtoList = queryResults.getResults().stream()
+				.map(tuple -> new PostPageDto(
+						tuple.get(post.postId),
+						tuple.get(post.postThumbnail)
+				))
+				.collect(Collectors.toList());
+		return new PageImpl<>(postPageDtoList,pageable, queryResults.getTotal());
+	}
+
+	@Override
 	public Long findMyRanking(String memberNickname, String courseName) {
 		List<Long> rankings = queryFactory
 				.select(post.postId)

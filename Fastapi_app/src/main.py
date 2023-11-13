@@ -17,7 +17,7 @@ from addcomponents import utilities as ut
 app = FastAPI()
 
 origins = [
-    "http://localhost:8001/*",
+    "http://localhost:8000/*",
     "http://k9a106a.p.ssafy.io*"
 ]
 
@@ -51,7 +51,7 @@ def docker_container_path_check(): # docker container 내부 path
 
 @app.get("/")
 async def read_root():
-    return {"0" : "fastapi 2번째 8001 포트 다시 체크"}
+    return {"0" : "fastapi 1번째 8000 포트 다시 체크"}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
@@ -191,4 +191,4 @@ async def imguploadtoaws(img_ids: str):
 
  
 if __name__ == "__main__":
-    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8001, reload = True)
+    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8000, reload = True)

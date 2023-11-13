@@ -28,7 +28,7 @@ pipeline {
                 // ���� ���� 'fasttwo' �����̳� ����
                 sh 'docker rm -f fasttwo'
                 // ���ο� �̹����� 'fast' �����̳ʸ� ��׶��忡�� ����
-                sh 'docker run -d --name fasttwo -p 8001:8001 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
+                sh 'docker run -d --name fasttwo -p 8000:8000 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
             }
         }
 

@@ -64,7 +64,7 @@ def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
 @app.get("/video/download/{filename}")
-def amazon_s3(filename: str):
+async def amazon_s3(filename: str):
     # filename = ut.get_params(request)
     print(filename)
     now_path = docker_container_path_check() # docker container 내부 path
@@ -75,6 +75,11 @@ def amazon_s3(filename: str):
     bucket_name = os.environ.get("S3_BUCKET")
     print(bucket_name)
     print(f"Video/{filename}.mp4")
+    try: # S3에서 파일 존재 확인
+        s3.head_object(Bucket=bucket_name, Key=f"Video/{filename}.mp4")
+    except Exception as e:
+        if e.response['Error']['Code'] == '404':
+            return {"file_exists": False}
     with open(file_path, 'wb') as fi:
         try:
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)

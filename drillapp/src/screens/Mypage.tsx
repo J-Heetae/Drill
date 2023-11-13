@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, TextInput, StyleSheet, Image, Text, Button, TouchableOpacity } from 'react-native';
+import { FlatList, TextInput, StyleSheet, Image, Text, Button, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootState } from "../modules/redux/RootReducer";
@@ -375,31 +375,43 @@ const styles = StyleSheet.create({
   },
   dropdown1: {
     width: '35%',
-    height: '50%',
+    height: '60%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   dropdown2: {
-    width: '24%',
-    height: '50%',
+    width: '22%',
+    height: '60%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    height: '90%',
+    fontSize: 20,
     color: '#000',
   },
   itemTextStyle: {

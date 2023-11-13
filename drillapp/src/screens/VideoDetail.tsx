@@ -79,9 +79,8 @@ const VideoDetail = () => {
     setIsLoading(false);
   };
   const videoRef = useRef<VideoRef>(null);
-  const background =
-    'https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/climb3.mp4';
-
+  const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/"
+  
   const API_URL1 = `${API_URL_Local}post/read`;
   const API_URL2 = `${API_URL_Local}comment/`;
   const API_URL3 = `${API_URL_Local}comment/list/${route.params?.id}`;
@@ -214,8 +213,8 @@ const VideoDetail = () => {
           )}
           <Video
             // Can be a URL or a local file.
-            source={{uri: background}}
-            // Store reference
+            source={{uri: background+data?.postVideo}}
+            // Store reference  
             ref={videoRef}
             controls={true}
             paused={false}

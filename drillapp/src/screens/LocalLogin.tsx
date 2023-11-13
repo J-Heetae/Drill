@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Image, TextInput, Alert,KeyboardAvoidingView,ScrollView, Text } from 'react-native';
+import { Image, TextInput, Alert,KeyboardAvoidingView,ScrollView, Pressable, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -84,27 +84,46 @@ const LocalLogin = () => {
               }}
             />
           </LogoView>
-          <Text style={{color:'#000'}}>이메일</Text>
           <TextInput
             placeholder="아이디"
+            placeholderTextColor='black'
             value={username}
             onChangeText={(text) => setUsername(text)}
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
+            style={{ height: 60, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black', fontSize:20 }}
           />
-          <Text style={{color:'#000'}}>비밀번호</Text>
           <TextInput
             placeholder="비밀번호"
+            placeholderTextColor='black'
             value={password}
             onChangeText={(text) => setPassword(text)}
             secureTextEntry
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
+            style={{ height: 60, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black', fontSize:20 }}
           />
-          <LoginButton onPress={handleLogin} title="로그인" />
+          <Pressable style={styles.button} onPress={handleLogin}>
+            <Text style={styles.text}>로그인</Text>
+          </Pressable>
         </ScrollView>
       </ContainerView>
     // </KeyboardAvoidingView>
   );
 };
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: '#5AC77C',
+  },
+  text: {
+    fontSize: 18,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+});
 
 const ContainerView = styled.View`
   flex: 1;

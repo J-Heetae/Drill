@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Image, StyleSheet, Text } from 'react-native';
+import { Image, StyleSheet, Text, ImageSourcePropType  } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RootState } from "../modules/redux/RootReducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -85,8 +85,8 @@ const Main = () => {
 
   const giveMeDifficulty = async () => {
     try {
-      console.log("selextedCenter: "+selectedCenter);
-      const response = await axios.get('https://k9a106.p.ssafy.io/api/ranking/findDifficulty', {
+      console.log("설마 님이");
+      const response = await axios.get('https://k9a106.p.ssafy.io/api/ranking/first', {
         params: {
           centerName: selectedCenter,
         },
@@ -96,7 +96,8 @@ const Main = () => {
       });
 
       // 요청 성공
-      console.log('랭킹 데이터:', response.data);
+      // console.log('랭킹 데이터: '+ response.data.courseName+' 최종');
+      setSelectedCourseName(response.data.courseName);
     } catch (error) {
       // 요청 실패
       console.error('랭킹 데이터를 불러오는 데 실패', error);
@@ -137,7 +138,7 @@ const Main = () => {
   const [myRanking, setMyRanking] = useState(0);
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
-  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
+  const [memberL, setMemberL] = useState<ImageSourcePropType>(require("../asset/icons/difficulty1.png"));
 
   
 
@@ -283,7 +284,7 @@ const Main = () => {
           <UserNameText>
             <Image
               source={memberL}
-              resizeMode="contain"
+              resizeMode="cover"
               style={{
                 width: 40,
                 height: 40,

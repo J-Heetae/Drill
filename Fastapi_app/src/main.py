@@ -71,7 +71,7 @@ async def amazon_s3(filename: str):
     with open(file_path, 'wb') as fi:
         try:
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)
-        except:
+        except Exception as e:
             return JSONResponse(content= {"download": False, "check": "영상 다운로드 불가", "status" : 404})
     if os.path.exists(file_path):
         content = {"download": True, "status" : 200}

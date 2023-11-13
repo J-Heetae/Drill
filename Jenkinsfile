@@ -25,17 +25,14 @@ pipeline {
         // docker Deploy
         stage('Deploy') {
             steps {
-                // ���� ���� 'fasttwo' �����̳� ����
                 sh 'docker rm -f fasttwo'
-                // ���ο� �̹����� 'fast' �����̳ʸ� ��׶��忡�� ����
-                sh 'docker run -d --name fasttwo -p 8001:8001 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
+                sh 'docker run -d --name fasttwo -p 8001:8001 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video ${imagename}:${version}'
             }
         }
 
         // docker push
         stage('Finish') {
             steps {
-                // ������ �ʴ� (dangling) �̹����� ã�� �����մϴ�.
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
         }

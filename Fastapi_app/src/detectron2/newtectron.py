@@ -33,11 +33,11 @@ def bgr_to_hsv(bgr):
 hsv_palette = {
   "빨강" : bgr_to_hsv([83, 75, 249]),
   "검정" : bgr_to_hsv([21, 22, 20]),
-  "노랑" : bgr_to_hsv([6, 208, 227]),
+  "노랑" : bgr_to_hsv([91, 226, 255]),
   "보라" : bgr_to_hsv([139, 68, 88]),
-  "하양" : bgr_to_hsv([224, 239, 237]),
-  "초록" : bgr_to_hsv([139, 170, 57]),
-  "핑크" : bgr_to_hsv([11, 52, 227]),
+  "하양" : bgr_to_hsv([217, 225, 224]),
+  "초록" : bgr_to_hsv([66, 107, 68]),
+  "핑크" : bgr_to_hsv([158, 81, 216]),
   "파랑" : bgr_to_hsv([167, 64, 1]),
   "주황" : bgr_to_hsv([1, 124, 231]),
   "민트" : bgr_to_hsv([200, 181, 93]),
@@ -96,22 +96,27 @@ def get_hold_info(img):
           s += hsv_color[1]
           v += hsv_color[2]
           hsv_cnt += 1
+    
     coordinates = outputs["instances"].pred_boxes[i].tensor.tolist()[0]
     # 좌표 추출
     top_left_x = coordinates[0]
     top_left_y = coordinates[1]
     bottom_right_x = coordinates[2]
     bottom_right_y = coordinates[3]
-    # center_x = (top_left_x + bottom_right_x) / 2
-    # center_y = (top_left_y + bottom_right_y) / 2
+    center_x = int((top_left_x + bottom_right_x) / 2)
+    center_y = int((top_left_y + bottom_right_y) / 2)
     # height = bottom_right_y - top_left_y
     # width = bottom_right_x - top_left_x
     
     # 종류 추출
     category = "volume" if outputs["instances"].pred_classes[i] else "hold"
     
-    # 평균 HSV값 추출
+    # 1. 평균 HSV값 추출
     hsv_color = (int(h/hsv_cnt), int(s/hsv_cnt), int(v/hsv_cnt))
+    
+    # 2. 중앙값을 RGB로 추출 -> HSV로 변환
+    # center_bgr = img[center_x, center_y]
+    # hsv_color = bgr_to_hsv([int(center_bgr[2]), int(center_bgr[1]), int(center_bgr[0])]) 
     
     predicted_color = ""
     dist = 9999999
@@ -119,7 +124,7 @@ def get_hold_info(img):
     # H 0.5, S 0.25, V 0.25 가중치로 유사도 계산
     for key, value in hsv_palette.items():
       hsv_dist = 0
-      hsv_dist += abs(hsv_color[0] - value[0]) * 0.5 + abs(hsv_color[1] - value[1]) * 0.25 + abs(hsv_color[2] - value[2]) * 0.25
+      hsv_dist += abs(hsv_color[0] - value[0]) * 0.6 + abs(hsv_color[1] - value[1]) * 0.2 + abs(hsv_color[2] - value[2]) * 0.2
       if hsv_dist < dist:
         predicted_color = key
         dist = hsv_dist
@@ -144,18 +149,22 @@ def get_hold_info(img):
     cv2.rectangle(img=img3, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=hsv_palette[box[6]], thickness=-1)
     print(box[6])
   
-  fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+  fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4)
   ax1.imshow(img[:, :, ::-1])
   ax1.axis('off')
   ax1.set_title('Original')
-
-  ax2.imshow(img2[:, :, ::-1])
-  ax2.axis('off')
-  ax2.set_title('Detected holds')
   
-  ax3.imshow(img3[:, :, ::-1])
+  ax2.imshow(hsv_img[:, :, ::-1])
+  ax2.axis('off')
+  ax2.set_title('HSV Converted')
+
+  ax3.imshow(img2[:, :, ::-1])
   ax3.axis('off')
-  ax3.set_title('Categorized holds')
+  ax3.set_title('Detected holds')
+  
+  ax4.imshow(img3[:, :, ::-1])
+  ax4.axis('off')
+  ax4.set_title('Categorized holds')
 
   fig.tight_layout()
   plt.show()

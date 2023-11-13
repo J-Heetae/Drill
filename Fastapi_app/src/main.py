@@ -75,19 +75,19 @@ async def amazon_s3(filename: str):
     bucket_name = os.environ.get("S3_BUCKET")
     print(bucket_name)
     print(f"Video/{filename}.mp4")
-    try: # S3에서 파일 존재 확인
-        s3.head_object(Bucket=bucket_name, Key=f"Video/{filename}.mp4")
-    except Exception as e:
-        return JSONResponse(content = {"download": False})
+    # try: # S3에서 파일 존재 확인
+    #     s3.head_object(Bucket=bucket_name, Key=f"Video/{filename}.mp4")
+    # except Exception as e:
+    #     return JSONResponse(content = {"download": False, "check": "S3에 영상이 없습니다."})
     with open(file_path, 'wb') as fi:
         try:
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)
         except:
-            return JSONResponse(content= {"download": False,"status" : 404})
+            return JSONResponse(content= {"download": False, "check": "영상 다운로드 불가", "status" : 404})
     if os.path.exists(file_path):
         content = {"download": True, "status" : 200}
     else:
-        content = {"download": False, "status" : 400}
+        content = {"download": False, "check": "영상이 폴더에 없습니다.", "status" : 400}
     return JSONResponse(content = content)
 
 @app.get("/video/remove/{filename}")

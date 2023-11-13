@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        imagename = "fast_api_test_two"
+        imagename = "fast_api_test"
         registryCredential = 'admin'
         version = 'latest'
         dockerImage = ''
@@ -25,10 +25,10 @@ pipeline {
         // docker Deploy
         stage('Deploy') {
             steps {
-                // ���� ���� 'fasttwo' �����̳� ����
-                sh 'docker rm -f fasttwo'
+                // ���� ���� 'fast' �����̳� ����
+                sh 'docker rm -f fast'
                 // ���ο� �̹����� 'fast' �����̳ʸ� ��׶��忡�� ����
-                sh 'docker run -d --name fasttwo -p 8000:8000 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
+                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
             }
         }
 

@@ -99,6 +99,7 @@ def video_process(video_name): # Function to extract the location of user's wris
     video_name += '.mp4'
     mp_pose = mp.solutions.pose
     video_path = os.getcwd() + "/video/" + video_name
+    print(video_path)
 
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS) // 3

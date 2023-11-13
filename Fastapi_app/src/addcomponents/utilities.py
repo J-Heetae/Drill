@@ -160,7 +160,7 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 def hold_extraction(image): # Function to extract hold in image using detectron2
     # print(os.getcwd())
-    newpath = os.getcwd() + '\\detectron2'
+    newpath = os.getcwd() + '/src/detectron2'
     os.chdir(newpath)
     print(os.getcwd())
     import newtectron as dt
@@ -168,7 +168,7 @@ def hold_extraction(image): # Function to extract hold in image using detectron2
     results = dt.get_hold_info(image)
     # print(results)
     # print(os.getcwd())
-    newpath = os.getcwd()[:-11]
+    newpath = os.getcwd()[:-15]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())

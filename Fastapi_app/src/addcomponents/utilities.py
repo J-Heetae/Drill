@@ -85,10 +85,10 @@ def compare_location(wrist_positions, hold_positions):
     print(wrist_positions)
     print(hold_positions)
     print('--------------------------------------')
-    lx, ly, rx, ry = hold_positions
-    wrist_y, wrist_x = wrist_positions
-    if ly < wrist_y < ry and lx < wrist_x < rx:
-        return True
+    # lx, ly, rx, ry = hold_positions
+    # wrist_y, wrist_x = wrist_positions
+    # if ly < wrist_y < ry and lx < wrist_x < rx:
+    #     return True
     return False
 
 def video_process(video_name): # Function to extract the location of user's wrist from a video file

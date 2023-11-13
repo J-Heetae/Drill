@@ -21,6 +21,7 @@ AWS.config.update({
 
 type RootStackParamList = {
   Video: undefined;
+  TabNavigator: undefined;
 };
 type DataItem = {
   key: string;
@@ -31,7 +32,7 @@ type DataItem = {
 const s3 = new AWS.S3();
 
 const Upload = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video'>>()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video', 'TabNavigator'>>()
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const [isHovered, setIsHovered] = useState(false);
   const [text, setText] = useState('');
@@ -151,7 +152,7 @@ const Upload = () => {
       setText('');
       setSelectedCenter('지점 선택');
       setSelectedHolder('홀드')
-      navigation.navigate("Video");
+      navigation.navigate("TabNavigator");
     } catch (error) {
       // 요청 실패
       console.log(postDto)
@@ -161,7 +162,7 @@ const Upload = () => {
   
   const VideoDownload = async () => {
     try {
-      const response = await axios.post(`https://k9106.p.ssafy.io/video/download/${postVideo}`
+      const response = await axios.post(`https://k9a106a.p.ssafy.io/video/download/${postVideo}`
       );
       console.log('영상 다운로드 성공', response)
     } catch (error) {
@@ -170,7 +171,7 @@ const Upload = () => {
   };
   const VideoProcess = async () => {
     try {
-      const response = await axios.get(`https://k9106.p.ssafy.io/video/process/${postVideo}`
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${postVideo}`
       );
       console.log('영상 처리 성공', response)
     } catch (error) {
@@ -193,6 +194,7 @@ const Upload = () => {
             <Text style={{color:'black', fontSize:25}}>※ 업로드 주의사항 ※</Text>
             <Text style={{color:'black', fontSize:18}}>1. 삼각대로 고정된 상태에서 영상을 촬영해주세요.</Text>
             <Text style={{color:'black', fontSize:18}}>2. 시작 지점과 끝 지점이 화면에 나와야합니다.</Text>
+            <Text style={{color:'black', fontSize:18}}>3. 업로드 영상 처리 시간이 걸리니 기다려주세요.</Text>
           </CautionView>
           <Spacer />
           <Spacer />

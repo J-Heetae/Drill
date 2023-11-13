@@ -81,6 +81,10 @@ def remove_video(video_name): # Function to delete video file in S3
     return res
 
 def compare_location(wrist_positions, hold_positions):
+    print('--------------------------------------')
+    print(wrist_positions)
+    print(hold_positions)
+    print('--------------------------------------')
     lx, ly, rx, ry = hold_positions
     wrist_y, wrist_x = wrist_positions
     if ly < wrist_y < ry and lx < wrist_x < rx:

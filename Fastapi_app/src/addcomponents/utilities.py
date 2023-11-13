@@ -160,7 +160,7 @@ def hold_extraction(image): # Function to extract hold in image using detectron2
     print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    results = dt.get_hold_info(image)
+    results = dt.get_hold_info(image, "주황")
     # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-11]

@@ -96,7 +96,7 @@ def remove_video(filename: str):
     print(filename)
     now_path = docker_container_path_check()
     print(now_path)
-    file_path = now_path + f"\\video\\{filename}.mp4"
+    file_path = os.path.join(now_path, f"video/{filename}.mp4")
     print(file_path)
     if os.path.isfile(file_path):
         print("파일 있어요. 제거합니다.")

@@ -69,13 +69,16 @@ def amazon_s3(filename: str):
     print(filename)
     now_path = docker_container_path_check() # docker container 내부 path
     print(now_path)
-    video_path = f"/video/{filename}.mp4"
+    video_path = f"video/{filename}.mp4"
     file_path = os.path.join(now_path, video_path) # 저장할 파일명 + 확장자 mp4
-    with open(file_path, 'wb') as f:
+    print(file_path)
+    bucket_name = os.environ.get("S3_BUCKET")
+    print(bucket_name)
+    with open(file_path, 'wb') as fi:
         try:
-            client_s3.download_fileobj(os.environ.get("S3_BUCKET"), f"Video/{filename}.mp4", f)
+            client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)
         except:
-            return JSONResponse(content= {"status" : 404})
+            return JSONResponse(content= {"download": False,"status" : 404})
     if os.path.exists(video_path):
         content = {"download": True, "status" : 200}
     else:

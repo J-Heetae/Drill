@@ -341,7 +341,7 @@ const UserNameView = styled.View`
   justify-content: center;
 `;
 const UserNameText = styled.Text`
-  fontsize: 25px;
+  font-size: 25px;
   font-weight: 900;
   color: black;
   margin-left: 10px;

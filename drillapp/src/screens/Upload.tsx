@@ -10,8 +10,8 @@ import AWS from 'aws-sdk';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
 import { useSelector } from "react-redux";
-import Modal from 'react-native-modal';
 import { API_URL_Local } from "@env";
+import Snackbar from "react-native-snackbar"
 
 AWS.config.update({
   accessKeyId: 'AKIA32XVP6DS7XK33DGC',
@@ -21,6 +21,7 @@ AWS.config.update({
 
 type RootStackParamList = {
   Video: undefined;
+  TabNavigator: undefined;
 };
 type DataItem = {
   key: string;
@@ -31,20 +32,21 @@ type DataItem = {
 const s3 = new AWS.S3();
 
 const Upload = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video'>>()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video', 'TabNavigator'>>()
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const [isHovered, setIsHovered] = useState(false);
   const [text, setText] = useState('');
   const [postThumbnail, setPostThumbnail] = useState<string | undefined>(undefined);
   const [postVideo, setPostVideo] = useState<string | undefined>(undefined);
+  const [postUri, setPostUri] = useState<string | undefined>(undefined);
   const [videourl, setVideourl] = useState('');
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
   };
 
-  const [selectedCenter, setSelectedCenter] = useState("지점 선택");
-  const [selectedHolder, setSelectedHolder] = useState("홀드");
+  const [selectedCenter, setSelectedCenter] = useState("center1");
+  const [selectedHolder, setSelectedHolder] = useState("S1하양연두_HD");
 
   const data: DataItem[] = [
     {key:'center1',value:'더클라임 홍대'},
@@ -59,23 +61,23 @@ const Upload = () => {
     {key:'center10',value:'더클라임 서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'difficulty1Course1',value:'하양'},
-    {key:'difficulty1Course2',value:'노랑'},
-    {key:'difficulty1Course3',value:'주황'},
-    {key:'difficulty2Course1',value:'초록'},
-    {key:'difficulty2Course2',value:'하양'},
-    {key:'difficulty2Course3',value:'노랑'},
-    {key:'difficulty3Course1',value:'주황'},
-    {key:'difficulty3Course2',value:'초록'},
+    {key:'S1하양연두_HD',value:'하양'},
+    {key:'S2노랑노랑_HD',value:'노랑'},
+    {key:'S3주황초록_HD',value:'주황'},
+    {key:'S4초록검정_HD',value:'초록'},
+    {key:'S5파랑빨강_HD',value:'하양'},
+    {key:'S1빨강핑크_HD',value:'노랑'},
+    {key:'S2보라파랑_HD',value:'주황'},
+    {key:'S3회색민트_HD',value:'초록'},
   ];
 
   const postDto = {
-    memberNickname: userInfo.nickName,
     center: selectedCenter,
-    postContent: text,
-    postVideo: postVideo,
     courseName: selectedHolder,
+    memberNickname: userInfo.nickName,
+    postContent: text,
     postThumbnail: postThumbnail,
+    postVideo: postVideo,
   };
 
   const uploadVideoToS3 = async (uri: string | undefined, fileName: string | undefined) => {
@@ -100,7 +102,6 @@ const Upload = () => {
         const result = await s3.upload(params).promise();
         console.log(result.Location);
         Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');
-        toggleModal();
       } catch (error) {
         console.error(error);
         Alert.alert('업로드 실패', '동영상을 업로드하지 못했습니다.');
@@ -121,10 +122,11 @@ const Upload = () => {
       console.log('파일이름---------------------------', fileName);
       console.log('URI---------------------------', uri);
       setPostVideo(fileName)
+      setPostUri(uri)
       const fileName_re = fileName?.replace(".mp4", ".jpg")
       console.log("바뀐 파일이름", fileName_re)
       setPostThumbnail(fileName_re)
-      uploadVideoToS3(uri, fileName);
+      // uploadVideoToS3(uri, fileName);
       setVideourl(`https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${fileName_re}`)
     } else {
       console.error('이미지가 선택되지 않았습니다.');
@@ -145,30 +147,58 @@ const Upload = () => {
       });
       // 요청 성공
       console.log('게시물 게시 성공', response);
-      Alert.alert('게시글 업로드 성공!');
+      uploadVideoToS3(postUri, postVideo);
       setVideourl('');
       setText('');
       setSelectedCenter('지점 선택');
       setSelectedHolder('홀드')
-      navigation.navigate("Video");
+      navigation.navigate("TabNavigator");
     } catch (error) {
       // 요청 실패
+      console.log(postDto)
       console.error('게시물 게시 실패', error);
     }
   };
-
-  // 모달 상태 변경
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  
+  const VideoDownload = async () => {
+    try {
+      const response = await axios.post(`https://k9a106a.p.ssafy.io/video/download/${postVideo}`
+      );
+      console.log('영상 다운로드 성공', response)
+    } catch (error) {
+      console.error('영상 다운로드 실패', error);
+    }
   };
-
+  const VideoProcess = async () => {
+    try {
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${postVideo}`
+      );
+      console.log('영상 처리 성공', response)
+    } catch (error) {
+      console.error('영상 처리 실패', error);
+    }
+  };
+  const SnackbarOpen = () => {
+    Snackbar.show({
+      text: 'Hello world',
+      duration: Snackbar.LENGTH_LONG,
+    });
+  }
 
   return (
     <ContainerView>
       <ScrollView>
+      <Spacer />
         <TopView>
+          <CautionView>
+            <Text style={{color:'black', fontSize:25}}>※ 업로드 주의사항 ※</Text>
+            <Text style={{color:'black', fontSize:18}}>1. 삼각대로 고정된 상태에서 영상을 촬영해주세요.</Text>
+            <Text style={{color:'black', fontSize:18}}>2. 시작 지점과 끝 지점이 화면에 나와야합니다.</Text>
+            <Text style={{color:'black', fontSize:18}}>3. 업로드 영상 처리 시간이 걸리니 기다려주세요.</Text>
+          </CautionView>
+          <Spacer />
+          <Spacer />
+          <Spacer />
           <TouchableHighlight
             onPress={() => { UploadVideo() }}
             underlayColor="#eee"
@@ -177,21 +207,15 @@ const Upload = () => {
           >
             <UploadView>
               {videourl ? (
-                <Image source={{ uri: videourl }} style={{ width: 280, height: 180 }} />
+                <UploadText  style={{color:'black'}}> {postVideo} </UploadText>
                 ) : (
-                <UploadText>영상을 선택해주세요</UploadText>
+                <UploadText style={{color:'black'}}>영상을 선택해주세요</UploadText>
               )}
-                <Modal isVisible={isModalVisible}>
-                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ width: 200, height: 200, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-                      <Text>홀드 색상 선택</Text>
-                      <Button title="Hide modal" onPress={toggleModal} />
-                    </View>
-                  </View>
-                </Modal>
             </UploadView> 
           </TouchableHighlight>
         </TopView>
+
+        <Spacer />
 
         <BottomView>
           <ExplainView>
@@ -200,16 +224,22 @@ const Upload = () => {
               onChangeText={onChangeText}
               value={text}
               placeholder='문구를 입력해주세요'
+              placeholderTextColor='black'
               style={styles.input}  
             />
           </ExplainView>
+
+          <Spacer />
+          <Spacer />
           <SelectView>
+
             <SelectOptionView>
               <Dropdown 
               style={styles.dropdown1}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
               mode='default'
               data={data}
               maxHeight={200}
@@ -227,6 +257,7 @@ const Upload = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={holderColor}
                 maxHeight={200}
@@ -241,6 +272,18 @@ const Upload = () => {
               />
             </SelectOptionView>
           </SelectView>
+          <Spacer />
+          <TouchableOpacity
+            onPress={SnackbarOpen}
+          >
+            <Text>스낵바 호출</Text>
+          </TouchableOpacity>
+          <Spacer />
+          <TouchableOpacity
+            onPress={VideoProcess}
+          >
+            <Text>파이썬 호출</Text>
+          </TouchableOpacity>
           <ButtonView>
             <TouchableOpacity
               style={styles.button}
@@ -257,7 +300,7 @@ const Upload = () => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#5AC77C', // 버튼 배경색상 추가
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderRadius: 30,
   },
   buttonText: {
@@ -267,8 +310,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 80,
-    width: 280,
+    height: 150,
+    width: 380,
+    fontSize: 20,
     borderColor: '#ADA4A5',
     borderWidth: 1,
     borderRadius: 10,
@@ -284,15 +328,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   dropdown1: {
-    width: 130,
-    height: 40,
+    width: '50%',
+    height: '110%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 40,
+    width: '30%',
+    height: '110%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
@@ -300,23 +344,27 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#ADA4A5',
+    color: '#000',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#ADA4A5',
+    color: '#000',
   },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`
   flex: 1;
   background-color: white;
   align-items: center;
+  
 `
 // -------------------------------
 const TopView = styled.View`
@@ -330,10 +378,15 @@ const BottomView = styled.View`
   align-items: center;
 `;
 // -------------------------------
-
+const CautionView = styled.View`
+  width: 380px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+`
 const UploadView = styled.View`
-  width: 280px;
-  height: 180px;
+  width: 380px;
+  height: 100px;
   border-radius: 10px;
   border: 1px dashed #999;
   justify-content: center;
@@ -361,7 +414,12 @@ const SelectOptionView = styled.View`
 `
 const ButtonView = styled.View`
   flex: 1;
-  width: 280px;
+  width: 380px;
+  height: 100px;
   justify-content: center;
 `
+
+const Spacer = styled.View`
+  height: 20px; /* 원하는 여백 크기 */
+`;
 export default Upload;

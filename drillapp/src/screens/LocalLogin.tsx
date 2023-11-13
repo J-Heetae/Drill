@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Image, TextInput, Alert,KeyboardAvoidingView,ScrollView } from 'react-native';
+import { Image, TextInput, Alert,KeyboardAvoidingView,ScrollView, Text } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -79,23 +79,25 @@ const LocalLogin = () => {
               resizeMode="contain"
               style={{
                 width: 500,
-                height: 500,
+                height: 550,
                 alignSelf: 'center',
               }}
             />
           </LogoView>
+          <Text style={{color:'#000'}}>이메일</Text>
           <TextInput
             placeholder="아이디"
             value={username}
             onChangeText={(text) => setUsername(text)}
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
           />
+          <Text style={{color:'#000'}}>비밀번호</Text>
           <TextInput
             placeholder="비밀번호"
             value={password}
             onChangeText={(text) => setPassword(text)}
             secureTextEntry
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10 }}
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10, padding: 10, color: 'black' }}
           />
           <LoginButton onPress={handleLogin} title="로그인" />
         </ScrollView>

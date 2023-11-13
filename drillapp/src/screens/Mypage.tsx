@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { API_URL_Local } from "@env";
+import * as Progress from "react-native-progress";
 
 type DataItem = {
   key: string;
@@ -65,6 +66,56 @@ const Mypage = () => {
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
 
+  const [nowLevel, setNowLevel] = useState(0);
+  const [maxLevel, setMaxLevel] = useState(81);
+  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
+
+  const giveLevel = async () => {
+    console.log("go?")
+    try {
+        const response = await axios.get('https://k9a106.p.ssafy.io/api/member/mypage', {
+        params: {
+          memberNickname: userInfo.nickName,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+      setMaxLevel(response.data.max_score);
+      setNowLevel(response.data.member_score);
+      setMemberL(response.data.difficulty);
+      if(response.data.difficulty=='difficulty1'){
+        setMemberL(require("../asset/icons/difficulty1.png"));
+      }else if(response.data.difficulty=='difficulty2'){
+        setMemberL(require("../asset/icons/difficulty2.png"));
+      }else if(response.data.difficulty=='difficulty3'){
+        setMemberL(require("../asset/icons/difficulty3.png"));
+      }else if(response.data.difficulty=='difficulty4'){
+        setMemberL(require("../asset/icons/difficulty4.png"));
+      }else if(response.data.difficulty=='difficulty5'){
+        setMemberL(require("../asset/icons/difficulty5.png"));
+      }else if(response.data.difficulty=='difficulty6'){
+        setMemberL(require("../asset/icons/difficulty6.png"));
+      }else if(response.data.difficulty=='difficulty7'){
+        setMemberL(require("../asset/icons/difficulty7.png"));
+      }else if(response.data.difficulty=='difficulty8'){
+        setMemberL(require("../asset/icons/difficulty8.png"));
+      }else if(response.data.difficulty=='difficulty9'){
+        setMemberL(require("../asset/icons/difficulty9.png"));
+      }else{
+        setMemberL(require("../asset/icons/difficulty10.png"));
+      }
+
+
+    } catch (error) {
+      // 요청 실패
+      console.error('유저 데이터를 불러오는 데 실패', error);
+    }
+  };
+
   const data: DataItem[] = [
     {key:'center0',value:'전체'},
     {key:'center1',value:'홍대'},
@@ -113,6 +164,7 @@ const Mypage = () => {
       });
 
       // 서버 응답이 유효한 데이터를 포함하고 있는지 확인
+      console.log('마이페이지 유저 닉네임', userInfo.nickName)
       if (response.data && response.data.postPage && response.data.postPage.content) {
         // 게시글이 있을 때
         setPosts(response.data.postPage.content);
@@ -169,6 +221,7 @@ const Mypage = () => {
 
   useEffect(() => {
     fetchPostList();
+    giveLevel();
   }, []);
   useEffect(() => {
     fetchPostList();
@@ -191,6 +244,8 @@ const Mypage = () => {
       console.error('로그아웃 오류:', error);
     }
   };
+  
+
 
   return (
     <ContainerView>
@@ -198,24 +253,31 @@ const Mypage = () => {
         <UserInfoView>
           <UserNameText>
             <Image
-              source={require('../asset/icons/profile_hold.png')}
+              source={memberL}
               resizeMode="contain"
               style={{
-                width: 40,
-                height: 40,
+                width: 30,
+                height: 30,
               }}
             />
             {userInfo.nickName}
             <TouchableOpacity onPress={Logout}>
-              <Text>로그아웃</Text>
+              <Text style={{color:'black'}}>로그아웃</Text>
             </TouchableOpacity>
           </UserNameText>
-          <UserExpView>
-
-          </UserExpView>
+          <BarView>
+            <Bar>
+              <Progress.Bar
+                progress={nowLevel / maxLevel}
+                width={null}
+                height={30}
+                color={"#5AC77C"}
+              />
+            </Bar>
+          </BarView>
         </UserInfoView>
         <SortMenuView>
-          <SortMenuTitle>내 영상 모아보기</SortMenuTitle>
+          <SortMenuTitle style={{color:'black'}}>내 영상 모아보기</SortMenuTitle>
           <MenuView>
             <SortMenu>
               <Dropdown 
@@ -223,6 +285,7 @@ const Mypage = () => {
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={data}
                 maxHeight={200}
@@ -235,13 +298,12 @@ const Mypage = () => {
                   setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
                 }}
               />
-            </SortMenu>
-            <SortMenu>
               <Dropdown 
                 style={styles.dropdown2}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={holderColor}
                 maxHeight={200}
@@ -254,13 +316,12 @@ const Mypage = () => {
                   setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
                 }}
               />
-            </SortMenu>
-            <SortMenu>
               <Dropdown 
                 style={styles.dropdown2}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
                 mode='default'
                 data={transformedCourseName}
                 maxHeight={200}
@@ -289,7 +350,7 @@ const Mypage = () => {
               // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
               return (
                 <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
-                  <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
+                  <Image source={{ uri: imageUrl }} style={{ width: 136, height: 136, margin: 1 }} />
                 </TouchableOpacity>
               );
             }}
@@ -313,31 +374,37 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dropdown1: {
-    width: 90,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '35%',
+    height: '50%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '24%',
+    height: '50%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   placeholderStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   selectedTextStyle: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+    color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`
@@ -363,25 +430,21 @@ const UserInfoView = styled.View`
 `
 const SortMenuView = styled.View`
   flex: 1;
-  padding-left: 30px;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
 `
 const UserNameText = styled.Text`
-  font-size: 25px;
+  font-size: 35px;
   text-align: center;
   font-weight: 900;
   color: black;
 `
-const UserExpView = styled.View`
-  width: 280px;
-  height: 30px;
-  background-color: #DDDADA;
-  border-radius: 30px;
-`
 // -------------------------------
 
 const SortMenuTitle = styled.Text`
-  font-size: 20px;
+  width: 80%;
+  font-size: 25px;
 `
 const MenuView = styled.View`
   flex:1 ;
@@ -390,11 +453,22 @@ const MenuView = styled.View`
   gap: 10px;
 `
 const SortMenu = styled.View`
-  width: 80px;
-  height: 30px;
-  background-color: #5AC77C;
-  border-radius: 50px;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 5px;
+`
+
+const BarView = styled.View`
+  width: 80%;
+  padding: 0 15px;
+  flex-direction: row;
+`
+ 
+const Bar = styled.View`
+  margin: 3px 0;
+  flex: 1;
 `
 export default Mypage;

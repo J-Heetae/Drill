@@ -137,6 +137,7 @@ const Main = () => {
   const [myRanking, setMyRanking] = useState(0);
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
+  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
 
   
 
@@ -171,6 +172,48 @@ const Main = () => {
 
   const [defaultCenter, setDefaultCenter] = useState(userInfo.place);
 
+  const giveLevel = async () => {
+    console.log("go?")
+    try {
+        const response = await axios.get('https://k9a106.p.ssafy.io/api/member/mypage', {
+        params: {
+          memberNickname: userInfo.nickName,
+        },
+        headers: {
+          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+        },
+      });
+
+      // 요청 성공
+      console.log('랭킹 데이터:', response.data);
+      setMemberL(response.data.difficulty);
+      if(response.data.difficulty=='difficulty1'){
+        setMemberL(require("../asset/icons/difficulty1.png"));
+      }else if(response.data.difficulty=='difficulty2'){
+        setMemberL(require("../asset/icons/difficulty2.png"));
+      }else if(response.data.difficulty=='difficulty3'){
+        setMemberL(require("../asset/icons/difficulty3.png"));
+      }else if(response.data.difficulty=='difficulty4'){
+        setMemberL(require("../asset/icons/difficulty4.png"));
+      }else if(response.data.difficulty=='difficulty5'){
+        setMemberL(require("../asset/icons/difficulty5.png"));
+      }else if(response.data.difficulty=='difficulty6'){
+        setMemberL(require("../asset/icons/difficulty6.png"));
+      }else if(response.data.difficulty=='difficulty7'){
+        setMemberL(require("../asset/icons/difficulty7.png"));
+      }else if(response.data.difficulty=='difficulty8'){
+        setMemberL(require("../asset/icons/difficulty8.png"));
+      }else if(response.data.difficulty=='difficulty9'){
+        setMemberL(require("../asset/icons/difficulty9.png"));
+      }else{
+        setMemberL(require("../asset/icons/difficulty10.png"));
+      }
+    } catch (error) {
+      // 요청 실패
+      console.error('유저 데이터를 불러오는 데 실패', error);
+    }
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -204,7 +247,8 @@ const Main = () => {
 
     fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
     myRankingData();
-  
+    giveLevel();
+
   }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
  
   useEffect(() => {
@@ -238,7 +282,7 @@ const Main = () => {
         <UserNameView>
           <UserNameText>
             <Image
-              source={require('../asset/icons/profile_hold.png')}
+              source={memberL}
               resizeMode="contain"
               style={{
                 width: 40,
@@ -257,6 +301,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={data}
             maxHeight={200}
@@ -275,6 +320,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={holderColor}
             maxHeight={200}
@@ -292,6 +338,7 @@ const Main = () => {
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
+            itemTextStyle={styles.itemTextStyle}
             mode='default'
             data={transformedCourseName}
             maxHeight={200}
@@ -335,31 +382,37 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   dropdown1: {
-    width: 130,
-    height: 40,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '35%',
+    height: '90%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 40,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '22%',
+    height: '90%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
+    height: '90%',
+    fontSize: 20,
+    color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`
@@ -384,7 +437,7 @@ const UserNameView = styled.View`
   justify-content: center;
 `
 const UserNameText = styled.Text`
-  font-size: 25px;
+  font-size: 40px;
   text-align: center;
   font-weight: 900;
   color: black;
@@ -404,7 +457,7 @@ const DateView = styled.View`
   margin-bottom: 10px;
 `
 const DateText = styled.Text`
-  font-size: 18px;
+  font-size: 25px;
   text-align: center;
   background-color: white;
   color: black;
@@ -412,23 +465,23 @@ const DateText = styled.Text`
 // -------------------------------
 
 const RankingView = styled.View`
-  width: 80%;
+  width: 83%;
   height: 85%;
-  background-color: #5AC77C;
+  border: 1px solid #ADA4A5;
   border-radius: 22px;
 `
 const RankTitleText = styled.Text`
-  font-size: 20px;
+  font-size: 35px;
   text-align: center;
-  color: white;
+  color: black;
   margin-top: 10px;
   margin-bottom: 10px;
 `
 const MyRankingText = styled.Text`
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
-  color: white;
+  color: black;
 `
 const Top10RankView = styled.View`
   flex: 1;
@@ -443,13 +496,13 @@ const Top10RankItem = styled.View`
 const Top10RankNum = styled.Text`
   flex: 2.5;
   text-align: center;
-  font-size: 20px;
-  color: white;
+  font-size: 25px;
+  color: black;
 `
 const Top10RankNickname = styled.Text`
   flex: 2;
   text-align: center;
-  font-size: 15px;
-  color: white;
+  font-size: 25px;
+  color: black;
 `
 export default Main;

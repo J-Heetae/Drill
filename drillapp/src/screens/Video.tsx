@@ -245,77 +245,76 @@ const Video = () => {
   console.log('저장된값 출력하기-----------------------',posts)
   return(
     <ContainerView>
-      <ScrollView>
         <TopView>
           <SearchView>
             <TextInput
               onChangeText={onChangeText}
               value={text}
               placeholder='유저 검색'
+              placeholderTextColor='black'
               style={styles.input}
             />
-            <TouchableOpacity onPress={handleSearch}>
-              <Text>검색</Text>
+            <TouchableOpacity onPress={handleSearch} style={{width:40, height:50, paddingTop:7, justifyContent:'center', alignItems:'center'}}>
+              <Text style={{color:'black'}}>검색</Text>
             </TouchableOpacity>
           </SearchView>
           <SortMenuView>
-            <SortMenu>
-              <Dropdown 
-                style={styles.dropdown1}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                mode='default'
-                data={data}
-                maxHeight={200}
-                placeholder="지점"
-                labelField="value"
-                valueField="key"
-                value={selectedCenter}
-                onChange={(item) => {
-                  const selectedOption = data.find(option => option.value === item.value);
-                  setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-                }}
-              />
-            </SortMenu>
-            <SortMenu>
-              <Dropdown 
-                style={styles.dropdown2}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                mode='default'
-                data={holderColor}
-                maxHeight={200}
-                placeholder="홀드"
-                labelField="value"
-                valueField="key"
-                value={selectedHolder}
-                onChange={(item) => {
-                  const selectedOption = holderColor.find(option => option.value === item.value);
-                  setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-                }}
-              />
-            </SortMenu>
-            <SortMenu>
-              <Dropdown 
-                style={styles.dropdown2}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                mode='default'
-                data={transformedCourseName}
-                maxHeight={200}
-                placeholder="코스"
-                labelField="label" // labelField 설정
-                valueField="value" // valueField 설정
-                value={selectedCourse}
-                onChange={ (item) => {
-                  const selectedOption = transformedCourseName.find(option => option.value === item.value);
-                  setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
-                }}
-              />
-            </SortMenu>
+            <Dropdown 
+              style={styles.dropdown1}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
+              mode='default'
+              data={data}
+              maxHeight={200}
+              placeholder="지점"
+              labelField="value"
+              valueField="key"
+              value={selectedCenter}
+              onChange={(item) => {
+                const selectedOption = data.find(option => option.value === item.value);
+                setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+              }}
+            />
+
+            <Dropdown 
+              style={styles.dropdown2}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
+              mode='default'
+              data={holderColor}
+              maxHeight={200}
+              placeholder="홀드"
+              labelField="value"
+              valueField="key"
+              value={selectedHolder}
+              onChange={(item) => {
+                const selectedOption = holderColor.find(option => option.value === item.value);
+                setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+              }}
+            />
+
+            <Dropdown 
+              style={styles.dropdown2}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              itemTextStyle={styles.itemTextStyle}
+              mode='default'
+              data={transformedCourseName}
+              maxHeight={200}
+              placeholder="코스"
+              labelField="label" // labelField 설정
+              valueField="value" // valueField 설정
+              value={selectedCourse}
+              onChange={ (item) => {
+                const selectedOption = transformedCourseName.find(option => option.value === item.value);
+                setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
+              }}
+            />
           </SortMenuView>
         </TopView>
 
@@ -330,7 +329,7 @@ const Video = () => {
                 // 이미지를 화면에 표시하는 TouchableOpacity 컴포넌트 반환
                 return (
                   <TouchableOpacity onPress={() => navigation.navigate("VideoDetail", {id: item.postId})}>
-                    <Image source={{ uri: imageUrl }} style={{ width: 100, height: 100, margin: 1 }} />
+                    <Image source={{ uri: imageUrl }} style={{ width: 136, height: 136, margin: 1 }} />
                   </TouchableOpacity>
                 );
               }}
@@ -341,21 +340,22 @@ const Video = () => {
           </SafeAreaView>
           
         </BottomView>
-      </ScrollView>
     </ContainerView>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    width: 250,
+    height: '50%',
+    width: '75%',
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
     paddingHorizontal: 8,
     marginTop: 30,
     marginBottom: 20,
+    fontSize:20,
+    color: 'black',
   },
   list: {
     width: '100%',
@@ -366,31 +366,37 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dropdown1: {
-    width: 90,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '35%',
+    height: '80%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   dropdown2: {
-    width: 65,
-    height: 30,
-    backgroundColor: '#5AC77C',
-    borderRadius: 50,
+    width: '24%',
+    height: '80%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 18,
+    color: '#000',
   },
+  itemTextStyle: {
+    color: '#000'
+  }
 });
 
 const ContainerView = styled.View`
@@ -420,14 +426,10 @@ const SortMenuView = styled.View`
   flex: 1;
   display: flex;
   flex-direction: row;
-  gap: 10px;
-`
-const SortMenu = styled.View`
-  background-color: #5AC77C;
-  width: 85px;
-  height: 30px;
-  borderRadius: 50px;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
+  gap: 5px;
 `
+
 export default Video;

@@ -25,17 +25,14 @@ pipeline {
         // docker Deploy
         stage('Deploy') {
             steps {
-                // ���� ���� 'fast' �����̳� ����
                 sh 'docker rm -f fast'
-                // ���ο� �̹����� 'fast' �����̳ʸ� ��׶��忡�� ����
-                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env ${imagename}:${version}'
+                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video ${imagename}:${version}'
             }
         }
 
         // docker push
         stage('Finish') {
             steps {
-                // ������ �ʴ� (dangling) �̹����� ã�� �����մϴ�.
                 sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
             }
         }

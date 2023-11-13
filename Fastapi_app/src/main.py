@@ -69,7 +69,7 @@ def amazon_s3(filename: str):
     print(filename)
     now_path = docker_container_path_check() # docker container 내부 path
     print(now_path)
-    video_path = f"video/{filename}.mp4"
+    video_path = f"/video/{filename}.mp4"
     file_path = os.path.join(now_path, video_path) # 저장할 파일명 + 확장자 mp4
     with open(file_path, 'wb') as f:
         try:

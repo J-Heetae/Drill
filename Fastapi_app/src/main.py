@@ -79,7 +79,7 @@ async def amazon_s3(filename: str):
         s3.head_object(Bucket=bucket_name, Key=f"Video/{filename}.mp4")
     except Exception as e:
         if e.response['Error']['Code'] == '404':
-            return {"file_exists": False}
+            return JSONResponse(content = {"download": False})
     with open(file_path, 'wb') as fi:
         try:
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)

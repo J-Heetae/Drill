@@ -74,6 +74,7 @@ def amazon_s3(filename: str):
     print(file_path)
     bucket_name = os.environ.get("S3_BUCKET")
     print(bucket_name)
+    print(f"Video/{filename}.mp4")
     with open(file_path, 'wb') as fi:
         try:
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)

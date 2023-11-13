@@ -79,7 +79,7 @@ def amazon_s3(filename: str):
             client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)
         except:
             return JSONResponse(content= {"download": False,"status" : 404})
-    if os.path.exists(video_path):
+    if os.path.exists(file_path):
         content = {"download": True, "status" : 200}
     else:
         content = {"download": False, "status" : 400}

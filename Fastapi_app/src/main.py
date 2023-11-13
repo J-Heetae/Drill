@@ -7,12 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 import boto3 # S3 연결
-import subprocess
-import cv2
 
 import sys
 # from .addcomponents.addmodel import check_model
-from .addcomponents import utilities as ut
+from addcomponents import utilities as ut
 
 app = FastAPI()
 
@@ -64,21 +62,21 @@ def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
 @app.get("/video/download/{filename}")
-def amazon_s3(filename: str):
+async def amazon_s3(filename: str):
     # filename = ut.get_params(request)
-    print(filename)
     now_path = docker_container_path_check() # docker container 내부 path
     video_path = f"video/{filename}.mp4"
     file_path = os.path.join(now_path, video_path) # 저장할 파일명 + 확장자 mp4
-    with open(file_path, 'wb') as f:
+    bucket_name = os.environ.get("S3_BUCKET")
+    with open(file_path, 'wb') as fi:
         try:
-            client_s3.download_fileobj(os.environ.get("S3_BUCKET"), f"Video/{filename}.mp4", f)
+            client_s3.download_fileobj(bucket_name, f"Video/{filename}.mp4", fi)
         except:
-            return JSONResponse(content= {"status" : 404})
-    if os.path.exists(video_path):
+            return JSONResponse(content= {"download": False, "check": "영상 다운로드 불가", "status" : 404})
+    if os.path.exists(file_path):
         content = {"download": True, "status" : 200}
     else:
-        content = {"download": False, "status" : 400}
+        content = {"download": False, "check": "영상이 폴더에 없습니다.", "status" : 400}
     return JSONResponse(content = content)
 
 @app.get("/video/remove/{filename}")
@@ -87,9 +85,9 @@ def remove_video(filename: str):
     print(filename)
     now_path = docker_container_path_check()
     print(now_path)
-    file_path = now_path + f"\\video\\{filename}.mp4"
+    file_path = os.path.join(now_path, f"video/{filename}.mp4")
     print(file_path)
-    if os.path.isfile(file_path):
+    if os.path.exists(file_path):
         print("파일 있어요. 제거합니다.")
         os.remove(file_path)
         content = {"remove" : True, "status": 200}

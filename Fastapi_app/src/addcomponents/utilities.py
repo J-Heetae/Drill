@@ -13,7 +13,7 @@ def get_params(request): # Function to get params
 
 def make_thumbnail_folder(): # Function to make thumbnail folder
     try:
-        folderpath = os.getcwd() + "/thumbnails"
+        folderpath = os.path.join(os.getcwd(), "src/thumbnails")
         if not os.path.exists(folderpath):
             os.makedirs(folderpath)
     except OSError:
@@ -22,13 +22,21 @@ def make_thumbnail_folder(): # Function to make thumbnail folder
 
 
 def thumbnail_extraction(image, video_path): # Function to extract thumbnail image
-    filepath = make_thumbnail_folder()
+    folderpath = make_thumbnail_folder()
     imgname = video_path.split("/")[-1].split(".")[0] + ".jpg"
-    filepath = filepath + "/" + imgname
+    filepath = folderpath + "/" + imgname
     print(filepath)
     cv2.imwrite(filepath, image)
     print('썸네일 추출 성공')
-    return imgname
+    return imgname, filepath
+
+def thumbnail_remove(imagepath):
+    try:
+        if os.path.exists(imagepath):
+            os.remove(imagepath)
+    except:
+        return False
+    return True
 
 def thumbnail_upload(folder_path: str, filename: str): # Function to upload thumbnail image to S3
     import boto3
@@ -121,13 +129,15 @@ def video_process(video_name): # Function to extract the location of user's wris
             
             if not cnt:
                 folderpath = make_thumbnail_folder() # thumbnails folder 만드는 함수
-                imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
+                imgname, filepath = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
+                print(imgname, filepath)
                 check_upload = thumbnail_upload(folderpath, imgname)
                 print('들어갑니다. detectron2')
                 hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
                 cnt += 1
+                thumbnail_remove(filepath)
             
-            if check_upload:
+            if not check_upload:
                 return False
             
             image.flags.writeable = False
@@ -155,7 +165,7 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 def hold_extraction(image): # Function to extract hold in image using detectron2
     # print(os.getcwd())
-    newpath = os.getcwd() + '\\detectron2'
+    newpath = os.path.join(os.getcwd(), 'src/detectron2')
     os.chdir(newpath)
     print(os.getcwd())
     import newtectron as dt
@@ -163,7 +173,7 @@ def hold_extraction(image): # Function to extract hold in image using detectron2
     results = dt.get_hold_info(image)
     # print(results)
     # print(os.getcwd())
-    newpath = os.getcwd()[:-11]
+    newpath = os.getcwd()[:-15]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())

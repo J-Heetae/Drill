@@ -102,7 +102,7 @@ def video_process(video_name): # Function to extract the location of user's wris
     import heapq
     video_name += '.mp4'
     mp_pose = mp.solutions.pose
-    video_path = os.getcwd() + "/video/" + video_name
+    video_path = os.getcwd() + "/src/video/" + video_name
 
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS) // 3
@@ -159,7 +159,11 @@ def video_process(video_name): # Function to extract the location of user's wris
                         heapq.heappush(wrist_all, (dy, dx))
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))
-    return compare_location(heapq.heappop(wrist_all), hold_top_value) # return wrist's y value
+    if wrist_all:
+        print('wrist_all', wrist_all)
+        return compare_location(heapq.heappop(wrist_all), hold_top_value) # return wrist's y value
+    else:
+        return False
 
 
 

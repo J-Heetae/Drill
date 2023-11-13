@@ -10,7 +10,7 @@ import boto3 # S3 연결
 
 import sys
 # from .addcomponents.addmodel import check_model
-from addcomponents import utilities as ut
+from .addcomponents import utilities as ut
 
 app = FastAPI()
 

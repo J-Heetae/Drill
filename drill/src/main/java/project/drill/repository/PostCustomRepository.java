@@ -41,6 +41,13 @@ public interface PostCustomRepository {
     Page<PostPageDto> findAllByCenterAndCourseDifficultyAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, Difficulty difficulty, String memberNickname);
 
     Page<PostPageDto> findAllByCenterAndCourseCourseNameAndMemberMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, Center center, String courseName, String memberNickname);
+    Page<PostPageDto> findByMemberMemberNicknameAndLiked(Pageable pageable, String memberEmail);
+    Page<PostPageDto> findByCourseNameAndMemberNicknameByLiked(Pageable pageable, String courseName, String memberNickname);
+    Page<PostPageDto> findByCourseNameAndMemberNicknameOrderByPostWriteTimeDesc(Pageable pageable, String courseName, String memberNickname);
+
+    Page<PostPageDto> findByCourseNameByLiked(Pageable pageable, String courseName);
+
+    Page<PostPageDto> findByCourseNameOrderByPostWriteTimeDesc(Pageable pageable, String courseName);
 
     Long findMyRanking(String memberNickname, String courseName);
 

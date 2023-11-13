@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import {Image, TouchableOpacity, Text } from 'react-native';
+import {Image, TouchableOpacity, Text, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import  * as KakaoLogin from '@react-native-seoul/kakao-login';
@@ -113,12 +113,12 @@ const Login = () => {
       </LogoView>
         <GoogleLoginView>
           <TouchableOpacity onPress={LocalSignup}>
-            <Text style={{fontSize: 25, color:'#000'}}>Local Signup</Text>
+            <Text style={{fontSize: 25, color:'#000'}}>회원가입</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <GoogleLoginView>
           <TouchableOpacity onPress={Locallogin}>
-            <Text style={{fontSize: 25, color:'#000'}}>Local Login</Text>
+            <Text style={{fontSize: 25, color:'#000'}}>로그인</Text>
           </TouchableOpacity>
         </GoogleLoginView>
         <KakaoLoginView>
@@ -127,8 +127,8 @@ const Login = () => {
               source={require('../asset/icons/kakao_login2.png')}
               resizeMode="contain"
               style={{
-                width: 330,
-                height: 100,
+                width: 350,
+                height: 75,
                 alignSelf: 'center',
               }}
             />
@@ -145,6 +145,9 @@ const ContainerView = styled.View`
 `
 const LogoView = styled.View`
   flex: 2;
+  ${Platform.OS === 'android'
+    ? 'elevation: 5;'
+    : 'shadowColor: #000; shadowOffset: 0 2px; shadowOpacity: 0.2; shadowRadius: 5px;'}
 `
 
 const GoogleLoginView = styled.View`
@@ -152,13 +155,19 @@ const GoogleLoginView = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 330px;
-  height: 70px;
+  width: 300px;
+  height: 65px;
   border: 1px solid gray;
   border-radius: 10px;
   margin-top: 10px;
+  background-color: #5AC77C;
+  ${Platform.OS === 'android'
+    ? 'elevation: 5;'
+    : 'shadowColor: #000; shadowOffset: 0 2px; shadowOpacity: 0.2; shadowRadius: 5px;'}
 `
 const KakaoLoginView = styled.View`
   position: absoulte;
+  margin-bottom: 10px;
+  margin-top: 10px;
 `
 export default Login;

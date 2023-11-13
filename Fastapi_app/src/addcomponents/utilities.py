@@ -95,7 +95,7 @@ def compare_location(wrist_positions, hold_positions):
         return True
     return False
 
-def video_process(video_name): # Function to extract the location of user's wrist from a video file
+def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
     import cv2
     import os
     import mediapipe as mp
@@ -133,7 +133,7 @@ def video_process(video_name): # Function to extract the location of user's wris
                 print(imgname, filepath)
                 check_upload = thumbnail_upload(folderpath, imgname)
                 print('들어갑니다. detectron2')
-                hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
+                hold_top_value = hold_extraction(image, hold_color) # 홀드 인식 / list로 반환
                 cnt += 1
                 thumbnail_remove(filepath)
             
@@ -167,14 +167,14 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 
-def hold_extraction(image): # Function to extract hold in image using detectron2
+def hold_extraction(image, hold_color): # Function to extract hold in image using detectron2
     # print(os.getcwd())
     newpath = os.path.join(os.getcwd(), 'src/detectron2')
     os.chdir(newpath)
     print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    results = dt.get_hold_info(image)
+    results = dt.get_hold_info(image, hold_color)
     # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]

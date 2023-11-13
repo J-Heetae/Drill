@@ -13,7 +13,7 @@ def get_params(request): # Function to get params
 
 def make_thumbnail_folder(): # Function to make thumbnail folder
     try:
-        folderpath = os.getcwd() + "/thumbnails"
+        folderpath = os.getcwd() + "/src/thumbnails"
         if not os.path.exists(folderpath):
             os.makedirs(folderpath)
     except OSError:
@@ -128,9 +128,10 @@ def video_process(video_name): # Function to extract the location of user's wris
                 folderpath = make_thumbnail_folder() # thumbnails folder 만드는 함수
                 imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
                 check_upload = thumbnail_upload(folderpath, imgname)
-                print('들어갑니다. detectron2')
-                hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
-                cnt += 1
+                if check_upload:
+                    print('들어갑니다. detectron2')
+                    hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
+                    cnt += 1
             
             if check_upload:
                 return False
@@ -154,7 +155,10 @@ def video_process(video_name): # Function to extract the location of user's wris
                         heapq.heappush(wrist_all, (dy, dx))
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))
-    return compare_location(heapq.heappop(wrist_all), hold_top_value) # return wrist's y value
+    if wrist_all:
+        return compare_location(heapq.heappop(wrist_all), hold_top_value) # return wrist's y value
+    else:
+        return False
 
 
 

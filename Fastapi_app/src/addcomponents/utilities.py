@@ -133,7 +133,7 @@ def video_process(video_name): # Function to extract the location of user's wris
                     hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
                     cnt += 1
             
-            if check_upload:
+            if not check_upload:
                 return False
             
             image.flags.writeable = False

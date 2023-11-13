@@ -85,10 +85,10 @@ def compare_location(wrist_positions, hold_positions):
     print(wrist_positions)
     print(hold_positions)
     print('--------------------------------------')
-    # lx, ly, rx, ry = hold_positions
-    # wrist_y, wrist_x = wrist_positions
-    # if ly < wrist_y < ry and lx < wrist_x < rx:
-    #     return True
+    lx, ly, rx, ry = hold_positions
+    wrist_y, wrist_x = wrist_positions
+    if ly < wrist_y < ry and lx < wrist_x < rx:
+        return True
     return False
 
 def video_process(video_name): # Function to extract the location of user's wrist from a video file
@@ -156,6 +156,7 @@ def video_process(video_name): # Function to extract the location of user's wris
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))
     if wrist_all:
+        print('wrist_all', wrist_all)
         return compare_location(heapq.heappop(wrist_all), hold_top_value) # return wrist's y value
     else:
         return False
@@ -170,6 +171,7 @@ def hold_extraction(image): # Function to extract hold in image using detectron2
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
     results = dt.get_hold_info(image)
+    print('results',results)
     # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]

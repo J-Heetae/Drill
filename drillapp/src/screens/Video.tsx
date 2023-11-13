@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, TextInput, StyleSheet, Image, Text, TouchableOpacity, Alert, ActivityIndicator,ScrollView } from 'react-native';
+import { FlatList, TextInput, StyleSheet, Image, Text, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { RootState } from "../modules/redux/RootReducer";
@@ -370,28 +370,40 @@ const styles = StyleSheet.create({
     height: '80%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   dropdown2: {
-    width: '24%',
+    width: '22%',
     height: '80%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   placeholderStyle: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   selectedTextStyle: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   inputSearchStyle: {
-    height: 40,
-    fontSize: 18,
+    height: '90%',
+    fontSize: 20,
     color: '#000',
   },
   itemTextStyle: {
@@ -429,7 +441,7 @@ const SortMenuView = styled.View`
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  gap: 5px;
+  gap: 8px;
 `
 
 export default Video;

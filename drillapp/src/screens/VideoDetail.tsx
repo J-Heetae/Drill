@@ -70,7 +70,7 @@ const VideoDetail = () => {
     setIsLoading(false);
   };
   const videoRef = useRef<VideoRef>(null);
-  const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/climb3.mp4"
+  const background = "https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Video/"
   
   const API_URL1 = `${API_URL_Local}post/read`;
   const API_URL2 = `${API_URL_Local}comment/`;
@@ -200,7 +200,7 @@ const VideoDetail = () => {
           {isLoading && <Text style={{color: 'black', fontSize:20}}>잠시 기다려 주세요</Text>}
           <Video 
             // Can be a URL or a local file.
-            source={{uri: background}}
+            source={{uri: background+data?.postVideo}}
             // Store reference  
             ref={videoRef}
             controls={true}

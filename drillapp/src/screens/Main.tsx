@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Image, StyleSheet, Text } from 'react-native';
+import { Image, StyleSheet, Text, Platform } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { RootState } from "../modules/redux/RootReducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -128,14 +128,15 @@ const Main = () => {
     {key:'center10',value:'더클라임 서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'difficulty1',value:'하양'},
-    {key:'difficulty2',value:'노랑'},
-    {key:'difficulty3',value:'주황'},
-    {key:'difficulty4',value:'초록'},
+    {key:'difficulty1',value:'빨강'},
+    {key:'difficulty2',value:'검정'},
+    {key:'difficulty3',value:'노랑'},
+    {key:'difficulty4',value:'보라'},
     {key:'difficulty5',value:'하양'},
-    {key:'difficulty6',value:'노랑'},
-    {key:'difficulty7',value:'주황'},
-    {key:'difficulty8',value:'초록'},
+    {key:'difficulty6',value:'초록'},
+    {key:'difficulty7',value:'핑크'},
+    {key:'difficulty8',value:'파랑'},
+    {key:'difficulty9',value:'주황'},
   ];
 
   function findValueByKey(key: string, data: DataItem[]): string | undefined {
@@ -350,24 +351,36 @@ const styles = StyleSheet.create({
     height: '90%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   dropdown2: {
     width: '22%',
     height: '90%',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#ADA4A5',
+    borderColor: '#5AC77C',
+    backgroundColor: '#5AC77C',
+    ...Platform.select({
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   placeholderStyle: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   selectedTextStyle: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
   },
   inputSearchStyle: {
     height: '90%',
@@ -433,11 +446,15 @@ const RankingView = styled.View`
   height: 85%;
   border: 1px solid #ADA4A5;
   border-radius: 22px;
+  background-color: #5AC77C;
+  ${Platform.OS === 'android'
+    ? 'elevation: 5;'
+    : 'shadowColor: #000; shadowOffset: 0 2px; shadowOpacity: 0.2; shadowRadius: 5px;'}
 `
 const RankTitleText = styled.Text`
   font-size: 35px;
   text-align: center;
-  color: black;
+  color: white;
   margin-top: 10px;
   margin-bottom: 10px;
 `
@@ -445,11 +462,11 @@ const MyRankingText = styled.Text`
   font-size: 30px;
   font-weight: bold;
   text-align: center;
-  color: black;
+  color: white;
 `
 const Top10RankView = styled.View`
   flex: 1;
-  width: 80%;
+  width: 100%;
   justify-content: center;
   gap: 2px;
 `
@@ -458,15 +475,15 @@ const Top10RankItem = styled.View`
   align-items: center;
 `
 const Top10RankNum = styled.Text`
-  flex: 2.5;
+  flex: 1.5;
   text-align: center;
-  font-size: 25px;
-  color: black;
+  font-size: 20px;
+  color: white;
 `
 const Top10RankNickname = styled.Text`
   flex: 2;
   text-align: center;
-  font-size: 25px;
-  color: black;
+  font-size: 20px;
+  color: white;
 `
 export default Main;

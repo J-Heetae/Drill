@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image, View, Button,ScrollView } from 'react-native';
+import { TouchableOpacity, TouchableHighlight, Text, TextInput, StyleSheet, Alert, Image, View, Button,ScrollView, Platform } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary} from 'react-native-image-picker';
 import { ImagePickerResponse } from 'react-native-image-picker';
@@ -21,7 +21,7 @@ AWS.config.update({
 
 type RootStackParamList = {
   Video: undefined;
-  TabNavigator: undefined;
+  Home: undefined;
 };
 type DataItem = {
   key: string;
@@ -32,7 +32,7 @@ type DataItem = {
 const s3 = new AWS.S3();
 
 const Upload = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video', 'TabNavigator'>>()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Video', 'Home'>>()
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const [isHovered, setIsHovered] = useState(false);
   const [text, setText] = useState('');
@@ -40,6 +40,7 @@ const Upload = () => {
   const [postVideo, setPostVideo] = useState<string | undefined>(undefined);
   const [postUri, setPostUri] = useState<string | undefined>(undefined);
   const [videourl, setVideourl] = useState('');
+  const [pythonPostVideo, setPythonPostVideo] = useState<string | undefined>(undefined);
 
   const onChangeText = (inputText: string) => {
     setText(inputText);
@@ -71,43 +72,45 @@ const Upload = () => {
     {key:'S3회색민트_HD',value:'초록'},
   ];
 
-  const postDto = {
-    center: selectedCenter,
-    courseName: selectedHolder,
-    memberNickname: userInfo.nickName,
-    postContent: text,
-    postThumbnail: postThumbnail,
-    postVideo: postVideo,
-  };
-
   const uploadVideoToS3 = async (uri: string | undefined, fileName: string | undefined) => {
     if (uri && fileName) {  
       try {
         const response = await fetch(uri);
         const blob = await response.blob();
         const now = new Date();
-        const year =now.getFullYear();
-        const month = now.getMonth()+1;
-        const day = now.getDate();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();  
         const hour = now.getHours();
         const minute = now.getMinutes();
         const second = now.getSeconds();
+        // 파일 이름에서 Video/ 부분을 제외한 부분을 추출
+        const keyWithoutVideo = `${userInfo.nickName}_${year}${month}${day}_${hour}${minute}${second}_${fileName}`;
+        
         const params = {
           Bucket: 'drill-video-bucket', 
-          Key: `Video/${userInfo.nickName}_${year}${month}${day}_${hour}${minute}${second}_${fileName}`,
+          Key: `Video/${keyWithoutVideo}`,
           Body: blob,
           ContentType: 'video/mp4', 
         };
   
         const result = await s3.upload(params).promise();
-        console.log(result.Location);
-        Alert.alert('업로드 성공', '동영상이 성공적으로 업로드되었습니다.');
-      } catch (error) {
+        const fileName_replace = keyWithoutVideo?.replace(".mp4", "")
+        setPythonPostVideo(fileName_replace);
+        
+        // 동일한 파일 이름을 사용하여 상태 업데이트
+        setPostVideo(keyWithoutVideo + '.mp4');
+        setPostThumbnail(keyWithoutVideo + '.jpg');
+        
+        VideoDownload(keyWithoutVideo);
+        return keyWithoutVideo; // 업로드 성공 시 파일 이름 반환
+      } catch (error) { 
         console.error(error);
-        Alert.alert('업로드 실패', '동영상을 업로드하지 못했습니다.');
+        return null; // 업로드 실패 시 null 반환
       }
     } else {
       console.error('유효하지 않은 URI 또는 파일 이름입니다.');
+      return null; // URI 또는 파일 이름이 유효하지 않을 경우 null 반환
     }
   };
 
@@ -119,12 +122,9 @@ const Upload = () => {
     } else if (response.assets && response.assets.length > 0) {
       const uri = response.assets[0].uri;
       const fileName = response.assets[0].fileName;
-      console.log('파일이름---------------------------', fileName);
-      console.log('URI---------------------------', uri);
       setPostVideo(fileName)
       setPostUri(uri)
       const fileName_re = fileName?.replace(".mp4", ".jpg")
-      console.log("바뀐 파일이름", fileName_re)
       setPostThumbnail(fileName_re)
       // uploadVideoToS3(uri, fileName);
       setVideourl(`https://drill-video-bucket.s3.ap-northeast-2.amazonaws.com/Thumbnail/${fileName_re}`)
@@ -137,53 +137,74 @@ const Upload = () => {
     launchImageLibrary({ mediaType: 'video' }, handleResponse); 
   }
 
+
+
   const API_URL = `${API_URL_Local}post`;
   const Uploadpost = async () => {
     try {
-      const response = await axios.post(API_URL, postDto, {
+      const uploadedFileName = await uploadVideoToS3(postUri, postVideo);
+      const fileNameWithoutMp4 = uploadedFileName?.replace(".mp4", "");
+
+      const postDto = {
+        center: selectedCenter,
+        courseName: selectedHolder,
+        memberNickname: userInfo.nickName,
+        postContent: text,
+        postThumbnail: fileNameWithoutMp4+'.jpg',  // 업로드된 파일 이름으로 수정
+        postVideo: fileNameWithoutMp4+'.mp4',      // 업로드된 파일 이름으로 수정
+      };
+  
+      const response = axios.post(API_URL, postDto, {
         headers: {
-          Authorization: userInfo.accessToken, // accessToken을 헤더에 추가
+          Authorization: userInfo.accessToken,
         },
       });
-      // 요청 성공
-      console.log('게시물 게시 성공', response);
-      uploadVideoToS3(postUri, postVideo);
+  
       setVideourl('');
       setText('');
       setSelectedCenter('지점 선택');
-      setSelectedHolder('홀드')
-      navigation.navigate("TabNavigator");
+      setSelectedHolder('홀드');
+      navigation.navigate('Home');
     } catch (error) {
-      // 요청 실패
-      console.log(postDto)
       console.error('게시물 게시 실패', error);
     }
   };
   
-  const VideoDownload = async () => {
+  const VideoDownload = async (fileName: string | undefined) => {
+    const fileNameWithoutMp4 = fileName?.replace(".mp4", "");
     try {
-      const response = await axios.post(`https://k9a106a.p.ssafy.io/video/download/${postVideo}`
-      );
-      console.log('영상 다운로드 성공', response)
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/download/${fileNameWithoutMp4}`);
+      console.log('다운로드 여부', response.data.download);
+      console.log('다운로드 여부', response.data.check)
+      if (response.data.download) {
+        // 다운로드가 성공했을 때의 동작
+        VideoProcess(fileName);
+      } else {
+        // 다운로드가 실패했을 때의 동작
+        console.log('다운로드 실패');
+      }
     } catch (error) {
       console.error('영상 다운로드 실패', error);
     }
   };
-  const VideoProcess = async () => {
+  const VideoProcess = async (fileName: string | undefined) => {
+    const fileNameWithoutMp4 = fileName?.replace(".mp4", "");
     try {
-      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${postVideo}`
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${fileNameWithoutMp4}`
       );
       console.log('영상 처리 성공', response)
+
+      SnackbarOpen();
     } catch (error) {
       console.error('영상 처리 실패', error);
     }
   };
   const SnackbarOpen = () => {
     Snackbar.show({
-      text: 'Hello world',
+      text: '영상이 성공적으로 게시됐습니다.',
       duration: Snackbar.LENGTH_LONG,
     });
-  }
+  };
 
   return (
     <ContainerView>
@@ -235,22 +256,22 @@ const Upload = () => {
 
             <SelectOptionView>
               <Dropdown 
-              style={styles.dropdown1}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              itemTextStyle={styles.itemTextStyle}
-              mode='default'
-              data={data}
-              maxHeight={200}
-              placeholder='지점 선택'
-              labelField="value"
-              valueField="key"
-              value={selectedCenter}
-              onChange={(item) => {
-                const selectedOption = data.find(option => option.value === item.value);
-                setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
-              }}
+                style={styles.dropdown1}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
+                mode='default'
+                data={data}
+                maxHeight={200}
+                placeholder='지점 선택'
+                labelField="value"
+                valueField="key"
+                value={selectedCenter}
+                onChange={(item) => {
+                  const selectedOption = data.find(option => option.value === item.value);
+                  setSelectedCenter(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                }}
               />
               <Dropdown 
                 style={styles.dropdown2}
@@ -273,23 +294,15 @@ const Upload = () => {
             </SelectOptionView>
           </SelectView>
           <Spacer />
-          <TouchableOpacity
-            onPress={SnackbarOpen}
-          >
-            <Text>스낵바 호출</Text>
-          </TouchableOpacity>
           <Spacer />
-          <TouchableOpacity
-            onPress={VideoProcess}
-          >
-            <Text>파이썬 호출</Text>
-          </TouchableOpacity>
+          <Spacer />
+          
           <ButtonView>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={Uploadpost}>
-              <Text style={styles.buttonText}>게시글 업로드</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => Uploadpost()}>
+            <Text style={styles.buttonText}>게시글 업로드</Text>
+          </TouchableOpacity>
           </ButtonView>
         </BottomView>
       </ScrollView>
@@ -302,6 +315,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#5AC77C', // 버튼 배경색상 추가
     paddingVertical: 15,
     borderRadius: 30,
+    ...Platform.select({
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   buttonText: {
     color: '#fff', // 버튼 글자색상 추가
@@ -417,6 +435,9 @@ const ButtonView = styled.View`
   width: 380px;
   height: 100px;
   justify-content: center;
+  ${Platform.OS === 'android'
+    ? 'elevation: 5;'
+    : 'shadowColor: #000; shadowOffset: 0 2px; shadowOpacity: 0.2; shadowRadius: 5px;'}
 `
 
 const Spacer = styled.View`

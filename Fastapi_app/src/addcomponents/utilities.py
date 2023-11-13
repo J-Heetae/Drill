@@ -174,14 +174,16 @@ def hold_extraction(image, hold_color): # Function to extract hold in image usin
     print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    results = dt.get_hold_info(image, hold_color)
-    # print(results)
+    outputs = dt.get_hold_info(image, hold_color)
+    print(outputs)
+    results = [outputs[i] for i in range(1, 5)]
+    print('results', results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())
-    return [20, 20, 20, 20]
+    return results
 
 def color_classification(img_path): # Function to classify color in image
     img_color = cv2.imread(img_path) # 이미지 파일을 컬러로 불러옴

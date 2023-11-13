@@ -91,7 +91,7 @@ def compare_location(wrist_positions, hold_positions):
         return True
     return False
 
-def video_process(video_name): # Function to extract the location of user's wrist from a video file
+def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
     import cv2
     import os
     import mediapipe as mp
@@ -130,7 +130,7 @@ def video_process(video_name): # Function to extract the location of user's wris
                 check_upload = thumbnail_upload(folderpath, imgname)
                 if check_upload:
                     print('들어갑니다. detectron2')
-                    hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
+                    hold_top_value = hold_extraction(image, hold_color) # 홀드 인식 / list로 반환
                     cnt += 1
             
             if not check_upload:
@@ -164,21 +164,23 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 
-def hold_extraction(image): # Function to extract hold in image using detectron2
+def hold_extraction(image, hold_color): # Function to extract hold in image using detectron2
     # print(os.getcwd())
     newpath = os.path.join(os.getcwd(), 'src/detectron2')
     os.chdir(newpath)
     # print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    results = dt.get_hold_info(image, "주황")
-    # print(results)
+    outputs = dt.get_hold_info(image, hold_color)
+    print(outputs)
+    results = [outputs[i] for i in range(1, 5)]
+    print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())
-    return [20, 20, 20, 20]
+    return results
 
 def color_classification(img_path): # Function to classify color in image
     img_color = cv2.imread(img_path) # 이미지 파일을 컬러로 불러옴

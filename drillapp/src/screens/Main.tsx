@@ -18,6 +18,7 @@ const Main = () => {
   const userInfo = useSelector((state: RootState) => state.templateUser);
   const API_URL = `${API_URL_Local}ranking/first`;
   const API_URL2 = `${API_URL_Local}ranking/list`;
+  const API_URL3 = `${API_URL_Local}ranking/myranking`;
   // 요구하는 매개변수
   const centerName = userInfo.place;
   // const courseName = 'difficulty1Course1';
@@ -34,7 +35,31 @@ const Main = () => {
     minutes: today.getMinutes(), //현재 분
   };
   let currentDate = `${time.year}년 ${time.month}월 ${time.date}일`
-  
+
+  const myRankingData = async() => {
+    const myRankingDto = {
+      memberNickname: userInfo.nickName,
+      courseName: selectedCourse,
+    };
+
+    try{
+      const response = await axios.post(API_URL3, myRankingDto, {
+        headers: {
+          Authorization: userInfo.accessToken, 
+        },
+      });
+      const myRankingValue: number = response.data; 
+      if (myRankingValue > 0 ) {
+        setMyRanking(myRankingValue);
+      } else {
+        setMyRanking(0);
+      }
+      console.log(myRankingValue)
+    }
+    catch (error) {
+      console.error('내 랭킹 불러오는 데 실패', error);
+    }
+  };
   // Axios를 사용하여 GET 요청 보내기
   const fetchRankingData = async () => {
     try {
@@ -109,6 +134,7 @@ const Main = () => {
   const [selectedCenter, setSelectedCenter] = useState(userInfo.place);
   const [selectedHolder, setSelectedHolder] = useState("difficulty1");
   const [selectedCourse, setSelectedCourse] = useState("");
+  const [myRanking, setMyRanking] = useState(0);
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
 
@@ -162,22 +188,22 @@ const Main = () => {
         setTop10Ranks(response.data.ranking);
         setSelectedCourseName(response.data.courseName);
         // console.log(response.data.courseName[0]);
-        setSelectedCourse(response.data.courseName[0]);
-        setSelectedHolder(response.data.difficulty[0]);
+
         
 
         const foundCenter = findValueByKey(centerName, data);
         if (foundCenter) {
           setDefaultCenter(foundCenter);
         }
+        setSelectedCourse(response.data.courseName[0]);
+        setSelectedHolder(response.data.difficulty[0]);
       } catch (error) {
         console.error('랭킹 데이터를 불러오는 데 실패', error);
       }
     };
 
-
-  
     fetchInitialData(); // 페이지가 처음 로딩될 때 데이터를 가져옴
+    myRankingData();
   
   }, []); // 빈 배열을 두 번째 인자로 전달하여, 컴포넌트가 처음으로 렌더링될 때만 실행되도록 함
  
@@ -190,8 +216,11 @@ const Main = () => {
     console.log("tlfgod?")
   }, [selectedCourseName]); 
 
+
+
   useEffect(() => {
     fetchRankingData();
+    myRankingData();
   }, [selectedCourse]);
 
   useEffect(() => {
@@ -281,8 +310,15 @@ const Main = () => {
 
       <BottomView>
         <RankingView>
-          <RankTitleText>내 순위</RankTitleText>
-          <MyRankingText>0위   {userInfo.nickName}</MyRankingText>
+          <RankTitleText>{myRanking !== null ? (
+    myRanking > 0 ? (
+      `내 순위: ${myRanking}위`
+    ) : (
+      '순위가 없습니다.'
+    )
+  ) : (
+    '로딩 중...'
+  )}</RankTitleText>
           <Top10RankView>
             {top10Ranks.map((rank, index) => (
               <Top10RankItem key={index}>

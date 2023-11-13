@@ -141,7 +141,7 @@ def video_process(video_name): # Function to extract the location of user's wris
             results = pose.process(image)
             h, w, c = image.shape
             image.flags.writeable = True
-            
+            print('h, w, c', h,w,c)
             for i in range(15, 17): # wrist label : 15, 16
                 flag = 0
                 if results.pose_landmarks:
@@ -152,6 +152,7 @@ def video_process(video_name): # Function to extract the location of user's wris
                         continue
                     if not flag:
                         dx, dy = position_wrist.x * w, position_wrist.y * h
+                        print("dx, dy", dx, dy)
                         heapq.heappush(wrist_all, (dy, dx))
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))
@@ -167,12 +168,11 @@ def hold_extraction(image): # Function to extract hold in image using detectron2
     # print(os.getcwd())
     newpath = os.getcwd() + '/src/detectron2'
     os.chdir(newpath)
-    print(os.getcwd())
+    # print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
     results = dt.get_hold_info(image)
-    print('results',results)
-    # print(results)
+    # print('results',results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]
     # print(newpath)

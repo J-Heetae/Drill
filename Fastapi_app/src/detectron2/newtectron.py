@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 
-MODEL_DIRECTORY = os.getcwd() + "\\model"
+MODEL_DIRECTORY = os.getcwd() + "/model"
 # MODEL_DIRECTORY = os.getcwd() + "\\" + "detectron2\\" + "model\\"
 
 # Get config and weigths for model

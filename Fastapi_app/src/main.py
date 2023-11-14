@@ -99,6 +99,7 @@ def remove_video(filename: str):
     video_path = os.path.join(now_path, f"video/{filename}.mp4")
     print(video_path)
     thumbnails_path = os.path.join(now_path, f"thumbnails/{filename}.jpg")
+    print(thumbnails_path)
     if os.path.exists(video_path):
         print("파일 있어요. 제거합니다.")
         os.remove(video_path)

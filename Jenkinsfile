@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker rm -f fasttwo'
-                sh 'docker run -d --name fasttwo -p 8001:8001 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video ${imagename}:${version}'
+                sh 'docker run -d --name fasttwo -p 8001:8001 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video -v /home/ubuntu/thumbnails:/app/src/thumbnails ${imagename}:${version}'
             }
         }
 

@@ -171,4 +171,4 @@ def get_hold_info(img, hold_color):
   
   print(box_info[0])
   # 제일 y 값이 작은 (맨 위에 있는) 홀드 return
-  return box_info[0]
+  return box_info

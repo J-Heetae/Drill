@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker rm -f fast'
-                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video -v /home/ubuntu/thumbnails:/app/src/thumbnails ${imagename}:${version}'
+                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video -v /home/ubuntu/thumbnails:/app/thumbnails ${imagename}:${version}'
             }
         }
 

@@ -96,15 +96,21 @@ def remove_video(filename: str):
     print(filename)
     now_path = docker_container_path_check()
     print(now_path)
-    file_path = os.path.join(now_path, f"video/{filename}.mp4")
-    print(file_path)
-    if os.path.isfile(file_path):
+    video_path = os.path.join(now_path, f"src/video/{filename}.mp4")
+    print(video_path)
+    thumbnails_path = os.path.join(now_path, f"src/thumbnails/{filename}.jpg")
+    if os.path.exists(video_path):
         print("파일 있어요. 제거합니다.")
-        os.remove(file_path)
+        os.remove(video_path)
         content = {"remove" : True, "status": 200}
     else:
         print("파일 없어요")
         content = {"remove" : False, "status": 404}
+    if os.path.exists(thumbnails_path):
+        print("썸네일 제거 완료")
+        os.remove(thumbnails_path)
+    else:
+        print("썸네일 없어요")
     return JSONResponse(content = content)
 
 @app.get("/video/process/{filename}")

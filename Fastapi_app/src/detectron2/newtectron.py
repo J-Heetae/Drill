@@ -134,37 +134,37 @@ def get_hold_info(img, hold_color):
       box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, hsv_color, predicted_color])
     
   # 이미지에 추출한 rgb 그려서 출력
-  # img2 = copy.deepcopy(hsv_img)
-  # img3 = copy.deepcopy(hsv_img) 
-  # for box in box_info:
-  #   cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
-  #   cv2.rectangle(img=img3, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=hsv_palette[box[6]], thickness=-1)
-  # for i in range(len(box_info)):
-  #   cv2.rectangle(img=img2, pt1=(int(box_info[i][1]), int(box_info[i][2])), pt2=(int(box_info[i][3]), int(box_info[i][4])), color=box_info[i][5], thickness=-1)
-  #   cv2.rectangle(img=img3, pt1=(int(box_info[i][1]), int(box_info[i][2])), pt2=(int(box_info[i][3]), int(box_info[i][4])), color=hsv_palette[box_info[i][6]], thickness=-1)
-  #   cv2.putText(img=img2, text=str(i), org=(int(box_info[i][1]), int(box_info[i][2])), fontFace=cv2.FONT_ITALIC, fontScale=0.5, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)  
-  #   cv2.putText(img=img3, text=str(i), org=(int(box_info[i][1]), int(box_info[i][2])), fontFace=cv2.FONT_ITALIC, fontScale=0.5, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)
-  # fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4)
-  # ax1.imshow(img[:, :, ::-1])
-  # ax1.axis('off')
-  # ax1.set_title('Original')
-  # ax1.legend()
+  img2 = copy.deepcopy(hsv_img)
+  img3 = copy.deepcopy(hsv_img) 
+  for box in box_info:
+    cv2.rectangle(img=img2, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=box[5], thickness=-1)
+    cv2.rectangle(img=img3, pt1=(int(box[1]), int(box[2])), pt2=(int(box[3]), int(box[4])), color=hsv_palette[box[6]], thickness=-1)
+  for i in range(len(box_info)):
+    cv2.rectangle(img=img2, pt1=(int(box_info[i][1]), int(box_info[i][2])), pt2=(int(box_info[i][3]), int(box_info[i][4])), color=box_info[i][5], thickness=-1)
+    cv2.rectangle(img=img3, pt1=(int(box_info[i][1]), int(box_info[i][2])), pt2=(int(box_info[i][3]), int(box_info[i][4])), color=hsv_palette[box_info[i][6]], thickness=-1)
+    cv2.putText(img=img2, text=str(i), org=(int(box_info[i][1]), int(box_info[i][2])), fontFace=cv2.FONT_ITALIC, fontScale=0.5, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)  
+    cv2.putText(img=img3, text=str(i), org=(int(box_info[i][1]), int(box_info[i][2])), fontFace=cv2.FONT_ITALIC, fontScale=0.5, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)
+  fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4)
+  ax1.imshow(img[:, :, ::-1])
+  ax1.axis('off')
+  ax1.set_title('Original')
+  ax1.legend()
   
-  # ax2.imshow(hsv_img[:, :, ::-1])
-  # ax2.axis('off')
-  # ax2.set_title('HSV Converted')
+  ax2.imshow(hsv_img[:, :, ::-1])
+  ax2.axis('off')
+  ax2.set_title('HSV Converted')
 
-  # ax3.imshow(img2[:, :, ::-1])
-  # ax3.axis('off')
-  # ax3.set_title('Detected holds')
+  ax3.imshow(img2[:, :, ::-1])
+  ax3.axis('off')
+  ax3.set_title('Detected holds')
   
   
-  # ax4.imshow(img3[:, :, ::-1])
-  # ax4.axis('off')
-  # ax4.set_title('Categorized holds')
+  ax4.imshow(img3[:, :, ::-1])
+  ax4.axis('off')
+  ax4.set_title('Categorized holds')
 
-  # fig.tight_layout()
-  # plt.show()
+  fig.tight_layout()
+  plt.show()
   
   # y값 순으로 정렬
   box_info.sort(key = lambda x : (x[2]))

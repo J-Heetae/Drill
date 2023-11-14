@@ -89,7 +89,7 @@ def compare_location(wrist_positions, hold_positions):
     for hold in hold_positions:
         print(hold)
         lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
-        if ly-5 < wrist_y < ry+5 and lx-5 < wrist_x < rx+5:
+        if ly-15 < wrist_y < ry+15 and lx-5 < wrist_x < rx+5:
             return True
     return False
 

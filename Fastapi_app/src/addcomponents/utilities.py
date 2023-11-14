@@ -87,6 +87,7 @@ def compare_location(wrist_positions, hold_positions):
     print('--------------------------------------')
     wrist_y, wrist_x = wrist_positions
     for hold in hold_positions:
+        print(hold)
         lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
         if ly-5 < wrist_y < ry+5 and lx-5 < wrist_x < rx+5:
             return True
@@ -173,7 +174,7 @@ def hold_extraction(image, hold_color): # Function to extract hold in image usin
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
     outputs = dt.get_hold_info(image, hold_color)
-    # print(outputs)
+    print(outputs)
     # results = [outputs[i] for i in range(1, 5)]
     # print(results)
     # print(os.getcwd())

@@ -173,8 +173,11 @@ def hold_extraction(image, hold_color): # Function to extract hold in image usin
     # print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    outputs = dt.get_hold_info(image, hold_color)
-    print(outputs)
+    try:
+        outputs = dt.get_hold_info(image, hold_color)
+        print(outputs)
+    except:
+        outputs = [['hold', 20, 20, 20, 20, (0, 0, 0), '모름']]
     # results = [outputs[i] for i in range(1, 5)]
     # print(results)
     # print(os.getcwd())

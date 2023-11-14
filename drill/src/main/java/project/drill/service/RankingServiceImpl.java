@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import project.drill.domain.Center;
 import project.drill.domain.Difficulty;
+import project.drill.domain.Post;
 import project.drill.dto.FirstRankingDto;
 import project.drill.repository.CourseRepository;
 import project.drill.repository.PostRepository;
@@ -50,8 +51,12 @@ public class RankingServiceImpl implements RankingService {
 
 	@Override
 	public Long findMyRanking(String memberNickname, String courseName) {
-		Long myRanking = 0L;
-		myRanking = postRepository.findMyRanking(memberNickname, courseName);
-		return myRanking;
+		List<Post> findPost = postRepository.findByMemberMemberNicknameAndCourseCourseNameAndCourseIsNewIsTrue(memberNickname,courseName);;
+		if(findPost.isEmpty()){
+			return 0L;
+		}
+		else {
+			return postRepository.findMyRanking(memberNickname, courseName);
+		}
 	}
 }

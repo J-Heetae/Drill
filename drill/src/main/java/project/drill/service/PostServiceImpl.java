@@ -263,16 +263,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<String> findCourseName(UploadPostDto uploadPostDto) {
         List<String> courses = null;
-                if (uploadPostDto.getCenterName().equals("center0")) {
-                    courses = courseRepository.findCourseNameByIsNewIsTrue();
-                }
-                else {
-                    if (uploadPostDto.getDifficulty().equals("difficulty0")) {
-                        courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()));
-                    } else {
-                            courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()),Difficulty.valueOf(uploadPostDto.getDifficulty()));
-                    }
-                }
+        if (uploadPostDto.getCenterName().equals("center0")) {
+            if(uploadPostDto.getDifficulty().equals("difficulty0")){
+                courses = courseRepository.findCourseNameByIsNewIsTrue();}
+            else{
+                courses = courseRepository.findCourseNameByDifficultyAndIsNewIsTrue(Difficulty.valueOf(uploadPostDto.getDifficulty()));
+            }
+        }
+        else {
+            if (uploadPostDto.getDifficulty().equals("difficulty0")) {
+                courses = courseRepository.findCourseNameByCenterAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()));
+            } else {
+                courses = courseRepository.findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center.valueOf(uploadPostDto.getCenterName()),Difficulty.valueOf(uploadPostDto.getDifficulty()));
+            }
+        }
         return courses;
     }
 }

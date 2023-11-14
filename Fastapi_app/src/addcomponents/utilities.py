@@ -85,10 +85,11 @@ def compare_location(wrist_positions, hold_positions):
     print(wrist_positions)
     print(hold_positions)
     print('--------------------------------------')
-    lx, ly, rx, ry = hold_positions
     wrist_y, wrist_x = wrist_positions
-    if ly-5 < wrist_y < ry+5 and lx-5 < wrist_x < rx+5:
-        return True
+    for hold in hold_positions:
+        lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
+        if ly-5 < wrist_y < ry+5 and lx-5 < wrist_x < rx+5:
+            return True
     return False
 
 def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
@@ -172,15 +173,15 @@ def hold_extraction(image, hold_color): # Function to extract hold in image usin
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
     outputs = dt.get_hold_info(image, hold_color)
-    print(outputs)
-    results = [outputs[i] for i in range(1, 5)]
-    print(results)
+    # print(outputs)
+    # results = [outputs[i] for i in range(1, 5)]
+    # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())
-    return results
+    return outputs
 
 def color_classification(img_path): # Function to classify color in image
     img_color = cv2.imread(img_path) # 이미지 파일을 컬러로 불러옴

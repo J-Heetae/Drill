@@ -81,10 +81,13 @@ def remove_video(video_name): # Function to delete video file in S3
     return res
 
 def compare_location(wrist_positions, hold_positions):
-    lx, ly, rx, ry = hold_positions
-    wrist_y, wrist_x = wrist_positions
-    if ly < wrist_y < ry and lx < wrist_x < rx:
-        return True
+    print(wrist_positions)
+    wrist_y, wrist_x = wrist_positions[0], wrist_positions[1]   
+    for hold in hold_positions:
+        lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
+        print(hold)
+        if ly-10 < wrist_y < ry+10 and lx-5 < wrist_x < rx+5:
+            return True
     return False
 
 def video_process(video_name): # Function to extract the location of user's wrist from a video file
@@ -124,11 +127,11 @@ def video_process(video_name): # Function to extract the location of user's wris
                 imgname = thumbnail_extraction(image, video_path) # thumbnail 추출해서 폴더에 넣어주는 함수
                 check_upload = thumbnail_upload(folderpath, imgname)
                 print('들어갑니다. detectron2')
-                hold_top_value = hold_extraction(image) # 홀드 인식 / list로 반환
+                hold_top_value = hold_extraction(image, "파랑") # 홀드 인식 / list로 반환
                 cnt += 1
             
-            if check_upload:
-                return False
+            # if check_upload:
+            #     return False
             
             image.flags.writeable = False
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -146,6 +149,8 @@ def video_process(video_name): # Function to extract the location of user's wris
                         continue
                     if not flag:
                         dx, dy = position_wrist.x * w, position_wrist.y * h
+                        # for i in range(9):
+                            # heapq.heappush(wrist_all, (dy-i, dx-i))
                         heapq.heappush(wrist_all, (dy, dx))
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))
@@ -153,21 +158,21 @@ def video_process(video_name): # Function to extract the location of user's wris
 
 
 
-def hold_extraction(image): # Function to extract hold in image using detectron2
+def hold_extraction(image, color): # Function to extract hold in image using detectron2
     # print(os.getcwd())
     newpath = os.getcwd() + '\\detectron2'
     os.chdir(newpath)
     print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    results = dt.get_hold_info(image, "주황")
+    results = dt.get_hold_info(image, color)
     # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-11]
     # print(newpath)
     os.chdir(newpath)
     # print(os.getcwd())
-    return [20, 20, 20, 20]
+    return results
 
 def color_classification(img_path): # Function to classify color in image
     img_color = cv2.imread(img_path) # 이미지 파일을 컬러로 불러옴

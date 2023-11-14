@@ -61,7 +61,7 @@ async def read_root():
 def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
-@app.post("/video/download/{filename}")
+@app.get("/video/download/{filename}")
 async def amazon_s3(filename: str):
     # filename = ut.get_params(request)
     now_path = docker_container_path_check() # docker container 내부 path

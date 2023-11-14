@@ -13,7 +13,7 @@ def get_params(request): # Function to get params
 
 def make_thumbnail_folder(): # Function to make thumbnail folder
     try:
-        folderpath = os.path.join(os.getcwd(), "src/thumbnails")
+        folderpath = os.getcwd() + "/thumbnails"
         if not os.path.exists(folderpath):
             os.makedirs(folderpath)
     except OSError:
@@ -89,10 +89,13 @@ def remove_video(video_name): # Function to delete video file in S3
     return res
 
 def compare_location(wrist_positions, hold_positions):
-    lx, ly, rx, ry = hold_positions
-    wrist_y, wrist_x = wrist_positions
-    if ly < wrist_y < ry and lx < wrist_x < rx:
-        return True
+    print(wrist_positions)
+    wrist_y, wrist_x = wrist_positions[0], wrist_positions[1]   
+    for hold in hold_positions:
+        lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
+        print(hold)
+        if ly-15 < wrist_y < ry+15 and lx-5 < wrist_x < rx+5:
+            return True
     return False
 
 def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
@@ -135,7 +138,7 @@ def video_process(video_name, hold_color): # Function to extract the location of
                 print('들어갑니다. detectron2')
                 hold_top_value = hold_extraction(image, hold_color) # 홀드 인식 / list로 반환
                 cnt += 1
-                thumbnail_remove(filepath)
+                # thumbnail_remove(filepath)
             
             if not check_upload:
                 return False
@@ -174,10 +177,8 @@ def hold_extraction(image, hold_color): # Function to extract hold in image usin
     print(os.getcwd())
     import newtectron as dt
     # output : [hold/volume, 좌측상단x, 좌측상단y, 우측하단x, 우측하단y, (b, g, r), 유사색]]
-    outputs = dt.get_hold_info(image, hold_color)
-    print(outputs)
-    results = [outputs[i] for i in range(1, 5)]
-    print('results', results)
+    results = dt.get_hold_info(image, hold_color)
+    # print(results)
     # print(os.getcwd())
     newpath = os.getcwd()[:-15]
     # print(newpath)
@@ -244,4 +245,3 @@ def color_classification(img_path): # Function to classify color in image
     cv2.imshow('img_color', img_result)
 
     cv2.waitKey(0)
-

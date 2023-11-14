@@ -125,7 +125,7 @@ def get_hold_info(img, hold_color):
     # print(i, predicted_color)
     
     # H 0.6, S 0.2, V 0.2 가중치로 유사도 계산
-    selected_color = hsv_palette[hold_color]
+    selected_color = hsv_palette[hold_color]  
     hsv_dist = 0
     hsv_dist += abs(hsv_color[0] - selected_color[0]) * 0.6 + abs(hsv_color[1] - selected_color[1]) * 0.2 + abs(hsv_color[2] - selected_color[2]) * 0.2
     # 45보다 작으면 같은 계열 색이라 판단하고 return 값에 추가함
@@ -133,7 +133,7 @@ def get_hold_info(img, hold_color):
       # [홀드/볼륨, 좌상단 x, 좌상단 y, 우하단 x, 우하단 y, hsv값, 예측된 색깔] return 
       box_info.append([category, top_left_x, top_left_y, bottom_right_x, bottom_right_y, hsv_color, predicted_color])
     
-  # 이미지에 추출한 rgb 그려서 출력
+  # # 이미지에 추출한 rgb 그려서 출력
   # img2 = copy.deepcopy(hsv_img)
   # img3 = copy.deepcopy(hsv_img) 
   # for box in box_info:
@@ -169,6 +169,5 @@ def get_hold_info(img, hold_color):
   # y값 순으로 정렬
   box_info.sort(key = lambda x : (x[2]))
   
-  print(box_info[0])
-  # 제일 y 값이 작은 (맨 위에 있는) 홀드 return
-  return box_info[0]
+  # 홀드 리스트 return
+  return box_info

@@ -5,10 +5,10 @@ import mediapipe as mp
 import json
 
 def get_params(request): # Function to get params
-    if 'video_name' not in request.args:
+    if 'hold_color' not in request.args:
         return "None"
-    video_name = request.args.get('video_name')
-    return video_name
+    hold_color = request.args.get('hold_color')
+    return hold_color
 
 
 def make_thumbnail_folder(): # Function to make thumbnail folder

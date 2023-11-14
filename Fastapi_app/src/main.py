@@ -1,6 +1,6 @@
 from typing import Union
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -61,7 +61,7 @@ async def read_root():
 def read_name(name: str, status: str):
     return {"상태 :" : f"A106 팀의 {name}이(가) {status} 입니다."}
 
-@app.get("/video/download/{filename}")
+@app.post("/video/download/{filename}")
 async def amazon_s3(filename: str):
     # filename = ut.get_params(request)
     now_path = docker_container_path_check() # docker container 내부 path
@@ -80,7 +80,7 @@ async def amazon_s3(filename: str):
         content = {"download": False, "check": "영상이 폴더에 없습니다.", "status" : 400}
     return JSONResponse(content = content)
 
-@app.get("/video/remove/{filename}")
+@app.delete("/video/remove/{filename}")
 async def remove_video(filename: str):
     # filename = ut.get_params(request)
     print(filename)
@@ -97,12 +97,13 @@ async def remove_video(filename: str):
         content = {"remove" : False, "status": 404}
     return JSONResponse(content = content)
 
-@app.get("/video/process/{filename}")
-async def process_video(filename: str, request): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
-    hold_color = ut.get_params(request) # get filename in request
+@app.post("/video/process/{filename}")
+async def process_video(filename: str, hold_color: str = Query("파랑", alias="hold_color")): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
+    # hold_color = ut.get_params(request) # get filename in request/
     # now_path = docker_container_path_check() # get current path
     # file_path = os.path.join(now_path, f"{filename}.mp4")
     # hold_color = "파랑"
+    print(hold_color)
     result = ut.video_process(filename, hold_color)
     # if not result:
     #     ut.remove_video(filename)

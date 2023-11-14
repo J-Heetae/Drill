@@ -87,7 +87,7 @@ def compare_location(wrist_positions, hold_positions):
     print('--------------------------------------')
     lx, ly, rx, ry = hold_positions
     wrist_y, wrist_x = wrist_positions
-    if ly < wrist_y < ry and lx < wrist_x < rx:
+    if ly-5 < wrist_y < ry+5 and lx-5 < wrist_x < rx+5:
         return True
     return False
 
@@ -141,7 +141,7 @@ def video_process(video_name, hold_color): # Function to extract the location of
             results = pose.process(image)
             h, w, c = image.shape
             image.flags.writeable = True
-            print('h, w, c', h,w,c)
+            # print('h, w, c', h,w,c)
             for i in range(15, 17): # wrist label : 15, 16
                 flag = 0
                 if results.pose_landmarks:
@@ -152,7 +152,7 @@ def video_process(video_name, hold_color): # Function to extract the location of
                         continue
                     if not flag:
                         dx, dy = position_wrist.x * w, position_wrist.y * h
-                        print("dx, dy", dx, dy)
+                        # print("dx, dy", dx, dy)
                         heapq.heappush(wrist_all, (dy, dx))
     # print('------------------------------------------------')
     # print(heapq.heappop(wrist_all))

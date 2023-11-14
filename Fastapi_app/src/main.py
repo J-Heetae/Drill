@@ -108,11 +108,11 @@ def remove_video(filename: str):
     return JSONResponse(content = content)
 
 @app.get("/video/process/{filename}")
-def process_video(filename: str): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
-    # hold_color = ut.get_params(request) # get filename in request
+def process_video(filename: str, request): # docker container에 저장된 동영상 파일 cv2로 실행되는 지 확인
+    hold_color = ut.get_params(request) # get filename in request
     # now_path = docker_container_path_check() # get current path
     # file_path = os.path.join(now_path, f"{filename}.mp4")
-    hold_color = "노랑"
+    # hold_color = "노랑"
     result = ut.video_process(filename, hold_color)
     # if not result:
     #     ut.remove_video(filename)

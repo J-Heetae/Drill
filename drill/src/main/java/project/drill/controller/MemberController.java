@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,8 @@ public class MemberController {
 	private final JwtUtil jwtUtil;
 
 	private final SocialLoginService socialLoginService;
+
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	@PostMapping("/login")
 	public ResponseEntity<String> doSocialLogin(
@@ -158,9 +161,14 @@ public class MemberController {
 	public ResponseEntity<String> localRegister(@RequestBody LocalRegisterDto localRegisterDto) throws Exception {
 		HttpStatus status;
 		String message;
+		String password = passwordEncoder.encode(localRegisterDto.getPassword());
+		LocalRegisterDto dto = LocalRegisterDto.builder()
+				.email(localRegisterDto.getEmail())
+				.password(password)
+				.build();
 		// 중복 : 205 RESET_CONTENT 반환
 		// 회원 가입 완료 : 200 OK 반환
-		if (memberService.localRegister(localRegisterDto) == null) {
+		if (memberService.localRegister(dto) == null) {
 			message = "중복된 회원입니다.";
 			status = HttpStatus.RESET_CONTENT;
 		} else {

@@ -3,7 +3,7 @@ import mediapipe as mp
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
-video_path = "../video/test13.mp4"
+video_path = "../video/climb4.mp4"
 
 cap = cv2.VideoCapture(video_path)
 fps = cap.get(cv2.CAP_PROP_FPS) // 3
@@ -45,7 +45,8 @@ with mp_pose.Pose(
             cv2.circle(image, landmark_15, 5, (0, 255, 0), -1)
             cv2.circle(image, landmark_16, 5, (0, 255, 0), -1)
 
-        cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
+        cv2.imshow('MediaPipe Pose', image)
         if cv2.waitKey(5) & 0xFF == ord("q"):
             break
 

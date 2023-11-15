@@ -3,6 +3,7 @@ package project.drill.service;
 import java.util.Optional;
 
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
 	private final CourseRepository courseRepository;
-
+	private final BCryptPasswordEncoder passwordEncoder;
 	@Transactional
 	@Override
 	public Member save(PostDto postDto) {
@@ -139,10 +140,9 @@ public class MemberServiceImpl implements MemberService {
 			return null;
 		}
 	}
-
 	public Member localLogin(LocalLoginDto localLoginDto) {
 		Optional<Member> member = memberRepository.findByMemberEmail(localLoginDto.getEmail());
-		if(member.isPresent() && member.get().getPassword().equals(localLoginDto.getPassword())) {
+		if(member.isPresent() && passwordEncoder.matches(localLoginDto.getPassword(), member.get().getPassword())) {
 			return member.get();
 		} else {
 			return null;

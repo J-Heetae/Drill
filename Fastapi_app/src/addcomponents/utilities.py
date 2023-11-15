@@ -90,12 +90,14 @@ def remove_video(video_name): # Function to delete video file in S3
 
 def compare_location(wrist_positions, hold_positions):
     print(wrist_positions)
+    hold_positions.sort(key = lambda x: (x[2], x[4]))
     wrist_y, wrist_x = wrist_positions[0], wrist_positions[1]   
     for hold in hold_positions:
         lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
         print(hold)
         if ly-15 < wrist_y < ry+15 and lx-5 < wrist_x < rx+5:
             return True
+        return False
     return False
 
 def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
@@ -106,7 +108,8 @@ def video_process(video_name, hold_color): # Function to extract the location of
     video_name += '.mp4'
     mp_pose = mp.solutions.pose
     video_path = os.getcwd() + "/src/video/" + video_name
-
+    print("현재 위치",os.getcwd())
+    print('video_path', video_path)
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS) // 3
     cnt, frame_num = 0, 0

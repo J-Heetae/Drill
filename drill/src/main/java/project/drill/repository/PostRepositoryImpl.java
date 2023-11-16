@@ -644,21 +644,20 @@ public class PostRepositoryImpl implements PostCustomRepository {
 
 	@Override
 	public Long findMyRanking(String memberNickname, String courseName) {
+		QPost post = QPost.post;
 		List<Long> rankings = queryFactory
 				.select(post.postId)
 				.from(post)
 				.where(post.course.courseName.eq(courseName)
 						.and(post.course.isNew.eq(true))
 						.and(post.postWriteTime.lt(
-								JPAExpressions.select(post.postWriteTime)
+								JPAExpressions.select(post.postWriteTime.min())
 										.from(post)
 										.where(post.member.memberNickname.eq(memberNickname)
 												.and(post.course.courseName.eq(courseName))
 												.and(post.course.isNew.eq(true)))
 						)))
-				.orderBy(post.postWriteTime.asc())
 				.fetch();
-
 		return (long) rankings.size() + 1;
 	}
 

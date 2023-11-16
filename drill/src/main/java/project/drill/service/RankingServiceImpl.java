@@ -59,4 +59,6 @@ public class RankingServiceImpl implements RankingService {
 			return postRepository.findMyRanking(memberNickname, courseName);
 		}
 	}
+
+
 }

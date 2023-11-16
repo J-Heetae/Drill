@@ -49,7 +49,7 @@ public interface PostCustomRepository {
 
     Page<PostPageDto> findByCourseNameOrderByPostWriteTimeDesc(Pageable pageable, String courseName);
 
-    Long findMyRanking(String memberNickname, String courseName);
+    Long findMyRanking(String memberNickname, Long courseId);
 
 
 }

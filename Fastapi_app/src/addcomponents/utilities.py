@@ -108,7 +108,8 @@ def video_process(video_name, hold_color): # Function to extract the location of
     video_name += '.mp4'
     mp_pose = mp.solutions.pose
     video_path = os.getcwd() + "/src/video/" + video_name
-
+    print("현재 위치",os.getcwd())
+    print('video_path', video_path)
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS) // 3
     cnt, frame_num = 0, 0

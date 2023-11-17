@@ -7,9 +7,11 @@
 
 
 3. 테이블 구조도 (ERD)
+<img src="exec/img/erd__1_.png " width="500" height="500">
 
 
 4. 아키텍처
+<img src="exec/img/architecture.png" width="500" height="300">
 
 5. 상세 페이지(시연)
 

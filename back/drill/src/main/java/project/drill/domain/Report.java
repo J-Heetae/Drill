@@ -18,14 +18,15 @@ public class Report {
     private Long reportId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_id",nullable = false)
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_email",referencedColumnName = "member_email")
+    @JoinColumn(name="member_email",referencedColumnName = "member_email",nullable = false)
     private Member member;
 
-    @Column(name="is_check")
+    @Column(name="is_check",nullable = false)
     @ColumnDefault("true")
     private boolean isCheck;
 }
+

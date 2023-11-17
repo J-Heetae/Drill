@@ -19,17 +19,18 @@ public class Comment {
     private Long commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_id",nullable = false)
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname")
+    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname",nullable = false)
     private Member member;
 
     @Column(name="comment_content",nullable = false)
     private String commentContent;
 
-    @Column(name="comment_write_time")
+    @Column(name="comment_write_time",nullable = false)
     private LocalDateTime commentWriteTime;
 
 }
+

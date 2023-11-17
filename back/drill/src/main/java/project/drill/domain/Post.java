@@ -20,7 +20,7 @@ public class Post {
     private Long postId;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname")
+    @JoinColumn(name="member_nickname",referencedColumnName = "member_nickname",nullable = false)
     private Member member;
 
     @Column(name="post_content",nullable = false)
@@ -37,11 +37,12 @@ public class Post {
     private Center center;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="course_id")
+    @JoinColumn(name="course_id",nullable = false)
     private Course course;
 
-    @Column(name="post_thumbnail")
+    @Column(name="post_thumbnail",nullable = false)
     private String postThumbnail;
 
 
 }
+

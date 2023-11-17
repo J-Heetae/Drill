@@ -46,6 +46,11 @@
 
 ## 5. 상세 페이지(시연)
 
+<img src="exec/img/메인페이지.png" width="200" height="400">
+<img src="exec/img/마이페이지.png" width="200" height="400">
+<img src="exec/img/영상목록페이지.png" width="200" height="400">
+<img src="exec/img/영상상세페이지.png" width="200" height="400">
+
 ### 👪참여자
 😺 SSAFY 9기 정태희(팀장)
 😎 SSAFY 9기 구민석(팀원)

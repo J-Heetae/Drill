@@ -1,15 +1,17 @@
 🍪drill 
 
-1. 요구사항 정의서 (Usercase Diagram)
+1. 프로젝트 개요
 
 
-2. 테이블 구조도 (ERD)
+2. 요구사항 정의서 (Usercase Diagram)
 
 
-3. Class Diagram
+3. 테이블 구조도 (ERD)
 
 
 4. 아키텍처
+
+5. 상세 페이지(시연)
 
 
 

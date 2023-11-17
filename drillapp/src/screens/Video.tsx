@@ -87,16 +87,17 @@ const Video = () => {
     {key:'center10',value:'서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'difficulty0',value:'전체'},
     {key:'difficulty1',value:'하양'},
     {key:'difficulty2',value:'노랑'},
     {key:'difficulty3',value:'주황'},
     {key:'difficulty4',value:'초록'},
-    {key:'difficulty5',value:'하양'},
-    {key:'difficulty6',value:'노랑'},
-    {key:'difficulty7',value:'주황'},
-    {key:'difficulty8',value:'초록'},
+    {key:'difficulty5',value:'파랑'},
+    {key:'difficulty6',value:'빨강'},
+    {key:'difficulty7',value:'보라'},
+    {key:'difficulty8',value:'핑크'},
+    {key:'difficulty9',value:'검정'},
   ];
+
 
   const onChangeText = (inputText: string) => {
     setText(inputText);

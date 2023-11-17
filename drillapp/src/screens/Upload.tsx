@@ -47,7 +47,10 @@ const Upload = () => {
   };
 
   const [selectedCenter, setSelectedCenter] = useState("center1");
-  const [selectedHolder, setSelectedHolder] = useState("S1하양연두_HD");
+  const [selectedHolder, setSelectedHolder] = useState("difficulty1");
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourseName, setSelectedCourseName] = useState([]);
+  const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
 
   const data: DataItem[] = [
     {key:'center1',value:'더클라임 홍대'},
@@ -62,15 +65,46 @@ const Upload = () => {
     {key:'center10',value:'더클라임 서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'S1하양연두_HD',value:'하양'},
-    {key:'S2노랑노랑_HD',value:'노랑'},
-    {key:'S3주황초록_HD',value:'주황'},
-    {key:'S4초록검정_HD',value:'초록'},
-    {key:'S5파랑빨강_HD',value:'하양'},
-    {key:'S1빨강핑크_HD',value:'노랑'},
-    {key:'S2보라파랑_HD',value:'주황'},
-    {key:'S3회색민트_HD',value:'초록'},
+    {key:'difficulty1',value:'하양'},
+    {key:'difficulty2',value:'노랑'},
+    {key:'difficulty3',value:'주황'},
+    {key:'difficulty4',value:'초록'},
+    {key:'difficulty5',value:'파랑'},
+    {key:'difficulty6',value:'빨강'},
+    {key:'difficulty7',value:'보라'},
+    {key:'difficulty8',value:'핑크'},
+    {key:'difficulty9',value:'검정'},
   ];
+
+
+  const UploadPostDto = {
+    centerName: selectedCenter,
+    difficulty: selectedHolder,
+  };
+  const API_URL2 = `${API_URL_Local}post/course`;
+  const getCourse = async () => {
+    try {
+      const response = await axios.post(API_URL2, UploadPostDto,);
+      console.log('코스 가져오기 성공', response.data)
+      setSelectedCourseName(response.data)
+    } catch (error) {
+      console.log('보낸 Dto',UploadPostDto)
+      console.error('코스 가져오기 실패', error);
+    }
+  };
+
+  useEffect(() => {
+    getCourse()
+  }, [selectedHolder]); 
+
+  useEffect(() => {
+    const transformed = selectedCourseName.map((course) => ({
+      label: course,
+      value: course, // or provide unique identifier for value
+    }));
+    setTransformedCourseName(transformed);
+    console.log("tlfgod?")
+  }, [selectedCourseName]); 
 
   const uploadVideoToS3 = async (uri: string | undefined, fileName: string | undefined) => {
     if (uri && fileName) {  
@@ -102,7 +136,7 @@ const Upload = () => {
         setPostVideo(keyWithoutVideo + '.mp4');
         setPostThumbnail(keyWithoutVideo + '.jpg');
         
-        VideoDownload(keyWithoutVideo);
+        // VideoDownload(keyWithoutVideo);
         return keyWithoutVideo; // 업로드 성공 시 파일 이름 반환
       } catch (error) { 
         console.error(error);
@@ -144,26 +178,12 @@ const Upload = () => {
     try {
       const uploadedFileName = await uploadVideoToS3(postUri, postVideo);
       const fileNameWithoutMp4 = uploadedFileName?.replace(".mp4", "");
-
-      const postDto = {
-        center: selectedCenter,
-        courseName: selectedHolder,
-        memberNickname: userInfo.nickName,
-        postContent: text,
-        postThumbnail: fileNameWithoutMp4+'.jpg',  // 업로드된 파일 이름으로 수정
-        postVideo: fileNameWithoutMp4+'.mp4',      // 업로드된 파일 이름으로 수정
-      };
-  
-      const response = axios.post(API_URL, postDto, {
-        headers: {
-          Authorization: userInfo.accessToken,
-        },
-      });
-  
+      
+      VideoDownload(fileNameWithoutMp4);
       setVideourl('');
       setText('');
-      setSelectedCenter('지점 선택');
-      setSelectedHolder('홀드');
+      setSelectedCenter('center1');
+      setSelectedHolder('difficulty1');
       navigation.navigate('Home');
     } catch (error) {
       console.error('게시물 게시 실패', error);
@@ -173,9 +193,9 @@ const Upload = () => {
   const VideoDownload = async (fileName: string | undefined) => {
     const fileNameWithoutMp4 = fileName?.replace(".mp4", "");
     try {
-      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/download/${fileNameWithoutMp4}`);
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/download/${fileNameWithoutMp4}` );
       console.log('다운로드 여부', response.data.download);
-      console.log('다운로드 여부', response.data.check)
+      console.log('다운로드 여부 이유', response.data.check)
       if (response.data.download) {
         // 다운로드가 성공했을 때의 동작
         VideoProcess(fileName);
@@ -187,24 +207,66 @@ const Upload = () => {
       console.error('영상 다운로드 실패', error);
     }
   };
+
+  
   const VideoProcess = async (fileName: string | undefined) => {
     const fileNameWithoutMp4 = fileName?.replace(".mp4", "");
+    const foundItem = holderColor.find(item => item.key === selectedHolder);
+    const foundValue = foundItem ? foundItem.value : null;
     try {
-      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${fileNameWithoutMp4}`
-      );
+      const response = await axios.get(`https://k9a106a.p.ssafy.io/video/process/${fileNameWithoutMp4}`, {
+        params: {
+          hold_color: foundValue,
+        },
+      });
+      console.log('파이썬으로 보낸 holdcolor', selectedHolder)
       console.log('영상 처리 성공', response)
 
-      SnackbarOpen();
+      if (response.data.result) {
+        const postDto = {
+          center: selectedCenter,
+          courseName: selectedHolder,
+          memberNickname: userInfo.nickName,
+          postContent: text,
+          postThumbnail: fileNameWithoutMp4+'.jpg',  // 업로드된 파일 이름으로 수정
+          postVideo: fileNameWithoutMp4+'.mp4',      // 업로드된 파일 이름으로 수정
+        };
+        
+        const response = axios.post(API_URL, postDto, {
+          headers: {
+            Authorization: userInfo.accessToken,
+          },
+        });
+        SnackbarOpen();
+      } else {
+        console.log('업로드 실패')
+        Alert.alert('업로드에 실패했습니다.')
+      }
+      VideoDelete(fileName);
+
     } catch (error) {
       console.error('영상 처리 실패', error);
     }
   };
+  
+  const VideoDelete = async (fileName: string | undefined) => {
+    const fileNameWithoutMp4 = fileName?.replace(".mp4", "");
+    try {
+      const response = await axios.delete(`https://k9a106a.p.ssafy.io/video/remove/${fileNameWithoutMp4}` );
+      console.log('영상 삭제 성공', response)
+      
+    } catch (error) {
+      console.error('영상 삭제 실패', error);
+    }
+  };
+  
   const SnackbarOpen = () => {
     Snackbar.show({
       text: '영상이 성공적으로 게시됐습니다.',
       duration: Snackbar.LENGTH_LONG,
     });
   };
+  
 
   return (
     <ContainerView>
@@ -289,6 +351,25 @@ const Upload = () => {
                 onChange={(item) => {
                   const selectedOption = holderColor.find(option => option.value === item.value);
                   setSelectedHolder(selectedOption?.key || ''); // 선택된 항목을 찾아 상태 업데이트
+                  getCourse()
+                }}
+              />
+              <Dropdown 
+                style={styles.dropdown3}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                itemTextStyle={styles.itemTextStyle}
+                mode='default'
+                data={transformedCourseName}
+                maxHeight={200}
+                placeholder={selectedCourse}
+                labelField="label" // labelField 설정
+                valueField="value" // valueField 설정
+                value={selectedCourse}
+                onChange={ (item) => {
+                  const selectedOption = transformedCourseName.find(option => option.value === item.value);
+                  setSelectedCourse(selectedOption?.label || ''); // 선택된 항목을 찾아 상태 업데이트
                 }}
               />
             </SelectOptionView>
@@ -346,13 +427,20 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   dropdown1: {
-    width: '50%',
+    width: '40%',
     height: '110%',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ADA4A5',
   },
   dropdown2: {
+    width: '20%',
+    height: '110%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ADA4A5',
+  },
+  dropdown3: {
     width: '30%',
     height: '110%',
     borderWidth: 1,
@@ -428,7 +516,7 @@ const SelectOptionView = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 10px;
 `
 const ButtonView = styled.View`
   flex: 1;

@@ -57,6 +57,7 @@ const Main = () => {
       console.log(myRankingValue)
     }
     catch (error) {
+      console.log('랭킹 dto', myRankingDto)
       console.error('내 랭킹 불러오는 데 실패', error);
     }
   };
@@ -138,7 +139,7 @@ const Main = () => {
   const [myRanking, setMyRanking] = useState(0);
   const [selectedCourseName, setSelectedCourseName] = useState([]);
   const [transformedCourseName, setTransformedCourseName] = useState<{ label: string; value: string; }[]>([]);
-  const [memberL, setMemberL] = useState<ImageSourcePropType>(require("../asset/icons/difficulty1.png"));
+  const [memberL, setMemberL] = useState(require("../asset/icons/difficulty1.png"));
 
   
 
@@ -155,15 +156,15 @@ const Main = () => {
     {key:'center10',value:'더클라임 서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'difficulty1',value:'빨강'},
-    {key:'difficulty2',value:'검정'},
-    {key:'difficulty3',value:'노랑'},
-    {key:'difficulty4',value:'보라'},
-    {key:'difficulty5',value:'하양'},
-    {key:'difficulty6',value:'초록'},
-    {key:'difficulty7',value:'핑크'},
-    {key:'difficulty8',value:'파랑'},
-    {key:'difficulty9',value:'주황'},
+    {key:'difficulty1',value:'하양'},
+    {key:'difficulty2',value:'노랑'},
+    {key:'difficulty3',value:'주황'},
+    {key:'difficulty4',value:'초록'},
+    {key:'difficulty5',value:'파랑'},
+    {key:'difficulty6',value:'빨강'},
+    {key:'difficulty7',value:'보라'},
+    {key:'difficulty8',value:'핑크'},
+    {key:'difficulty9',value:'검정'},
   ];
 
   function findValueByKey(key: string, data: DataItem[]): string | undefined {
@@ -189,27 +190,6 @@ const Main = () => {
       // 요청 성공
       console.log('랭킹 데이터:', response.data);
       setMemberL(response.data.difficulty);
-      if(response.data.difficulty=='difficulty1'){
-        setMemberL(require("../asset/icons/difficulty1.png"));
-      }else if(response.data.difficulty=='difficulty2'){
-        setMemberL(require("../asset/icons/difficulty2.png"));
-      }else if(response.data.difficulty=='difficulty3'){
-        setMemberL(require("../asset/icons/difficulty3.png"));
-      }else if(response.data.difficulty=='difficulty4'){
-        setMemberL(require("../asset/icons/difficulty4.png"));
-      }else if(response.data.difficulty=='difficulty5'){
-        setMemberL(require("../asset/icons/difficulty5.png"));
-      }else if(response.data.difficulty=='difficulty6'){
-        setMemberL(require("../asset/icons/difficulty6.png"));
-      }else if(response.data.difficulty=='difficulty7'){
-        setMemberL(require("../asset/icons/difficulty7.png"));
-      }else if(response.data.difficulty=='difficulty8'){
-        setMemberL(require("../asset/icons/difficulty8.png"));
-      }else if(response.data.difficulty=='difficulty9'){
-        setMemberL(require("../asset/icons/difficulty9.png"));
-      }else{
-        setMemberL(require("../asset/icons/difficulty10.png"));
-      }
     } catch (error) {
       // 요청 실패
       console.error('유저 데이터를 불러오는 데 실패', error);
@@ -284,11 +264,35 @@ const Main = () => {
         <UserNameView>
           <UserNameText>
             <Image
-              source={memberL}
-              resizeMode="cover"
+              source={
+                memberL === "difficulty1"
+                  ? require("../asset/icons/difficulty1.png")
+                  : memberL === "difficulty2"
+                  ? require("../asset/icons/difficulty2.png")
+                  : memberL === "difficulty3"
+                  ? require("../asset/icons/difficulty3.png")
+                  : memberL === "difficulty3"
+                  ? require("../asset/icons/difficulty3.png")
+                  : memberL === "difficulty4"
+                  ? require("../asset/icons/difficulty4.png")
+                  : memberL === "difficulty5"
+                  ? require("../asset/icons/difficulty5.png")
+                  : memberL === "difficulty6"
+                  ? require("../asset/icons/difficulty6.png")
+                  : memberL === "difficulty7"
+                  ? require("../asset/icons/difficulty7.png")
+                  : memberL === "difficulty8"
+                  ? require("../asset/icons/difficulty8.png")
+                  : memberL === "difficulty9"
+                  ? require("../asset/icons/difficulty9.png")
+                  : memberL === "difficulty10"
+                  ? require("../asset/icons/difficulty10.png")
+                  : require("../asset/icons/Profile.png")
+              }
+              resizeMode="contain"
               style={{
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
               }}
             />
             {userInfo.nickName}

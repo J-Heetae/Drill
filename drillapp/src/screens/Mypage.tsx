@@ -87,27 +87,6 @@ const Mypage = () => {
       setMaxLevel(response.data.max_score);
       setNowLevel(response.data.member_score);
       setMemberL(response.data.difficulty);
-      if(response.data.difficulty=='difficulty1'){
-        setMemberL(require("../asset/icons/difficulty1.png"));
-      }else if(response.data.difficulty=='difficulty2'){
-        setMemberL(require("../asset/icons/difficulty2.png"));
-      }else if(response.data.difficulty=='difficulty3'){
-        setMemberL(require("../asset/icons/difficulty3.png"));
-      }else if(response.data.difficulty=='difficulty4'){
-        setMemberL(require("../asset/icons/difficulty4.png"));
-      }else if(response.data.difficulty=='difficulty5'){
-        setMemberL(require("../asset/icons/difficulty5.png"));
-      }else if(response.data.difficulty=='difficulty6'){
-        setMemberL(require("../asset/icons/difficulty6.png"));
-      }else if(response.data.difficulty=='difficulty7'){
-        setMemberL(require("../asset/icons/difficulty7.png"));
-      }else if(response.data.difficulty=='difficulty8'){
-        setMemberL(require("../asset/icons/difficulty8.png"));
-      }else if(response.data.difficulty=='difficulty9'){
-        setMemberL(require("../asset/icons/difficulty9.png"));
-      }else{
-        setMemberL(require("../asset/icons/difficulty10.png"));
-      }
 
 
     } catch (error) {
@@ -130,16 +109,17 @@ const Mypage = () => {
     {key:'center10',value:'서울대'},
   ];
   const holderColor: DataItem[] = [
-    {key:'difficulty0',value:'전체'},
     {key:'difficulty1',value:'하양'},
     {key:'difficulty2',value:'노랑'},
     {key:'difficulty3',value:'주황'},
     {key:'difficulty4',value:'초록'},
-    {key:'difficulty5',value:'하양'},
-    {key:'difficulty6',value:'노랑'},
-    {key:'difficulty7',value:'주황'},
-    {key:'difficulty8',value:'초록'},
+    {key:'difficulty5',value:'파랑'},
+    {key:'difficulty6',value:'빨강'},
+    {key:'difficulty7',value:'보라'},
+    {key:'difficulty8',value:'핑크'},
+    {key:'difficulty9',value:'검정'},
   ];
+
 
   const API_URL = `${API_URL_Local}post/list`;
   const [currentPage, setCurrentPage] = useState(0);
@@ -252,12 +232,36 @@ const Mypage = () => {
       <TopView>
         <UserInfoView>
           <UserNameText>
-            <Image
-              source={memberL}
+          <Image
+              source={
+                memberL === "difficulty1"
+                  ? require("../asset/icons/difficulty1.png")
+                  : memberL === "difficulty2"
+                  ? require("../asset/icons/difficulty2.png")
+                  : memberL === "difficulty3"
+                  ? require("../asset/icons/difficulty3.png")
+                  : memberL === "difficulty3"
+                  ? require("../asset/icons/difficulty3.png")
+                  : memberL === "difficulty4"
+                  ? require("../asset/icons/difficulty4.png")
+                  : memberL === "difficulty5"
+                  ? require("../asset/icons/difficulty5.png")
+                  : memberL === "difficulty6"
+                  ? require("../asset/icons/difficulty6.png")
+                  : memberL === "difficulty7"
+                  ? require("../asset/icons/difficulty7.png")
+                  : memberL === "difficulty8"
+                  ? require("../asset/icons/difficulty8.png")
+                  : memberL === "difficulty9"
+                  ? require("../asset/icons/difficulty9.png")
+                  : memberL === "difficulty10"
+                  ? require("../asset/icons/difficulty10.png")
+                  : require("../asset/icons/Profile.png")
+              }
               resizeMode="contain"
               style={{
-                width: 30,
-                height: 30,
+                width: 50,
+                height: 50,
               }}
             />
             {userInfo.nickName}

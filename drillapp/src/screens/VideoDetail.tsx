@@ -154,6 +154,8 @@ const VideoDetail = () => {
       // 성공
       console.log('댓글 작성 성공', response);
       setText(''); // 입력창 초기화
+
+      Commentpostget();
     } catch (error) {
       // 요청
       console.error('댓글 작성 실패:', error);
@@ -171,7 +173,6 @@ const VideoDetail = () => {
       // 성공
       console.log('댓글 목록 불러오기 성공', response.data);
       setComments(response.data.reverse());
-      Commentpostget(); // 댓글 목록 다시 불러오기
     } catch (error) {
       // 요청
       console.error('댓글 목록 불러오기 실패:', error);
@@ -313,12 +314,13 @@ const styles = StyleSheet.create({
     right: 0,
   },
   input: {
-    height: '60%',
+    height: '85%',
     width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
     paddingHorizontal: 8,
+    fontSize: 15,
   },
 });
 
@@ -359,20 +361,18 @@ const PostBottomView = styled.View`
   padding-left: 20px;
 `;
 const PostLikedView = styled.View`
-  flex: 1;
+  flex: 0.5;
+  align-items: center;
   display: flex;
   flex-direction: row;
   gap: 10px;
   padding-left: 20px;
-  alignitems: center;
 `;
 const PostContentView = styled.View`
-  flex: 1.5;
+  flex: 1;
   display: flex;
   padding-left: 20px;
   padding-right: 10px;
-  border-bottom-width: 1px;
-  border-color: gray;
 `;
 // -------------------------------
 const PostBottomSearch = styled.View`
@@ -380,7 +380,7 @@ const PostBottomSearch = styled.View`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  alignitems: center;
+  align-items: center;
 `;
 const PostBottomComment = styled.View`
   flex: 2;

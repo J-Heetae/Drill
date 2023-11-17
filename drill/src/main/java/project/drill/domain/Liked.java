@@ -18,10 +18,10 @@ public class Liked {
     private Long likedId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_email")
+    @JoinColumn(name="member_email",nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_id",nullable = false)
     private Post post;
 }

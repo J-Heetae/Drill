@@ -14,5 +14,5 @@ public class MemberDto {
 	private long member_score;
 	private long max_score;
 	private String center;
-	private String difficulty;
+	private  String difficulty;
 }

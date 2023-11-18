@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class SettingDto {
-	private String memberNickname;
-	private String center;
+  private String memberNickname;
+  private String center;
 }

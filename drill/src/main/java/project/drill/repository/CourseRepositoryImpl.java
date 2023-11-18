@@ -10,13 +10,12 @@ import project.drill.domain.Difficulty;
 import project.drill.domain.QCourse;
 
 @RequiredArgsConstructor
-public class CourseRepositoryImpl implements CourseCustomRepository {
+public class CourseRepositoryImpl implements CourseCustomRepository{
 
 	private final JPAQueryFactory queryFactory;
-
 	@Override
 	public List<Difficulty> findDifficultyByCenterAndIsNewIsTrue(Center center) {
-		QCourse qCourse = QCourse.course;
+		QCourse qCourse= QCourse.course;
 		return queryFactory
 			.select(qCourse.difficulty)
 			.from(qCourse)
@@ -26,18 +25,29 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
 	}
 
 	@Override
-	public List<String> findCourseNameByIsNewIsTrue() {
+	public List<String> findCourseNameByIsNewIsTrue(){
 		QCourse course = QCourse.course;
 		return queryFactory
-			.select(course.courseName)
-			.from(course)
-			.where(course.isNew.eq(true))
-			.fetch();
+				.select(course.courseName)
+				.from(course)
+				.where(course.isNew.eq(true))
+				.fetch();
 	}
 
 	@Override
+	public List<String> findCourseNameByDifficultyAndIsNewIsTrue(Difficulty difficulty) {
+		QCourse course = QCourse.course;
+		return queryFactory
+				.select(course.courseName)
+				.from(course)
+				.where(course.difficulty.eq(difficulty))
+				.fetch();
+	}
+
+
+	@Override
 	public List<String> findCourseNameByCenterAndIsNewIsTrue(Center center) {
-		QCourse qCourse = QCourse.course;
+		QCourse qCourse= QCourse.course;
 		return queryFactory
 			.select(qCourse.courseName)
 			.from(qCourse)
@@ -48,7 +58,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
 
 	@Override
 	public List<String> findCourseNameByCenterAndDifficultyAndIsNewIsTrue(Center center, Difficulty difficulty) {
-		QCourse qCourse = QCourse.course;
+		QCourse qCourse= QCourse.course;
 		return queryFactory
 			.select(qCourse.courseName)
 			.from(qCourse)

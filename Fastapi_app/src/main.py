@@ -45,6 +45,10 @@ client_s3 = boto3.client(
 def docker_container_path_check(): # docker container 내부 path
     return os.path.dirname(os.path.realpath(__file__))
 
+@app.get("/")
+def check_load_balancing():
+    return {"check": "3번째 load balancing"}
+
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():
     with open(os.path.join(static_path, "info.html"), "r", encoding="utf-8") as file:

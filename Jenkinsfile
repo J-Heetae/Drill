@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        imagename = "fast_api_test"
+        imagename = "fast_api_test_three"
         registryCredential = 'admin'
         version = 'latest'
         dockerImage = ''
@@ -25,8 +25,8 @@ pipeline {
         // docker Deploy
         stage('Deploy') {
             steps {
-                sh 'docker rm -f fast'
-                sh 'docker run -d --name fast -p 8000:8000 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video -v /home/ubuntu/thumbnails:/app/thumbnails ${imagename}:${version}'
+                sh 'docker rm -f fastthree'
+                sh 'docker run -d --name fastthree -p 8002:8002 -u root -v ${envfilepath}:/app/.env -v /home/ubuntu/video:/app/src/video -v /home/ubuntu/thumbnails:/app/thumbnails ${imagename}:${version}'
             }
         }
 

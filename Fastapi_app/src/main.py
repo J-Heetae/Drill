@@ -47,7 +47,7 @@ def docker_container_path_check(): # docker container 내부 path
 
 @app.get("/")
 def check_load_balancing():
-    return {"check": "3번째 load balancing"}
+    return {"check": "4번째 load balancing"}
 
 @app.get("/information", response_class=HTMLResponse)
 async def read_root():

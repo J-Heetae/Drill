@@ -14,7 +14,7 @@ from .addcomponents import utilities as ut
 app = FastAPI()
 
 origins = [
-    "http://localhost:8002/*",
+    "http://localhost:8003/*",
     "http://k9a106a.p.ssafy.io*"
 ]
 
@@ -100,4 +100,4 @@ def process_video(filename: str, hold_color: str = Query("파랑", alias="hold_c
 
  
 if __name__ == "__main__":
-    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8002, reload = True)
+    uvicorn.run(app = "__main__:app", host="0.0.0.0", port = 8003, reload = True)

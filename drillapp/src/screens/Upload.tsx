@@ -225,7 +225,7 @@ const Upload = () => {
       if (response.data.result) {
         const postDto = {
           center: selectedCenter,
-          courseName: selectedHolder,
+          courseName: selectedCourse,
           memberNickname: userInfo.nickName,
           postContent: text,
           postThumbnail: fileNameWithoutMp4+'.jpg',  // 업로드된 파일 이름으로 수정

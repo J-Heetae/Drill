@@ -105,7 +105,7 @@ def video_process(video_name, hold_color): # Function to extract the location of
     print(video_path)
 
     cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS) // 3
+    fps = cap.get(cv2.CAP_PROP_FPS) // 2
     cnt, frame_num = 0, 0
     wrist_all = []
     

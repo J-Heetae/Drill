@@ -81,18 +81,17 @@ def remove_video(video_name): # Function to delete video file in S3
     return res
 
 def compare_location(wrist_positions, hold_positions):
-    print('--------------------------------------')
-    print(wrist_positions)
-    print(hold_positions)
-    print('--------------------------------------')
     wrist_y, wrist_x = wrist_positions
     hold_positions.sort(key = lambda x: (x[2], x[4]))
+    check = 0
     for hold in hold_positions:
         print(hold)
+        check += 1
         lx, ly, rx, ry = hold[1], hold[2], hold[3], hold[4]
         if ly-15 < wrist_y < ry+15 and lx-5 < wrist_x < rx+5:
             return True
-        return False
+        if check > 3:
+            return False
     return False
 
 def video_process(video_name, hold_color): # Function to extract the location of user's wrist from a video file
